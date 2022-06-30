@@ -1,0 +1,9 @@
+{
+    "clangd.arguments": [
+        "--header-insertion=never",
+        "--limit-results=50",
+        "--log=verbose",
+        "--completion-style=detailed"
+    ],
+    "colors.filetypes" : ["*"]
+}
