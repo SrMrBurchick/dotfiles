@@ -1,0 +1,74 @@
+" Import plugins
+runtime ./plug.vim
+
+" Import maps
+runtime ./maps.vim
+lua require("configuration")
+
+" Base
+filetype plugin on
+
+set nocompatible
+set noswapfile
+syntax on
+
+" Global configuration
+set mouse-=a
+
+" Don't redraw while executing macros (good performance config)
+set lazyredraw
+set number
+set hidden
+set cursorline
+set autoindent
+set smartindent
+set tabstop=4 shiftwidth=4 expandtab
+set fileencodings=utf-8,sjis,euc-jp,latin
+set encoding=utf-8
+set history=500
+set clipboard=unnamedplus
+
+set ai "Auto indent
+set si "Smart indent
+set nowrap "No Wrap lines
+set backspace=start,eol,indent
+
+colorscheme happy_hacking
+set termguicolors
+hi Normal guibg=NONE ctermbg=NONE
+highlight clear LineNr
+set colorcolumn=81
+highlight ColorColumn ctermbg=102
+hi CursorLine gui=underline cterm=underline
+
+
+" Chars showing
+set list
+set listchars=tab:>-,trail:~,extends:>,precedes:<
+
+set exrc
+
+" NERD Tree config
+let NERDTreeShowHidden=1
+let g:NERDTreeGitStatusIndicatorMapCustom = {
+                \ 'Modified'  :'~',
+                \ 'Staged'    :'+',
+                \ 'Untracked' :'*',
+                \ 'Renamed'   :'->',
+                \ 'Unmerged'  :'═',
+                \ 'Deleted'   :'-',
+                \ 'Dirty'     :'~',
+                \ 'Ignored'   :' ',
+                \ 'Clean'     :'OK',
+                \ 'Unknown'   :'?',
+                \ }
+
+" Start NERDTree when Vim is started without file arguments.
+if argc() != 0
+        let f = escape(fnameescape(argv(0)), '.')
+        if f == "pr"
+            autocmd VimEnter * bdelete pr | NERDTree new | :NERDTreeToggle
+        endif
+endif
+
+autocmd BufEnter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif

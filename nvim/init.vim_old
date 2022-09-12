@@ -1,0 +1,301 @@
+" Specify a directory for plugins
+call plug#begin()
+    Plug 'https://github.com/preservim/nerdtree.git'
+    Plug 'vim-airline/vim-airline'
+    Plug 'https://github.com/Xuyuanp/nerdtree-git-plugin.git'
+    Plug 'airblade/vim-gitgutter'
+    Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+    Plug 'vim-syntastic/syntastic'
+    Plug 'https://github.com/rafi/awesome-vim-colorschemes.git'
+    Plug 'rhysd/git-messenger.vim'
+    Plug 'https://github.com/APZelos/blamer.nvim.git'
+    Plug 'neoclide/coc.nvim', {'branch': 'release'}
+    Plug 'https://github.com/puremourning/vimspector'
+    Plug 'ryanoasis/vim-devicons'
+    Plug 'arithran/vim-delete-hidden-buffers'
+    Plug 'https://github.com/pboettch/vim-cmake-syntax.git'
+    Plug 'https://github.com/preservim/tagbar.git'
+    Plug 'kevinhwang91/rnvimr', {'do': 'make sync'}
+    Plug 'tibabit/vim-templates'
+    Plug 'akinsho/toggleterm.nvim', {'tag' : 'v2.*'}
+    Plug 'nvim-lua/popup.nvim'
+    Plug 'nvim-lua/plenary.nvim'
+    Plug 'nvim-telescope/telescope.nvim' " make sure you have telescope installed
+    Plug 'EthanJWright/vs-tasks.nvim'
+    Plug 'nvim-lua/plenary.nvim' " don't forget to add this one if you don't have it yet!
+    Plug 'neoclide/coc-snippets'
+    Plug 'kamykn/spelunker.vim'
+
+    Plug 'https://github.com/drichardson/vim-unreal.git'
+    Plug 'https://github.com/honza/vim-snippets.git'
+    Plug 'https://github.com/Pocco81/true-zen.nvim.git'
+    Plug 'sheerun/vim-polyglot'
+    Plug 'OmniSharp/omnisharp-vim'
+
+    Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+    Plug 'https://github.com/ThePrimeagen/refactoring.nvim.git'
+    Plug 'tpope/vim-commentary'
+
+    Plug 'mhinz/vim-startify'
+    Plug 'tpope/vim-fugitive'
+
+    Plug 'rhysd/vim-clang-format'
+call plug#end()
+
+filetype plugin on
+
+set nocompatible
+set noswapfile
+" set lazyredraw
+syntax on
+
+vnoremap <C-c> "+y
+
+" shift+arrow selection
+nmap <S-Up> v<Up>
+nmap <S-Down> v<Down>
+nmap <S-Left> v<Left>
+nmap <S-Right> v<Right>
+vmap <S-Up> <Up>
+vmap <S-Down> <Down>
+vmap <S-Left> <Left>
+vmap <S-Right> <Right>
+imap <S-Up> <Esc>v<Up>
+imap <S-Down> <Esc>v<Down>
+imap <S-Left> <Esc>v<Left
+imap <S-Right> <Esc>v<Right>
+
+" Arrow resize
+nmap <C-Left> :vertical resize -5 <CR>
+nmap <C-Right> :vertical resize +5 <CR>
+
+" Global configuration
+set mouse-=a
+
+set termguicolors
+colorscheme happy_hacking
+
+set number
+set hidden
+set cursorline
+"set expandtab
+set autoindent
+set smartindent
+set tabstop=4 shiftwidth=4 expandtab
+"expandtab
+set encoding=UTF-8
+set history=500
+set clipboard=unnamedplus
+
+hi Normal guibg=NONE ctermbg=NONE
+highlight clear LineNr
+set colorcolumn=81
+highlight ColorColumn ctermbg=102
+hi CursorLine gui=underline cterm=underline
+
+set list
+set listchars=tab:>-,trail:~,extends:>,precedes:<
+
+set exrc
+
+" NERD Tree config
+let NERDTreeShowHidden=1
+let g:NERDTreeGitStatusIndicatorMapCustom = {
+                \ 'Modified'  :'~',
+                \ 'Staged'    :'+',
+                \ 'Untracked' :'*',
+                \ 'Renamed'   :'->',
+                \ 'Unmerged'  :'═',
+                \ 'Deleted'   :'-',
+                \ 'Dirty'     :'~',
+                \ 'Ignored'   :' ',
+                \ 'Clean'     :'OK',
+                \ 'Unknown'   :'?',
+                \ }
+
+" Git configuration
+let g:git_messenger_include_diff = 1
+let g:blamer_enabled = 1
+let g:blamer_delay = 100
+let g:blamer_show_in_visual_modes = 1
+let g:blamer_show_in_insert_modes = 0
+let g:blamer_template = '<commit-short>: <author>, <committer-time> • <summary>'
+let g:blamer_date_format = '%d.%m.%y %H:%M'
+set updatetime=100
+
+nnoremap <C-g>s :Gstatus<CR>
+nnoremap <C-g>a :Git add -p<CR>
+nnoremap <C-g>m :GitMessenger <CR>
+
+" NERD Tree config
+let NERDTreeShowHidden=1
+
+" Start NERDTree when Vim is started without file arguments.
+if argc() != 0
+        let f = escape(fnameescape(argv(0)), '.')
+        if f == "pr"
+            autocmd VimEnter * bdelete pr | NERDTree new | :NERDTreeToggle
+        endif
+endif
+
+nmap <c-E> :NERDTreeToggle<CR>
+
+" COC config
+if has('nvim')
+    inoremap <silent><expr> <c-space> coc#refresh()
+else
+    inoremap <silent><expr> <c-@> coc#refresh()
+endif
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~ '\s'
+endfunction
+
+" Insert <tab> when previous text is space, refresh completion if not.
+"inoremap <silent><expr> <M-]>
+"  \ coc#pum#visible() ? coc#pum#next(1):
+"  \ <SID>check_back_space() ? "\<Tab>" :
+"  \ coc#refresh()
+"inoremap <expr><M-[> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+"
+"inoremap <silent><expr> <CR> coc#pum#visible() ? coc#_select_confirm()
+"            \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+"
+"inoremap <silent><expr> <TAB>
+"  \ coc#pum#visible() ? coc#_select_confirm() :
+"  \ coc#expandableOrJumpable() ?
+"  \ "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
+"  \ <SID>check_back_space() ? "\<TAB>" :
+"  \ coc#refresh()
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+let g:coc_snippet_next = '<tab>'
+
+" Actions extract method etc.
+autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+xmap <M-a> <Plug>(coc-codeaction-selected)
+nmap <M-a> <Plug>(coc-codeaction-selected)
+
+" GoTo code navigation.
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+autocmd CursorHold * silent call CocActionAsync('highlight')
+nnoremap <C-c>s : call CocAction('colorPresentation') <CR>
+nnoremap <C-c>p : call CocAction('pickColor') <CR>
+
+" =================== COC config END =======================
+
+" Open Config
+nmap <M-c>o :e ~/.config/nvim/init.vim <CR>
+nmap <M-c>a :so ~/.config/nvim/init.vim <CR>
+
+let mapleader = "`"
+
+" Symbol renaming.
+nmap <M-r>n <Plug>(coc-rename)
+
+" Terminal configuration
+let g:term_buf = 0
+let g:term_win = 0
+
+tnoremap <ESC> <C-\><C-n>
+
+set completeopt-=preview
+set completeopt+=menuone
+set completeopt+=noinsert
+
+"set omnifunc=syntaxcomplete#Complete
+
+set nohlsearch
+
+" Vimspector
+let g:vimspector_enable_mappings = 'HUMAN'
+let g:vimspector_base_dir='/home/sbura/.local/share/nvim/plugged/vimspector'
+
+nnoremap <C-d>d <Plug>VimspectorToggleConditionalBreakpoint
+
+autocmd BufEnter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
+" Folding
+set foldmethod=indent
+set nofoldenable
+
+" Make Ranger replace netrw and be the file explorer
+let g:rnvimr_ex_enable = 1
+
+nmap <space>r :RnvimrToggle<CR>
+
+" Vim templates
+let g:tmpl_author_email = 'serhiibura@gmail.com'
+let g:tmpl_author_name = 'Serhii Bura'
+let g:tmpl_search_paths = ['~/.config/nvim/templates']
+
+lua require('configuration')
+
+" TogTERM
+function! OpenToggleTerm()
+    let nerd_root = g:NERDTree.ForCurrentTab().getRoot().path.str()
+    execute "ToggleTerm dir=" . nerd_root
+endfunction
+
+nnoremap <silent><c-t> :call OpenToggleTerm() <CR>
+
+" VS tasks
+nnoremap <c-t>a :lua require("telescope").extensions.vstask.tasks()<CR>
+nnoremap <c-t>i :lua require("telescope").extensions.vstask.inputs()<CR>
+nnoremap <c-t>t :lua require("telescope").extensions.vstask.close()<CR>
+
+" VS launch
+" nnoremap <c-l>a :lua require("telescope").extensions.vslaunch.launches()<CR>
+" nnoremap <c-l>i :lua require("telescope").extensions.vslaunch.inputs()<CR>
+" nnoremap <c-l>t :lua require("telescope").extensions.vslaunch.close()<CR>
+
+" Refactoring configuration
+nnoremap <C-r>e <Esc><cmd>lua require('telescope').extensions.refactoring.refactors()<CR>
+
+" Tabs
+" nnoremap <M-n> :bnext<CR>
+" nnoremap <M-p> :bprev<CR>
+
+" Airline
+let g:airline#extensions#branch#enabled=1
+
+" Remove empty spaces
+nnoremap <C-r>s :%s/\s\+$//e <CR>
+
+" Telescope config
+nnoremap <C-t>f <cmd>Telescope find_files<cr>
+nnoremap <C-t>g <cmd>Telescope live_grep<cr>
+
+" Clang format
+nnoremap <M-f> :ClangFormat <CR>
+
+" TagBar
+nnoremap <C-t>b :TagbarToggle <CR>
+
+" Vlodek scripts
+function! DotnetInitTemplates()
+  execute '!dotnet new -i Yae.Templates::0.0.2'
+endfunction
+
+function! CreateTestClass()
+  let curline = getline('.')
+  call inputsave()
+  let dir = input('Enter dir: ')
+  let name = input('Enter name: ')
+  if len(dir) == 0
+      let dir = "."
+  endif
+  execute '!cd ' . dir . ' && dotnet new class -t ' . name . ' && cd - '
+endfunction
+
+nnoremap <C-c>t :call CreateTestClass() <CR>
+nnoremap <C-d>i :call DotnetInitTemplates() <CR>

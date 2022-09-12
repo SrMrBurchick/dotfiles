@@ -1,0 +1,16 @@
+/**
+ * @author      : {{NAME}} ({{EMAIL}})
+ * @file        : {{FILE}}
+ * @created     : {{TIMESTAMP}}
+ */
+
+#include "{{FILE}}.hpp"
+
+{{CLASS}}::{{CLASS}}()
+{
+    {{CURSOR}}
+}
+
+{{CLASS}}::~{{CLASS}}()
+{
+}
