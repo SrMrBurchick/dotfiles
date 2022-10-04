@@ -63,3 +63,5 @@ require('refactoring').setup({
     printf_statements = {},
     print_var_statements = {},
 })
+
+vim.cmd [[ let g:vimspector_enable_mappings = 'HUMAN' ]]

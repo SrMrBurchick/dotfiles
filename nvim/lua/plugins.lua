@@ -66,6 +66,7 @@ packer.startup(function(use)
     use 'nvim-lua/plenary.nvim'
     use 'nvim-telescope/telescope.nvim'
     use 'nvim-telescope/telescope-file-browser.nvim'
+    use 'nvim-telescope/telescope-project.nvim'
     use 'akinsho/toggleterm.nvim'
     -- Telescope media files preview
     use 'nvim-telescope/telescope-media-files.nvim'
@@ -109,12 +110,10 @@ packer.startup(function(use)
 
 
     -- Other
-    use 'preservim/nerdtree'
     use 'arithran/vim-delete-hidden-buffers'
     use 'rhysd/vim-clang-format'
     use 'preservim/tagbar'
     use 'kamykn/spelunker.vim'
-    use 'tibabit/vim-templates'
     use 'windwp/nvim-autopairs'
 
 
@@ -138,4 +137,35 @@ packer.startup(function(use)
         end
     }
 
+
+    -- remote code accessor
+    use {
+        '~/.config/nvim/remote-code-accessor.nvim',
+        requires = {
+            {'rcarriga/nvim-notify'}
+        },
+        config = function ()
+            require('remote-code-accessor').setup()
+        end
+    }
+
+	use {
+		'OmniSharp/omnisharp-vim'
+	}
+
+	use 'weilbith/nvim-code-action-menu'
+
+	use {'nvim-telescope/telescope-ui-select.nvim' }
+	use 'puremourning/vimspector'
+
+	use {
+		'kyazdani42/nvim-tree.lua',
+		requires = {
+			'kyazdani42/nvim-web-devicons', -- optional, for file icons
+		},
+		tag = 'nightly' -- optional, updated every week. (see issue #1193)
+	}
+
+	-- use 'nfvs/vim-perforce'
+	-- use {'glepnir/dashboard-nvim'}
 end)

@@ -25,7 +25,6 @@ ts.setup {
         "cmake",
         "c",
         "cpp",
-        "c_sharp",
         "python",
         "rust"
     },

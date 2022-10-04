@@ -1,5 +1,9 @@
 local keymap = vim.keymap
 
+-- Open/Load config
+keymap.set('n', '<M-c>o', ':tabnew ~\\AppData\\Local\\nvim\\init.lua<CR>')
+keymap.set('n', '<M-c>l', ':so ~\\AppData\\Local\\nvim\\init.lua<CR>')
+
 keymap.set('n', 'x', '"_x')
 
 -- Increment/decrement
@@ -20,7 +24,7 @@ keymap.set('n', 'tnt', ':tabnew<CR>:terminal<CR>')
 keymap.set('n', 'ss', ':split<Return><C-w>w')
 keymap.set('n', 'sv', ':vsplit<Return><C-w>w')
 -- Move window
-keymap.set('', '<Space><Space>', '<C-w>w')
+keymap.set('', '<Space>', '<C-w>w')
 keymap.set('', 'sh', '<C-w>h')
 keymap.set('', 'sk', '<C-w>k')
 keymap.set('', 'sj', '<C-w>j')
@@ -36,16 +40,20 @@ keymap.set('n', '<C-w>r<down>', '<C-w>-')
 keymap.set('', '<C-c>', '"+y')
 keymap.set('', '<C-p>', '"+p')
 
--- NerdTREE
-keymap.set('n', '<C-e>', ':NERDTreeToggle<CR>')
+-- NvimTree
+keymap.set('n', '<C-e>', ':NvimTreeToggle<CR>')
 
 -- ToggleTerm
 keymap.set('t', '<ESC>', '<C-\\><C-n>')
 keymap.set('', 'tt', ':ToggleTerm <CR>')
 
 -- Code Actions
+keymap.set('', 'va', '<cmd>Lspsaga code_action<CR>')
+keymap.set('', 'vd', '<cmd>Lspsaga show_line_diagnostics<CR>')
+-- keymap.set('', 'ca', "<cmd>lua vim.lsp.buf.code_action()<CR>")
+-- keymap.set('', 'ca', "<cmd>lua vim.lsp.buf.range_code_action()<CR>")
 -- Rename
-keymap.set("n", "rn", "<cmd>lua vim.lsp.buf.rename()<CR>", { noremap = true })
+--keymap.set("n", "rn", "<cmd>lua vim.lsp.buf.rename()<CR>", { noremap = true })
 -- Remaps for the refactoring operations currently offered by the plugin
 -- load refactoring Telescope extension
 require("telescope").load_extension("refactoring")

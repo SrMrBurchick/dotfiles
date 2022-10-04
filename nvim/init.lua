@@ -3,20 +3,34 @@ require('configuration')
 require('highlights')
 require('maps')
 require('plugins')
--- require('unreal_engine_cpp_setup')
+
+-- Neovide
+vim.cmd [[
+    if exists("g:neovide")
+        autocmd VimEnter * Telescope project
+        let g:neovide_remember_window_size = v:true
+        let g:neovide_cursor_trail_size = 0.2
+        let g:neovide_hide_mouse_when_typing = v:true
+        let g:neovide_cursor_vfx_mode = "pixiedust"
+    endif
+
+]]
 
 if vim.v.argc ~= 0 then
     if vim.v.argv[2] == "pr" then
-        vim.cmd 'autocmd VimEnter * bdelete pr | NERDTree new | :NERDTreeToggle'
-        vim.cmd 'autocmd BufEnter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif'
+        vim.cmd 'autocmd VimEnter * bdelete pr | NvimTree new | :NvimTreeToggle'
+--[[        vim.cmd 'autocmd BufEnter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif' ]]
     end
 end
 
-vim.cmd [[autocmd CursorHold,CursorHoldI * lua require('nvim-lightbulb').update_lightbulb()]]
+--vim.cmd [[autocmd CursorHold,CursorHoldI * lua require('nvim-lightbulb').update_lightbulb()]]
+vim.cmd [[autocmd CursorHold,CursorHoldI * lua require('lspsaga').show_cursor_diagnostic() ]]
 
 local rc_file = vim.fn.getcwd() .. "/.exrc"
 local f = io.open(rc_file,"r")
 if f ~=nil then
     io.close(f)
-    vim.cmd [[ source .exrc ]]
 end
+
+vim.cmd [[ noswapfile ]]
+vim.cmd [[ let g:OmniSharp_highlighting = 3 ]]

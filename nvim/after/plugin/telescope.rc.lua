@@ -8,7 +8,6 @@ local function telescope_buffer_dir()
 end
 
 local fb_actions = require "telescope".extensions.file_browser.actions
-
 telescope.setup {
   defaults = {
     mappings = {
@@ -18,6 +17,15 @@ telescope.setup {
     },
   },
   extensions = {
+    project = {
+      base_dirs = {
+        'D:\\Education',
+        {'~\\AppData\\Local\\nvim\\'},
+      },
+      hidden_files = true, -- default: false
+      theme = "dropdown",
+      order_by = "asc"
+    },
     file_browser = {
       theme = "dropdown",
       -- disables netrw and use telescope-file-browser in its place
@@ -41,11 +49,12 @@ telescope.setup {
 }
 
 telescope.load_extension("file_browser")
+telescope.load_extension('project')
 
 vim.keymap.set('n', ';f',
   function()
     builtin.find_files({
-      no_ignore = false,
+      no_ignore = true,
       hidden = true
     })
   end)

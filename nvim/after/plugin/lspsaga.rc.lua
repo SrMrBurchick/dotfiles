@@ -5,7 +5,17 @@ if (not status) then
 end
 
 saga.init_lsp_saga {
-    server_filetype_map = {}
+    server_filetype_map = {},
+    show_outline = {
+        win_position = 'left',
+        win_with = '',
+        win_width = 10,
+        auto_enter = false,
+        auto_preview = false,
+        virt_text = '┃',
+        jump_key = 'o',
+        auto_refresh = true,
+    },
 }
 
 local opts = { noremap = true, silent = true }
