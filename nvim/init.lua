@@ -7,11 +7,13 @@ require('plugins')
 -- Neovide
 vim.cmd [[
     if exists("g:neovide")
-        autocmd VimEnter * Telescope project
+        set guifont=Monospace:h8
         let g:neovide_remember_window_size = v:true
         let g:neovide_cursor_trail_size = 0.2
         let g:neovide_hide_mouse_when_typing = v:true
         let g:neovide_cursor_vfx_mode = "pixiedust"
+        let g:neovide_underline_automatic_scaling = v:false
+        let g:neovide_transparency=0.8
     endif
 
 ]]
