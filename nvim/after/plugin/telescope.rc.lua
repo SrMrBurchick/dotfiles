@@ -19,8 +19,6 @@ telescope.setup {
   extensions = {
     project = {
       base_dirs = {
-        'D:\\Education',
-        {'~\\AppData\\Local\\nvim\\'},
       },
       hidden_files = true, -- default: false
       theme = "dropdown",

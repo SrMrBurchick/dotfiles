@@ -149,23 +149,23 @@ packer.startup(function(use)
         end
     }
 
-	use {
-		'OmniSharp/omnisharp-vim'
-	}
+    use {
+        'OmniSharp/omnisharp-vim'
+    }
 
-	use 'weilbith/nvim-code-action-menu'
+    use 'weilbith/nvim-code-action-menu'
 
-	use {'nvim-telescope/telescope-ui-select.nvim' }
-	use 'puremourning/vimspector'
+    use {'nvim-telescope/telescope-ui-select.nvim' }
+    use 'puremourning/vimspector'
 
-	use {
-		'kyazdani42/nvim-tree.lua',
-		requires = {
-			'kyazdani42/nvim-web-devicons', -- optional, for file icons
-		},
-		tag = 'nightly' -- optional, updated every week. (see issue #1193)
-	}
+    use {
+        'kyazdani42/nvim-tree.lua',
+        requires = {
+            'kyazdani42/nvim-web-devicons', -- optional, for file icons
+        },
+        tag = 'nightly' -- optional, updated every week. (see issue #1193)
+    }
 
-	-- use 'nfvs/vim-perforce'
-	-- use {'glepnir/dashboard-nvim'}
+    -- use 'nfvs/vim-perforce'
+    -- use {'glepnir/dashboard-nvim'}
 end)
