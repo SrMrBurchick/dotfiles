@@ -21,7 +21,20 @@ vim.opt.cmdheight = 1
 vim.opt.laststatus = 2
 vim.opt.expandtab = true
 vim.opt.scrolloff = 10
-vim.opt.shell = 'zsh'
+
+local is_win = vim.fn.has "win32"
+
+if is_win then
+    vim.opt.shell = 'powershell'
+    vim.opt.shellcmdflag = "-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;"
+    vim.opt.shellredir = "-RedirectStandardOutput %s -NoNewWindow -Wait"
+    vim.opt.shellpipe = "2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode"
+    vim.opt.shellquote = ""
+    vim.opt.shellxquote = ""
+else
+    vim.opt = 'zsh'
+end
+
 vim.opt.backupskip = { '/tmp/*', '/private/tmp/*' }
 vim.opt.inccommand = 'split'
 vim.opt.ignorecase = true -- Case insensitive searching UNLESS /C or capital in search
@@ -37,9 +50,3 @@ vim.opt.list = true
 vim.opt.listchars = "tab:>-,trail:~,extends:>,precedes:<"
 vim.opt.foldmethod = "indent"
 vim.opt.foldenable = false
-
-
--- ToggleTerm
-
-vim.cmd 'let NERDTreeShowHidden=1'
-

@@ -13,4 +13,3 @@ vim.cmd 'hi CursorLine gui=underline cterm=underline'
 
 vim.cmd 'set termguicolors'
 vim.cmd 'hi Normal guibg=NONE ctermbg=NONE'
-

@@ -22,9 +22,6 @@ packer.startup(function(use)
         requires = 'kyazdani42/nvim-web-devicons'
     }
     use 'rafi/awesome-vim-colorschemes'
-    -- Text->Color UI
-    use 'NvChad/nvim-colorizer.lua'
-    use 'max397574/colortils.nvim'
 
 
     -- LSP
@@ -53,7 +50,6 @@ packer.startup(function(use)
     }
     -- Treesitter highlight colorizer
     use 'p00f/nvim-ts-rainbow'
-    use 'windwp/nvim-ts-autotag'
 
 
     -- Icons
@@ -76,27 +72,6 @@ packer.startup(function(use)
     use 'tpope/vim-fugitive'
     use 'airblade/vim-gitgutter'
     use 'rhysd/git-messenger.vim'
-    use {
-        'pwntester/octo.nvim',
-        requires = {
-            'nvim-lua/plenary.nvim',
-            'nvim-telescope/telescope.nvim',
-            'kyazdani42/nvim-web-devicons',
-        },
-        config = function()
-            require "octo".setup()
-        end
-    }
-
-
-    -- Refactoring server
-    use {
-        "ThePrimeagen/refactoring.nvim",
-        requires = {
-            { "nvim-lua/plenary.nvim" },
-            { "nvim-treesitter/nvim-treesitter" }
-        }
-    }
 
 
     -- Markdown preview
@@ -111,8 +86,6 @@ packer.startup(function(use)
 
     -- Other
     use 'arithran/vim-delete-hidden-buffers'
-    use 'rhysd/vim-clang-format'
-    use 'preservim/tagbar'
     use 'kamykn/spelunker.vim'
     use 'windwp/nvim-autopairs'
 
@@ -142,21 +115,13 @@ packer.startup(function(use)
     use {
         '~/.config/nvim/remote-code-accessor.nvim',
         requires = {
-            {'rcarriga/nvim-notify'}
+            { 'rcarriga/nvim-notify' }
         },
-        config = function ()
+        config = function()
             require('remote-code-accessor').setup()
         end
     }
 
-    use {
-        'OmniSharp/omnisharp-vim'
-    }
-
-    use 'weilbith/nvim-code-action-menu'
-
-    use {'nvim-telescope/telescope-ui-select.nvim' }
-    use 'puremourning/vimspector'
 
     use {
         'kyazdani42/nvim-tree.lua',
@@ -166,6 +131,12 @@ packer.startup(function(use)
         tag = 'nightly' -- optional, updated every week. (see issue #1193)
     }
 
-    -- use 'nfvs/vim-perforce'
-    -- use {'glepnir/dashboard-nvim'}
+
+    -- Debugger
+    use {
+        'rcarriga/nvim-dap-ui',
+        requires = {
+            'mfussenegger/nvim-dap'
+        }
+    }
 end)

@@ -15,6 +15,8 @@ keymap.set('n', '<C-a>', 'gg<S-v>G')
 
 -- Save with root permission (not working for now)
 --vim.api.nvim_create_user_command('W', 'w !sudo tee > /dev/null %', {})
+-- Lsp formatting
+keymap.set('n', 'cf', '<cmd> lua vim.lsp.buf.formatting_sync()<cr>')
 
 -- New tab
 keymap.set('n', 'tn', ':tabnew <CR>')
@@ -50,24 +52,6 @@ keymap.set('', 'tt', ':ToggleTerm <CR>')
 -- Code Actions
 keymap.set('', 'va', '<cmd>Lspsaga code_action<CR>')
 keymap.set('', 'vd', '<cmd>Lspsaga show_line_diagnostics<CR>')
--- keymap.set('', 'ca', "<cmd>lua vim.lsp.buf.code_action()<CR>")
--- keymap.set('', 'ca', "<cmd>lua vim.lsp.buf.range_code_action()<CR>")
--- Rename
---keymap.set("n", "rn", "<cmd>lua vim.lsp.buf.rename()<CR>", { noremap = true })
--- Remaps for the refactoring operations currently offered by the plugin
--- load refactoring Telescope extension
-require("telescope").load_extension("refactoring")
-
--- remap to open the Telescope refactoring menu in visual mode
-vim.api.nvim_set_keymap(
-    "",
-    "tr",
-    "<Esc><cmd>lua require('telescope').extensions.refactoring.refactors()<CR>",
-    { noremap = true }
-)
-
--- Clang formatte
-keymap.set('n', 'cf', ':ClangFormat<CR>', { noremap = true })
 
 -- Remove empty spaces
 keymap.set('n', 'rs', ':%s/\\s\\+$//e <CR>')
@@ -79,8 +63,8 @@ keymap.set('n', '<M-m>t', '<Plug>MarkdownPreviewToggle')
 
 -- VS Tasks
 keymap.set('', 'ta', ':lua require("telescope").extensions.vstask.tasks()<CR>',
-           {noremap = true})
+    { noremap = true })
 
 -- VS Launch
 keymap.set('', 'la', ':lua require("telescope").extensions.vslaunch.launches()<CR>',
-           {noremap = true})
+    { noremap = true })

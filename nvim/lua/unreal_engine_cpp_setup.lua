@@ -16,7 +16,7 @@ local function lines_from(file)
     local lines = {}
 
     for line in io.lines(file) do
-        lines[#lines+1] = line
+        lines[#lines + 1] = line
     end
 
     return lines
@@ -59,7 +59,6 @@ local function update_compile_commands(file_name)
     file:close()
 end
 
-
 local function copy_compile_commands(compile_commands)
     local src = io.open(compile_commands, "r")
     local dst = io.open("compile_commands.json", "w+")
@@ -74,7 +73,6 @@ local function copy_compile_commands(compile_commands)
     src:close()
     dst:close()
 end
-
 
 local function parse_vscode_compile_commands(compile_commands)
     if type(compile_commands) ~= "table" then
@@ -106,7 +104,7 @@ local function search_vscode_compile_commands()
     local compile_commands = {}
     for dir in io.popen([[dir ".vscode/" /b /ad]]):lines() do
         local t = {}
-        dir:gsub("[^%s]+",function(c) table.insert(t,c) end)
+        dir:gsub("[^%s]+", function(c) table.insert(t, c) end)
         for key, value in pairs(t) do
             if value and value:find("compileCommands_") and value:find("json") then
                 compile_commands[key] = value
