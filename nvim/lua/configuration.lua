@@ -1,67 +1,63 @@
 -- VS tasks
-require("vstask").setup({
-  use_harpoon = false, -- use harpoon to auto cache terminals
-  telescope_keys = { -- change the telescope bindings used to launch tasks
-      vertical = '<C-v>',
-      split = '<C-p>',
-      tab = '<C-t>',
-      current = '<CR>',
-  },
-  terminal = 'toggleterm',
-  term_opts = {
-    horizontal = {
-      direction = "horizontal",
-      size = "10"
-    },
-  }
-})
+local status, vstask = pcall(require, "vstask")
+if (status) then
+    vstask.setup({
+        use_harpoon = false, -- use harpoon to auto cache terminals
+        telescope_keys = { -- change the telescope bindings used to launch tasks
+            vertical = '<C-v>',
+            split = '<C-p>',
+            tab = '<C-t>',
+            current = '<CR>',
+        },
+        terminal = 'toggleterm',
+        term_opts = {
+            horizontal = {
+                direction = "horizontal",
+                size = "10"
+            },
+        }
+    })
 
--- VS launch
-require("vslaunch").setup({
-  use_harpoon = false, -- use harpoon to auto cache terminals
-  telescope_keys = { -- change the telescope bindings used to launch tasks
-      vertical = '<C-v>',
-      split = '<C-p>',
-      tab = '<C-t>',
-      current = '<CR>',
-  },
-  terminal = 'toggleterm',
-  term_opts = {
-    horizontal = {
-      direction = "horizontal",
-      size = "10"
-    },
-  }
-})
+    -- VS launch
+    require("vslaunch").setup({
+        use_harpoon = false, -- use harpoon to auto cache terminals
+        telescope_keys = { -- change the telescope bindings used to launch tasks
+            vertical = '<C-v>',
+            split = '<C-p>',
+            tab = '<C-t>',
+            current = '<CR>',
+        },
+        terminal = 'toggleterm',
+        term_opts = {
+            horizontal = {
+                direction = "horizontal",
+                size = "10"
+            },
+        }
+    })
+
+end
 
 -- Comments
-require('Comment').setup()
+local comment = {}
+
+status, comment = pcall(require, "Comment")
+if status then
+    comment.setup()
+end
 
 -- Bufferline
-vim.opt.termguicolors = true
-require("bufferline").setup{}
+local bufferline = {}
+
+status, bufferline = pcall(require, "bufferline")
+if status then
+    bufferline.setup()
+end
 
 -- Standalone UI for nvim-lsp progress.
-require('fidget').setup()
+local fidget = {}
 
--- Telescope Refactoring
-require('refactoring').setup({
-    prompt_func_return_type = {
-        cpp = true,
-        c = true,
-        h = true,
-        hpp = true,
-        cxx = true,
-    },
-    prompt_func_param_type = {
-        cpp = true,
-        c = true,
-        h = true,
-        hpp = true,
-        cxx = true,
-    },
-    printf_statements = {},
-    print_var_statements = {},
-})
-
-vim.cmd [[ let g:vimspector_enable_mappings = 'HUMAN' ]]
+status, fidget = pcall(require, "fidget")
+if status then
+    fidget.setup()
+end

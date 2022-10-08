@@ -13,20 +13,13 @@ ts.setup {
     },
     indent = {
         enable = true,
-        disable = {"yaml"},
+        disable = { "yaml" },
     },
     ensure_installed = {
-        "toml",
         "json",
-        "yaml",
-        "html",
-        "scss",
-        "css",
-        "cmake",
         "c",
         "cpp",
         "python",
-        "rust"
     },
     autotag = {
         enable = true
