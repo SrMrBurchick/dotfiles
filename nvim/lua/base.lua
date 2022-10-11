@@ -24,12 +24,13 @@ vim.opt.scrolloff = 10
 
 local is_win = vim.fn.has "win32"
 if is_win == true then
-    vim.opt.shell = 'powershell'
-    vim.opt.shellcmdflag = "-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;"
-    vim.opt.shellredir = "-RedirectStandardOutput %s -NoNewWindow -Wait"
-    vim.opt.shellpipe = "2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode"
-    vim.opt.shellquote = ""
-    vim.opt.shellxquote = ""
+    vim.cmd [[
+        let &shell = executable('pwsh') ? 'pwsh' : 'powershell'
+        let &shellcmdflag = '-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;'
+        let &shellredir = '-RedirectStandardOutput %s -NoNewWindow -Wait'
+        let &shellpipe = '2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode'
+        set shellquote= shellxquote=
+    ]]
 else
     vim.opt.shell = 'zsh'
 end
