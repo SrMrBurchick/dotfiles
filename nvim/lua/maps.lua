@@ -45,9 +45,6 @@ keymap.set('', '<C-p>', '"+p')
 -- NvimTree
 keymap.set('n', '<C-e>', ':NvimTreeToggle<CR>')
 
--- ToggleTerm
-keymap.set('t', '<ESC>', '<C-\\><C-n>')
-
 -- Code Actions
 keymap.set('', 'va', '<cmd>Lspsaga code_action<CR>')
 keymap.set('', 'vd', '<cmd>Lspsaga show_line_diagnostics<CR>')
