@@ -23,8 +23,7 @@ vim.opt.expandtab = true
 vim.opt.scrolloff = 10
 
 local is_win = vim.fn.has "win32"
-
-if is_win then
+if is_win == true then
     vim.opt.shell = 'powershell'
     vim.opt.shellcmdflag = "-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;"
     vim.opt.shellredir = "-RedirectStandardOutput %s -NoNewWindow -Wait"
@@ -32,7 +31,7 @@ if is_win then
     vim.opt.shellquote = ""
     vim.opt.shellxquote = ""
 else
-    vim.opt = 'zsh'
+    vim.opt.shell = 'zsh'
 end
 
 vim.opt.backupskip = { '/tmp/*', '/private/tmp/*' }

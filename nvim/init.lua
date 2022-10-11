@@ -14,10 +14,13 @@ vim.cmd [[
         let g:neovide_hide_mouse_when_typing = v:true
         let g:neovide_cursor_vfx_mode = "pixiedust"
         let g:neovide_underline_automatic_scaling = v:false
-        let g:neovide_transparency=1
+        let g:neovide_transparency=0.8
         autocmd VimEnter * Telescope project
-    endif
 
+        " system clipboard
+        inoremap <c-v> <c-r>+
+        cnoremap <c-v> <c-r>+
+    endif
 ]]
 
 if vim.v.argc ~= 0 then

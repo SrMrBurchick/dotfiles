@@ -1,12 +1,25 @@
 local status, dap = pcall(require, "dap")
 if (not status) then return end
 
+-- VSCode launch
+local vscode = {}
+status, vscode = pcall(require, 'dap.ext.vscode')
+if status then
+   vscode.type_to_filetypes = {
+        cppdbg = { 'c', 'cpp' },
+        lldb = { 'c', 'cpp' },
+        codelldb = { 'c', 'cpp' },
+        -- cppvsdbg= { 'c', 'cpp' },
+    }
+end
+
+-- C++ adapters
 dap.adapters.codelldb = {
     type = 'server',
     port = "${port}",
     executable = {
         -- CHANGE THIS to your path!
-        command = vim.fn.stdpath "data" .. '\\mason\\packages\\codelldb\\extension\\adapter\\codelldb.exe',
+        command = vim.fn.stdpath "data" .. '/mason/packages/codelldb/extension/adapter/codelldb',
         args = { "--port", "${port}" },
 
         -- On windows you may have to uncomment this:
@@ -17,7 +30,7 @@ dap.adapters.codelldb = {
 dap.adapters.cppdbg = {
     id = 'cppdbg',
     type = 'executable',
-    command = vim.fn.stdpath "data" .. '\\mason\\packages\\cpptools\\extension\\debugAdapters\\bin\\OpenDebugAD7.exe',
+    command = "gdb",
     options = {
         detached = false
     }
@@ -28,26 +41,16 @@ dap.adapters.lldb = {
     command = 'lldb',
 }
 
-dap.adapters.vsdbg = {
+dap.adapters.cppvsdbg = {
     type = 'executable',
-    command = vim.fn.stdpath "data" .. '\\mason\\packages\\cpptools\\extension\\debugAdapters\\vsdbg\\bin\\vsdbg.exe',
+    command = vim.fn.stdpath "data" .. '/mason/packages/cpptools/extension/debugAdapters/bin/OpenDebugAD7',
+    MIMode = 'gdb'
 }
-
 
 dap.configurations.cpp = {
     {
-        name = "(cppDBG) Launch",
+        name = "(CPPDB) Launch",
         type = "cppdbg",
-        request = "launch",
-        program = function()
-            return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
-        end,
-        cwd = '${workspaceFolder}',
-        stopAtEntry = true,
-    },
-    {
-        name = "(VSDBG) Launch",
-        type = "vsdbg",
         request = "launch",
         program = function()
             return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
@@ -65,30 +68,6 @@ dap.configurations.cpp = {
         cwd = '${workspaceFolder}',
         stopAtEntry = true,
     },
-    {
-        name = "(Unreal Engine) Launch",
-        type = "vsdbg",
-        request = "launch",
-        program = "D:\\Education\\UnrealEngine\\Engine\\Binaries\\Win64\\UE4Editor.exe",
-        args = {
-            "D:\\Projects\\MyProject\\MyProject.uproject"
-        },
-        cwd = 'D:\\Education\\UnrealEngine',
-        stopAtEntry = true,
-    },
-
-    {
-        name = 'Attach to gdbserver :1234',
-        type = 'cppdbg',
-        request = 'launch',
-        MIMode = 'gdb',
-        miDebuggerServerAddress = 'localhost:1234',
-        miDebuggerPath = '/usr/bin/gdb',
-        cwd = '${workspaceFolder}',
-        program = function()
-            return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
-        end,
-    },
 }
 
 dap.configurations.c = dap.configurations.cpp
@@ -105,11 +84,14 @@ vim.fn.sign_define('DapBreakpoint', { text = '🟥', texthl = '', linehl = '', n
 
 -- Key maps
 local keymap = vim.keymap
-keymap.set('n', '<F5>', '<Cmd>lua require"dap".continue()<CR>')
-keymap.set('n', '<F10>', '<Cmd>lua require"dap".step_over()<CR>')
-keymap.set('n', '<F11>', '<Cmd>lua require"dap".step_into()<CR>')
-keymap.set('n', '<F12>', '<Cmd>lua require"dap".step_out()<CR>')
-keymap.set('n', '<F9>', '<Cmd>lua require"dap".toggle_breakpoint()<CR>')
+keymap.set('n', '<F5>', function ()
+    vim.cmd [[ :DapLoadLaunchJSON ]]
+    vim.cmd [[ :DapContinue ]]
+end)
+keymap.set('n', '<F10>', '<Cmd>DapStepOver<CR>')
+keymap.set('n', '<F11>', '<Cmd>DapStepInto<CR>')
+keymap.set('n', '<F12>', '<Cmd>DapStepOut<CR>')
+keymap.set('n', '<F12>', '<Cmd>DapToggleBreakPoint<CR>')
 keymap.set('n', '<c-F9>', '<Cmd>lua require"dap".set_breakpoint(vim.fn.input("Breakpoint condition: "))<CR>')
 
 -- DAP UI

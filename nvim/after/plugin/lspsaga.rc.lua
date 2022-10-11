@@ -6,15 +6,12 @@ end
 
 saga.init_lsp_saga {
     server_filetype_map = {},
+    code_action_lightbulb = {
+        virtual_text = false,
+    },
     show_outline = {
-        win_position = 'left',
-        win_with = '',
-        win_width = 10,
+        win_width = 30,
         auto_enter = false,
-        auto_preview = false,
-        virt_text = '┃',
-        jump_key = 'o',
-        auto_refresh = true,
     },
 }
 
@@ -23,4 +20,7 @@ vim.keymap.set('n', 'gr', '<Cmd> Lspsaga lsp_finder<cr>', opts)
 vim.keymap.set('n', 'rn', '<Cmd> Lspsaga rename<cr>', opts)
 vim.keymap.set('n', 'gp', '<Cmd> Lspsaga preview_definition<cr>', opts)
 vim.keymap.set('n', 'K', '<Cmd> Lspsaga hover_doc<cr>', opts)
+vim.keymap.set('n', 'sot', '<Cmd> LSoutlineToggle<cr>', opts)
+vim.keymap.set('n', 'tt', '<Cmd> Lspsaga open_floaterm<cr>', opts)
+vim.keymap.set('t', 'tt', '<Cmd> Lspsaga close_floaterm<cr>', opts)
 -- vim.keymap.set('i', '<C-k>', '<Cmd> Lspsaga signature_help<cr>', opts)
