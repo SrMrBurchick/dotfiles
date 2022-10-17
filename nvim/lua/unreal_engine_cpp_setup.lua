@@ -1,6 +1,6 @@
 local M = {}
 
-local clang_new_line = '"command": "\\"clang.exe\\" @\\"C:\\\\Users\\\\s.Bura\\\\.config\\\\nvim\\\\clang-flags.txt\\" '
+local clang_new_line = '"command": "clang++ @/home/sbura/.config/nvim/clang-flags.txt '
 
 local function is_valid(file)
     for line in io.lines(file) do
@@ -35,7 +35,7 @@ local function update_compile_commands(file_name)
     end
 
     for k, value in pairs(lines) do
-        if string.find(value, "cl") then
+        if string.find(value, "clang++") then
             local index = string.find(value, "@")
             local new_line = string.sub(value, index)
             lines[k] = clang_new_line .. new_line

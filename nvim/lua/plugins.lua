@@ -28,6 +28,7 @@ packer.startup(function(use)
     use 'neovim/nvim-lspconfig' -- Collection of configurations for built-in LSP client
     use 'hrsh7th/nvim-cmp' -- Autocompletion plugin
     use 'hrsh7th/cmp-nvim-lsp' -- LSP source for nvim-cmp
+    use 'hrsh7th/cmp-path'
     use 'glepnir/lspsaga.nvim' -- Lightweight LSP UI
     use 'onsails/lspkind.nvim' -- vscode-like pictograms
     use 'j-hui/fidget.nvim' -- Standalone UI for nvim-lsp progress
