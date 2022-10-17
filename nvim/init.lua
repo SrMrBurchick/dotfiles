@@ -35,3 +35,15 @@ local f = io.open(rc_file, "r")
 if f ~= nil then
     io.close(f)
 end
+
+local has = vim.fn.has
+local is_win = has "win32"
+local is_linux = has "linux"
+
+if 0 ~= is_win then
+    require('win')
+elseif 0 ~= is_linux then
+    require('linux')
+else
+    print("Uknown system!")
+end

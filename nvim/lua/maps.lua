@@ -1,9 +1,5 @@
 local keymap = vim.keymap
 
--- Open/Load config
-keymap.set('n', '<M-c>o', ':tabnew ~\\AppData\\Local\\nvim\\init.lua<CR>')
-keymap.set('n', '<M-c>l', ':so ~\\AppData\\Local\\nvim\\init.lua<CR>')
-
 keymap.set('n', 'x', '"_x')
 
 -- Increment/decrement
