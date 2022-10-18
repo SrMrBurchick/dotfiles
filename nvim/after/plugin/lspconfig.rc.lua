@@ -14,7 +14,7 @@ local protocol = require('vim.lsp.protocol')
 -- Add additional capabilities supported by nvim-cmp
 local capabilities = protocol.make_client_capabilities()
 
-capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
+capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
 local m = require("mason-lspconfig")
 
