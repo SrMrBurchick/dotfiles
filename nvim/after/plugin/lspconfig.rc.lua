@@ -41,7 +41,7 @@ local on_attach = function(client, bufnr)
 end
 
 m.setup {
-    ensure_installed = { 'clangd', 'cmake-language-server', 'lua-language-server' },
+    ensure_installed = { 'clangd' },
 }
 
 -- Loop through all of the installed servers and set it up via lspconfig
