@@ -15,6 +15,7 @@ vim.opt.syntax = on
 vim.opt.autoindent = true
 vim.opt.smartindent = true
 vim.opt.hlsearch = true
+vim.opt.exrc = true
 vim.opt.backup = false
 vim.opt.showcmd = true
 vim.opt.cmdheight = 1

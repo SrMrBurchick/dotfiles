@@ -29,10 +29,9 @@ if vim.v.argc ~= 0 then
     end
 end
 
-local rc_file = vim.fn.getcwd() .. "/.exrc"
-local f = io.open(rc_file, "r")
-if f ~= nil then
-    io.close(f)
+local local_vimrc = vim.fn.getcwd() .. '/.nvimrc.lua'
+if vim.loop.fs_stat(local_vimrc) then
+    vim.cmd('source ' .. local_vimrc)
 end
 
 local has = vim.fn.has

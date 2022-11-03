@@ -38,7 +38,8 @@ dap.adapters.cppdbg = {
 
 dap.adapters.lldb = {
     type = 'executable',
-    command = 'lldb',
+    command = '/usr/bin/lldb-vscode',
+    name = 'lldb',
 }
 
 dap.adapters.cppvsdbg = {
@@ -59,8 +60,8 @@ dap.configurations.cpp = {
         stopAtEntry = true,
     },
     {
-        name = "(CodeLLDB) Launch",
-        type = "codelldb",
+        name = "(LLDB) Launch",
+        type = "lldb",
         request = "launch",
         program = function()
             return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
@@ -68,6 +69,20 @@ dap.configurations.cpp = {
         cwd = '${workspaceFolder}',
         stopAtEntry = true,
     },
+    {
+        name = "(Unreal Engine Debug Game) Launch",
+        type = "lldb",
+        request = "launch",
+        program = function()
+            return '/epic_games/UnrealEngine/Engine/Binaries/Linux/UE4Editor-Linux-DebugGame'
+        end,
+        args = {
+            vim.fn.input('Path to project: ', vim.fn.getcwd() .. '/', 'file')
+        },
+        cwd = '${workspaceFolder}',
+        stopAtEntry = true,
+    },
+
 }
 
 dap.configurations.c = dap.configurations.cpp
@@ -88,10 +103,15 @@ keymap.set('n', '<F5>', function ()
     vim.cmd [[ :DapLoadLaunchJSON ]]
     vim.cmd [[ :DapContinue ]]
 end)
+
+keymap.set('n', '<F5>', function ()
+    vim.cmd [[ :DapLoadLaunchJSON ]]
+    vim.cmd [[ :DapContinue ]]
+end)
 keymap.set('n', '<F10>', '<Cmd>DapStepOver<CR>')
 keymap.set('n', '<F11>', '<Cmd>DapStepInto<CR>')
 keymap.set('n', '<F12>', '<Cmd>DapStepOut<CR>')
-keymap.set('n', '<F12>', '<Cmd>DapToggleBreakPoint<CR>')
+keymap.set('n', '<F9>', '<Cmd>DapToggleBreakpoint<CR>')
 keymap.set('n', '<c-F9>', '<Cmd>lua require"dap".set_breakpoint(vim.fn.input("Breakpoint condition: "))<CR>')
 
 -- DAP UI

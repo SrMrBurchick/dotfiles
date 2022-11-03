@@ -60,6 +60,7 @@ telescope.setup {
 }
 
 telescope.load_extension("file_browser")
+telescope.load_extension('perforce')
 telescope.load_extension('project')
 
 vim.keymap.set('n', ';f',
