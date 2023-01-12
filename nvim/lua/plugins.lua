@@ -72,6 +72,7 @@ packer.startup(function(use)
     use 'tpope/vim-fugitive'
     use 'airblade/vim-gitgutter'
     use 'rhysd/git-messenger.vim'
+    use 'f-person/git-blame.nvim'
 
 
     -- Markdown preview
@@ -139,4 +140,9 @@ packer.startup(function(use)
             'mfussenegger/nvim-dap'
         }
     }
+
+    use {
+        'simrat39/symbols-outline.nvim',
+    }
+    use 'voldikss/vim-floaterm'
 end)

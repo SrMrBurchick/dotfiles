@@ -60,3 +60,6 @@ keymap.set('', 'ta', ':lua require("telescope").extensions.vstask.tasks()<CR>',
 -- VS Launch
 keymap.set('', 'la', ':lua require("telescope").extensions.vslaunch.launches()<CR>',
     { noremap = true })
+
+-- Floatterm
+keymap.set('', '<C-t>t', ':FloatermNew --height=0.9 --width=0.9<CR>', { noremap = true })
