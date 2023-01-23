@@ -61,3 +61,5 @@ keymap.set('', 'ta', ':lua require("telescope").extensions.vstask.tasks()<CR>',
 keymap.set('', 'la', ':lua require("telescope").extensions.vslaunch.launches()<CR>',
     { noremap = true })
 
+-- Symbols outline
+keymap.set('', '<M-o>', '<CMD>Telescope lsp_document_symbols<CR>')
