@@ -144,5 +144,5 @@ packer.startup(function(use)
     use {
         'simrat39/symbols-outline.nvim',
     }
-    use 'voldikss/vim-floaterm'
+    use 'akinsho/toggleterm.nvim'
 end)

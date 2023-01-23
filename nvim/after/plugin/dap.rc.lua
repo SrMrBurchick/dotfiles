@@ -69,20 +69,6 @@ dap.configurations.cpp = {
         cwd = '${workspaceFolder}',
         stopAtEntry = true,
     },
-    {
-        name = "(Unreal Engine Debug Game) Launch",
-        type = "lldb",
-        request = "launch",
-        program = function()
-            return '/epic_games/UnrealEngine/Engine/Binaries/Linux/UE4Editor-Linux-DebugGame'
-        end,
-        args = {
-            vim.fn.input('Path to project: ', vim.fn.getcwd() .. '/', 'file')
-        },
-        cwd = '${workspaceFolder}',
-        stopAtEntry = true,
-    },
-
 }
 
 dap.configurations.c = dap.configurations.cpp
