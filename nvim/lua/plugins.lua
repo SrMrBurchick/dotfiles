@@ -29,10 +29,14 @@ packer.startup(function(use)
     use 'hrsh7th/nvim-cmp' -- Autocompletion plugin
     use 'hrsh7th/cmp-nvim-lsp' -- LSP source for nvim-cmp
     use 'hrsh7th/cmp-path'
-    use 'glepnir/lspsaga.nvim' -- Lightweight LSP UI
     use 'onsails/lspkind.nvim' -- vscode-like pictograms
     use 'j-hui/fidget.nvim' -- Standalone UI for nvim-lsp progress
-
+    use({
+        "glepnir/lspsaga.nvim",
+        branch = "main",
+        commit = "b7b4777",
+        requires = { {"nvim-tree/nvim-web-devicons"} }
+    })
 
     -- Snippets
     use 'saadparwaiz1/cmp_luasnip' -- Snippets source for nvim-cmp
@@ -72,7 +76,7 @@ packer.startup(function(use)
     use 'tpope/vim-fugitive'
     use 'airblade/vim-gitgutter'
     use 'rhysd/git-messenger.vim'
-    use 'f-person/git-blame.nvim'
+    use 'braxtons12/blame_line.nvim'
 
 
     -- Markdown preview
@@ -141,8 +145,5 @@ packer.startup(function(use)
         }
     }
 
-    use {
-        'simrat39/symbols-outline.nvim',
-    }
     use 'akinsho/toggleterm.nvim'
 end)

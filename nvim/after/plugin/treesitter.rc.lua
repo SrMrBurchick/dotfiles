@@ -20,6 +20,7 @@ ts.setup {
         "c",
         "cpp",
         "python",
+        "rust"
     },
     autotag = {
         enable = true

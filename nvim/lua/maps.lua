@@ -62,4 +62,18 @@ keymap.set('', 'la', ':lua require("telescope").extensions.vslaunch.launches()<C
     { noremap = true })
 
 -- Symbols outline
-keymap.set('', '<M-o>', '<CMD>Telescope lsp_document_symbols<CR>')
+keymap.set('', '<M-o>', function ()
+    -- local opts= {
+    --     symbols = {
+    --         "function",
+    --         "variable",
+    --         "class",
+    --         "constructor",
+    --         "method",
+    --     }
+    -- }
+    -- if vim.bo.filetype == "vim" then
+    --     opts.symbols = { "function" }
+    -- end
+    require('telescope.builtin').lsp_document_symbols()
+end)
