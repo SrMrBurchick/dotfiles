@@ -20,7 +20,10 @@ ts.setup {
         "c",
         "cpp",
         "python",
-        "rust"
+        "rust",
+        "lua",
+        "markdown",
+        "markdown_inline"
     },
     autotag = {
         enable = true

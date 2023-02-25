@@ -34,9 +34,8 @@ packer.startup(function(use)
     use({
         "glepnir/lspsaga.nvim",
         branch = "main",
-        commit = "b7b4777",
-        requires = { {"nvim-tree/nvim-web-devicons"} }
     })
+    use 'lvimuser/lsp-inlayhints.nvim'
 
     -- Snippets
     use 'saadparwaiz1/cmp_luasnip' -- Snippets source for nvim-cmp
@@ -112,18 +111,6 @@ packer.startup(function(use)
         'numToStr/Comment.nvim',
         config = function()
             require('Comment').setup()
-        end
-    }
-
-
-    -- remote code accessor
-    use {
-        '~/.config/nvim/remote-code-accessor.nvim',
-        requires = {
-            { 'rcarriga/nvim-notify' }
-        },
-        config = function()
-            require('remote-code-accessor').setup()
         end
     }
 

@@ -41,21 +41,31 @@ local on_attach = function(client, bufnr)
 end
 
 m.setup {
-    ensure_installed = { 'clangd' },
 }
 
 -- Loop through all of the installed servers and set it up via lspconfig
 m.setup_handlers {
     function(server_name)
         require('lspconfig')[server_name].setup({
+            on_attach = on_attach,
             capabilities = capabilities,
             handlers = handlers
         })
     end
 }
 
+require('lspconfig')['rust_analyzer'].setup {
+    on_attach = on_attach,
+    -- Server-specific settings...
+    capabilities = capabilities,
+    handlers = handlers,
+
+    settings = {
+        ["rust-analyzer"] = {}
+    }
+}
 -- Lua server
-require('lspconfig')["sumneko_lua"].setup {
+require('lspconfig')["lua_ls"].setup {
     on_attach = on_attach,
     handlers = handlers,
     settings = {
@@ -98,14 +108,12 @@ require('lspkind').init({
     -- DEPRECATED (use mode instead): enables text annotations
     -- options: 'text', 'text_symbol', 'symbol_text', 'symbol'
     mode = 'symbol_text',
-
     -- default symbol map
     -- can be either 'default' (requires nerd-fonts font) or
     -- 'codicons' for codicon preset (requires vscode-codicons font)
     --
     -- default: 'default'
     preset = 'codicons',
-
     -- override preset symbols
     --
     -- default: {}
@@ -161,7 +169,7 @@ cmp.setup {
         })
     },
     mapping = cmp.mapping.preset.insert({
-        ['<C-d>'] = cmp.mapping.scroll_docs(-4),
+        ['<C-d>'] = cmp.mapping.scroll_docs( -4),
         ['<C-f>'] = cmp.mapping.scroll_docs(4),
         ['<C-Space>'] = cmp.mapping.complete(),
         ['<CR>'] = cmp.mapping.confirm {
@@ -180,8 +188,8 @@ cmp.setup {
         ['<S-Tab>'] = cmp.mapping(function(fallback)
             if cmp.visible() then
                 cmp.select_prev_item()
-            elseif luasnip.jumpable(-1) then
-                luasnip.jump(-1)
+            elseif luasnip.jumpable( -1) then
+                luasnip.jump( -1)
             else
                 fallback()
             end

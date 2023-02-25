@@ -21,6 +21,9 @@ end)
 vim.keymap.set('n', '<M-g>u', function ()
     require('toggleterm').exec('git fetch origin dev')
 end)
+vim.keymap.set('n', '<M-g>lg', function ()
+    require('toggleterm').exec('lazygit')
+end)
 local status, git_blame = pcall(require, 'blame_line')
 if (not status) then
     return
