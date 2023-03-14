@@ -1,0 +1,151 @@
+{
+    "layer": "top", // Waybar at top layer
+    "margin": "5 20 0 20",
+    "modules-left": [
+        "custom/launcher",
+        "custom/vpn",
+        "custom/pomodoro",
+        "tray",
+    ],
+    "modules-center": [
+        "custom/media",
+        "clock",
+        "custom/cava-internal",
+    ],
+    "modules-right": [
+        "pulseaudio",
+        "backlight",
+        "memory",
+        "cpu",
+        "network",
+        "battery",
+        "custom/powermenu"
+    ],
+    "custom/launcher": {
+        "format": "",
+        "on-click": "wofi --show drun",
+        "tooltip": false
+    },
+    "custom/cava-internal": {
+        "exec": "~/.config/waybar/media.sh",
+    },
+    "custom/media": {
+        "format": "{}",
+        "interval": 1,
+        "return-type": "json",
+        "on-click": "~/.config/hypr/scripts/mediactl.py toggle",
+        "exec": "~/.config/hypr/scripts/mediactl.py"
+    },
+    "backlight": {
+        "device": "intel_backlight",
+        "on-scroll-up": "light -A 5",
+        "on-scroll-down": "light -U 5",
+        "format": "{icon} {percent}%",
+        "format-icons": [
+            "",
+            "",
+            "",
+            ""
+        ]
+    },
+    "pulseaudio": {
+        "scroll-step": 1,
+        "format": "{icon} {volume}%",
+        "format-muted": "婢 Muted",
+        "format-icons": {
+            "default": [
+                "",
+                ""
+            ]
+        },
+        "states": {
+            "warning": 85,
+        },
+        "on-click": "pavucontrol",
+        "tooltip": false,
+    },
+    "battery": {
+        "interval": 10,
+        "states": {
+            "warning": 20,
+            "critical": 10
+        },
+        "format": "{icon} {capacity}%",
+        "format-icons": [
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
+        ],
+        "format-full": "{icon} {capacity}%",
+        "format-charging": " {capacity}%",
+        "tooltip": false
+    },
+    "clock": {
+        "on-click-right": "~/.config/waybar/wallpaper_random.sh &",
+        "on-click-middle": "~/.config/waybar/live_wallpaper.sh &",
+        "interval": 1,
+        "format": "{:%I:%M:%S %p  %A %b %d}",
+        "tooltip": true,
+        "tooltip-format": "{:%A, %d %B %Y}\n<tt>{calendar}</tt>"
+    },
+    "memory": {
+        "interval": 1,
+        "format": "﬙ {percentage}%",
+        "states": {
+            "warning": 85,
+        },
+    },
+    "cpu": {
+        "interval": 1,
+        "format": " {usage}%"
+    },
+    "network": {
+        "interval": 10,
+        "format-wifi": "說 {essid}",
+        "format-ethernet": "  {ifname} ({ipaddr})",
+        "format-linked": "說 {essid} (No IP)",
+        "format-disconnected": "說 Disconnected",
+        "tooltip": false
+    },
+    "temperature": {
+        "hwmon-path": "",
+        "critical-threshold": 80,
+        "tooltip": true,
+        "format": " {temperatureC}°C"
+    },
+    "custom/powermenu": {
+        "format": "{}",
+        "return-type": "json",
+        "interval": 1,
+        "tooltip": "true",
+        "on-click": "wlogout",
+        "exec": "~/.config/waybar/uptime.sh"
+    },
+    "custom/pomodoro": {
+        "format": "{}",
+        "exec": "~/.config/waybar/pomodoro.py",
+        "interval": 1,
+        "return-type": "json",
+        "on-click": "gnome-pomodoro",
+        "tooltip": "true"
+    },
+    "tray": {
+        "icon-size": 15,
+        "spacing": 5
+    },
+    "custom/vpn": {
+        "exec": "~/.config/waybar/vpn.py",
+        "format": "{}",
+        "interval": 5,
+        "return-type": "json",
+        "tooltip": "true",
+        "on-click": "~/.config/waybar/vpn.py toggle",
+        "signal-click-left": 10
+    }
+}

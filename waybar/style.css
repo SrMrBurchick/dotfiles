@@ -1,0 +1,127 @@
+* {
+  font-family: "DejaVuSansMono-Bold", "SF Pro", "JetBrainsMono Nerd Font";
+  font-size: 15pt;
+  font-weight: bold;
+  border-radius: 0px;
+  transition-property: background-color;
+  transition-duration: 0.1s;
+}
+@define-color background #000000;
+@define-color foreground #f8f8f2;
+@define-color active-background #6272a4;
+@define-color active-foreground #f8f8f2;
+@define-color urgent-background #ff5555;
+@define-color urgent-foreground #f8f8f2;
+
+#window {
+    /*font-weight: bold;*/
+  color: rgb(217, 224, 238);
+}
+window#waybar {
+    background: transparent;
+}
+/*-----module groups----*/
+.modules-right {
+  margin-top: 5px;
+  opacity: 0.7;
+  background-color: @background;
+  border-radius: 20px;
+}
+
+.modules-center {
+  margin-top: 5px;
+  background-color: @background;
+  opacity: 0.7;
+  border-radius: 20px;
+}
+
+.modules-left {
+  margin-top: 5px;
+  background-color: @background;
+  opacity: 0.7;
+  border-radius: 20px;
+}
+
+tooltip {
+  background: @background;
+}
+tooltip label {
+  color: rgb(217, 224, 238);
+}
+#custom-launcher {
+  padding-left: 8px;
+  padding-right: 6px;
+  font-size: 24;
+  color: rgb(201, 203, 255);
+}
+#mode,
+#clock,
+#memory,
+#temperature,
+#cpu,
+#idle_inhibitor,
+#temperature,
+#backlight,
+#pulseaudio,
+#network,
+#battery,
+#custom-powermenu,
+#custom-cava-internal,
+#custom-vpn,
+#custom-pomodoro,
+#custom-media {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+#memory {
+  color: rgb(181, 232, 224);
+}
+#cpu {
+  color: rgb(245, 194, 231);
+}
+#clock {
+  color: rgb(217, 224, 238);
+}
+#idle_inhibitor {
+  color: rgb(221, 182, 242);
+}
+#temperature {
+  color: rgb(150, 205, 251);
+}
+#backlight {
+  color: rgb(248, 189, 150);
+}
+#pulseaudio {
+  color: rgb(245, 224, 220);
+}
+#network {
+  color: #ABE9B3;
+}
+
+#network.disconnected {
+  color: rgb(255, 255, 255);
+}
+#battery.charging, #battery.full, #battery.discharging {
+  color: rgb(250, 227, 176);
+}
+#battery.critical:not(.charging) {
+  color: rgb(242, 143, 173);
+}
+#custom-powermenu {
+  color: red;
+}
+#custom-vpn {
+  color: rgb(245, 194, 231)
+}
+#tray {
+  padding-right: 8px;
+  padding-left: 10px;
+}
+#custom-cava-internal{
+  color: rgb(150, 205, 251);
+  font-family: "Hack Nerd Font" ;
+}
+
+#custom-media {
+  color: rgb(150, 205, 251);
+}
