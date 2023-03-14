@@ -23,6 +23,18 @@ packer.startup(function(use)
     }
     use 'rafi/awesome-vim-colorschemes'
 
+    -- CSS
+    use {
+        'brenoprata10/nvim-highlight-colors',
+        config = function()
+            require("nvim-highlight-colors").setup {
+                render = 'background', -- or 'foreground' or 'first_column'
+                enable_named_colors = true,
+                enable_tailwind = false
+            }
+        end
+    }
+
 
     -- LSP
     use 'neovim/nvim-lspconfig' -- Collection of configurations for built-in LSP client
@@ -46,6 +58,10 @@ packer.startup(function(use)
     use 'williamboman/mason.nvim'
     use 'williamboman/mason-lspconfig.nvim'
 
+    use {
+        "mfussenegger/nvim-dap",
+        "jay-babu/mason-nvim-dap.nvim",
+    }
 
     -- Language based highlight
     use {
@@ -75,7 +91,17 @@ packer.startup(function(use)
     use 'tpope/vim-fugitive'
     use 'airblade/vim-gitgutter'
     use 'rhysd/git-messenger.vim'
-    use 'braxtons12/blame_line.nvim'
+    -- use 'braxtons12/blame_line.nvim'
+    use {
+        'tanvirtin/vgit.nvim',
+        requires = {
+            'nvim-lua/plenary.nvim'
+        },
+        config = function()
+            require('vgit').setup()
+        end
+
+    }
 
 
     -- Markdown preview
@@ -133,4 +159,12 @@ packer.startup(function(use)
     }
 
     use 'akinsho/toggleterm.nvim'
+
+    use {
+        "princejoogie/chafa.nvim",
+        requires = {
+            "nvim-lua/plenary.nvim",
+            "m00qek/baleia.nvim"
+        },
+    }
 end)

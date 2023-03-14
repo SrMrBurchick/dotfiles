@@ -1,4 +1,4 @@
-vim.opt.shell = 'zsh'
+vim.opt.shell = 'fish'
 
 -- Open/Load config
 local keymap = vim.keymap

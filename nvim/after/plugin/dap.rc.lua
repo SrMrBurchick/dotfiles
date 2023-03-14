@@ -5,7 +5,7 @@ if (not status) then return end
 local vscode = {}
 status, vscode = pcall(require, 'dap.ext.vscode')
 if status then
-   vscode.type_to_filetypes = {
+    vscode.type_to_filetypes = {
         cppdbg = { 'c', 'cpp' },
         lldb = { 'c', 'cpp' },
         codelldb = { 'c', 'cpp' },
@@ -13,19 +13,24 @@ if status then
     }
 end
 
--- C++ adapters
-dap.adapters.codelldb = {
-    type = 'server',
-    port = "${port}",
-    executable = {
-        -- CHANGE THIS to your path!
-        command = vim.fn.stdpath "data" .. '/mason/packages/codelldb/extension/adapter/codelldb',
-        args = { "--port", "${port}" },
+-- C++/Rust adapters
+local extension_path = vim.env.HOME .. '/.local/share/nvim/mason/packages/codelldb/extension/'
+local codelldb_path = extension_path .. 'adapter/codelldb'
+local liblldb_path = extension_path .. 'adapter/libcodelldb.so'
 
-        -- On windows you may have to uncomment this:
-        -- detached = false,
-    }
-}
+-- dap.adapters.codelldb = {
+--     type = 'server',
+--     port = "${port}",
+--     host = "127.0.0.0",
+--     executable = {
+--         -- CHANGE THIS to your path!
+--         command = codelldb_path,
+--         args = { "--liblldb", liblldb_path, "--port", "${port}" },
+--
+--         -- On windows you may have to uncomment this:
+--         -- detached = false,
+--     }
+-- }
 
 dap.adapters.cppdbg = {
     id = 'cppdbg',
@@ -48,6 +53,7 @@ dap.adapters.cppvsdbg = {
     MIMode = 'gdb'
 }
 
+
 dap.configurations.cpp = {
     {
         name = "(CPPDB) Launch",
@@ -66,12 +72,26 @@ dap.configurations.cpp = {
         program = function()
             return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
         end,
+        cwd = function()
+            return vim.fn.input('Path to working directory: ', vim.fn.getcwd() .. '/', 'file')
+        end,
+        stopAtEntry = true,
+    },
+    {
+        name = "(CodeLLDB) Launch",
+        type = "codelldb",
+        request = "launch",
+        program = function()
+            return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+        end,
         cwd = '${workspaceFolder}',
         stopAtEntry = true,
     },
+
 }
 
 dap.configurations.c = dap.configurations.cpp
+dap.configurations.rust = dap.configurations.cpp
 
 -- VSCode launch
 local json5 = {}
@@ -85,12 +105,12 @@ vim.fn.sign_define('DapBreakpoint', { text = '🟥', texthl = '', linehl = '', n
 
 -- Key maps
 local keymap = vim.keymap
-keymap.set('n', '<F5>', function ()
+keymap.set('n', '<F5>', function()
     vim.cmd [[ :DapLoadLaunchJSON ]]
     vim.cmd [[ :DapContinue ]]
 end)
 
-keymap.set('n', '<F5>', function ()
+keymap.set('n', '<F5>', function()
     vim.cmd [[ :DapLoadLaunchJSON ]]
     vim.cmd [[ :DapContinue ]]
 end)
