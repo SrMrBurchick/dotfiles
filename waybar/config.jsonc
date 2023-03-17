@@ -133,6 +133,8 @@
         "interval": 1,
         "return-type": "json",
         "on-click": "gnome-pomodoro",
+        "on-click-right": "gnome-pomodoro --pause-resume",
+        "on-click-middle": "gnome-pomodoro --skip",
         "tooltip": "true"
     },
     "tray": {
@@ -146,6 +148,7 @@
         "return-type": "json",
         "tooltip": "true",
         "on-click": "~/.config/waybar/vpn.py toggle",
+        "on-click-right": "nm-connection-editor",
         "signal-click-left": 10
     }
 }
