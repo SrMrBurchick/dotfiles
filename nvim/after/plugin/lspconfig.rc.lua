@@ -53,54 +53,54 @@ m.setup_handlers {
         })
     end
 }
-
-require('lspconfig')['rust_analyzer'].setup {
-    on_attach = on_attach,
-    -- Server-specific settings...
-    capabilities = capabilities,
-    handlers = handlers,
-
-    settings = {
-        ["rust-analyzer"] = {}
-    }
-}
--- Lua server
-require('lspconfig')["lua_ls"].setup {
-    on_attach = on_attach,
-    handlers = handlers,
-    settings = {
-        Lua = {
-            diagnostics = {
-                -- Get the language server to recognize the `vim` global
-                globals = { 'vim' },
-            },
-
-            workspace = {
-                -- Make the server aware of Neovim runtime files
-                library = vim.api.nvim_get_runtime_file("", true),
-                checkThirdParty = false
-            },
-        },
-    },
-}
-
--- Clangd server
-require("clangd_extensions").setup {
-    server = {
-        on_attach = on_attach,
-        cmd = {
-            "clangd",
-            "--background-index",
-            "--cross-file-rename",
-            "--header-insertion=never",
-            "--limit-references=100",
-            "--completion-style=detailed",
-            "--limit-results=20"
-        },
-        capabilities = capabilities,
-        handlers = handlers,
-    },
-}
+--
+-- require('lspconfig')['rust_analyzer'].setup {
+--     on_attach = on_attach,
+--     -- Server-specific settings...
+--     capabilities = capabilities,
+--     handlers = handlers,
+--
+--     settings = {
+--         ["rust-analyzer"] = {}
+--     }
+-- }
+-- -- Lua server
+-- require('lspconfig')["lua_ls"].setup {
+--     on_attach = on_attach,
+--     handlers = handlers,
+--     settings = {
+--         Lua = {
+--             diagnostics = {
+--                 -- Get the language server to recognize the `vim` global
+--                 globals = { 'vim' },
+--             },
+--
+--             workspace = {
+--                 -- Make the server aware of Neovim runtime files
+--                 library = vim.api.nvim_get_runtime_file("", true),
+--                 checkThirdParty = false
+--             },
+--         },
+--     },
+-- }
+--
+-- -- Clangd server
+-- require("clangd_extensions").setup {
+--     server = {
+--         on_attach = on_attach,
+--         cmd = {
+--             "clangd",
+--             "--background-index",
+--             "--cross-file-rename",
+--             "--header-insertion=never",
+--             "--limit-references=100",
+--             "--completion-style=detailed",
+--             "--limit-results=20"
+--         },
+--         capabilities = capabilities,
+--         handlers = handlers,
+--     },
+-- }
 
 local luasnip = require 'luasnip'
 
