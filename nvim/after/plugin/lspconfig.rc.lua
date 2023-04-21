@@ -1,5 +1,27 @@
-local status, lspconfig = pcall(require, "lspconfig")
+local status, mason = pcall(require, "mason")
 if (not status) then return end
+
+mason.setup({
+    ui = {
+        icons = {
+            package_installed = "✓",
+            package_pending = "➜",
+            package_uninstalled = "✗"
+        }
+    }
+})
+
+status, mason_lsp = pcall(require, "mason-lspconfig")
+if (not status) then return end
+
+mason_lsp.setup()
+
+status, mason_dap = pcall(require, "mason-nvim-dap")
+if (not status) then return end
+
+mason_dap.setup({
+    automatic_setup = true
+})
 
 local handlers = {
     ["textDocument/publishDiagnostics"] = vim.lsp.with(
@@ -15,8 +37,6 @@ local protocol = require('vim.lsp.protocol')
 local capabilities = protocol.make_client_capabilities()
 
 capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
-
-local m = require("mason-lspconfig")
 
 local opts = { noremap = true, silent = true }
 --vim.keymap.set('n', '<space>e', vim.diagnostic.open_float, opts)
@@ -40,11 +60,8 @@ local on_attach = function(client, bufnr)
     vim.keymap.set('n', 'ca', vim.lsp.buf.code_action, bufopts)
 end
 
-m.setup {
-}
-
 -- Loop through all of the installed servers and set it up via lspconfig
-m.setup_handlers {
+mason_lsp.setup_handlers {
     function(server_name)
         require('lspconfig')[server_name].setup({
             on_attach = on_attach,

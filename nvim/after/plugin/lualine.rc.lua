@@ -27,7 +27,7 @@ lualine.setup {
             'filetype'
         },
         lualine_y = { 'progress' },
-        lualine_z = { '%l:%L' }
+        lualine_z = { 'location' }
     },
     inactive_sections = {
         lualine_a = {},

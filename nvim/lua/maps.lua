@@ -12,7 +12,7 @@ keymap.set('n', '<C-a>', 'gg<S-v>G')
 -- Save with root permission (not working for now)
 --vim.api.nvim_create_user_command('W', 'w !sudo tee > /dev/null %', {})
 -- Lsp formatting
-keymap.set('n', 'cf', '<cmd> lua vim.lsp.buf.formatting_sync()<cr>')
+keymap.set('n', 'cf', '<cmd> lua vim.lsp.buf.format()<cr>')
 
 -- New tab
 keymap.set('n', 'tn', ':tabnew <CR>')
@@ -62,7 +62,7 @@ keymap.set('', 'la', ':lua require("telescope").extensions.vslaunch.launches()<C
     { noremap = true })
 
 -- Symbols outline
-keymap.set('', '<M-o>', function ()
+keymap.set('', '<M-o>', function()
     -- local opts= {
     --     symbols = {
     --         "function",
