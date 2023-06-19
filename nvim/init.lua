@@ -6,23 +6,6 @@ require('maps')
 require('plugins')
 require('unreal_engine_cpp_setup')
 
--- Neovide
-vim.cmd [[
-    if exists("g:neovide")
-        set guifont=Hack:h8
-        let g:neovide_remember_window_size = v:true
-        let g:neovide_cursor_trail_size = 0.2
-        let g:neovide_hide_mouse_when_typing = v:true
-        let g:neovide_cursor_vfx_mode = "pixiedust"
-        let g:neovide_underline_automatic_scaling = v:false
-        autocmd VimEnter * Telescope project
-
-        " system clipboard
-        inoremap <c-v> <c-r>+
-        cnoremap <c-v> <c-r>+
-    endif
-]]
-
 if vim.v.argc ~= 0 then
     if vim.v.argv[2] == "pr" then
         vim.cmd 'autocmd VimEnter * bdelete pr | NvimTreeToggle'
@@ -44,4 +27,14 @@ elseif 0 ~= is_linux then
     require('linux')
 else
     print("Uknown system!")
+end
+
+if vim.g.neovide then
+    vim.g.neovide_cursor_vfx_mode = "torpedo"
+    vim.g.neovide_transparency = 0.8
+    vim.g.transparency = 0.8
+    vim.g.neovide_background_color = "#000000"
+    vim.g.neovide_floating_blur_amount_x = 2.0
+    vim.g.neovide_floating_blur_amount_y = 2.0
+    vim.o.guifont = "Cascadia Code:h20"
 end

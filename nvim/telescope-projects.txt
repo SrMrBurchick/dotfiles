@@ -3,9 +3,3 @@
  * Project template
  * : <Name>=<Path>=w0=1=1
  */
-
-Education=D:\Education=w0=1=1
-UnrealEngine[Education]=D:\Education\UnrealEngine=w0=1=1
-Kleptomania[Education]=D:\Education\UnrealEngine\Kleptomania=w0=1=1665083688
-Neovim config=D:/Tools/dotfiles=w0=1=1665088000
-ConsoleApplication=D:\Projects\ConsoleApplication1=w0=1=1665090606
