@@ -4,7 +4,7 @@ import subprocess
 import json
 import sys
 
-VPN_NAME = ""
+VPN_NAME = "Pingle"
 
 
 # Функція для отримання інформації про VPN

@@ -38,20 +38,16 @@
     },
     "backlight": {
         "device": "intel_backlight",
-        "on-scroll-up": "light -A 5",
-        "on-scroll-down": "light -U 5",
-        "format": "{icon} {percent}%",
+        "format": "{percent}% {icon}",
         "format-icons": [
-            "",
-            "",
-            "",
-            ""
+            "",
+            ""
         ]
     },
     "pulseaudio": {
         "scroll-step": 1,
         "format": "{icon} {volume}%",
-        "format-muted": "婢 Muted",
+        "format-muted": "  Muted",
         "format-icons": {
             "default": [
                 "",
@@ -65,26 +61,20 @@
         "tooltip": false,
     },
     "battery": {
-        "interval": 10,
+        "interval": 60,
         "states": {
-            "warning": 20,
-            "critical": 10
+            "warning": 30,
+            "critical": 15
         },
-        "format": "{icon} {capacity}%",
+        "format": "{capacity}% {icon} ",
         "format-icons": [
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "",
-            ""
+            "",
+            "",
+            "",
+            "",
+            ""
         ],
-        "format-full": "{icon} {capacity}%",
-        "format-charging": " {capacity}%",
-        "tooltip": false
+        "max-length": 25
     },
     "clock": {
         "on-click-right": "~/.config/waybar/wallpaper_random.sh &",
@@ -96,22 +86,20 @@
     },
     "memory": {
         "interval": 1,
-        "format": "﬙ {percentage}%",
+        "format": " {percentage}%",
         "states": {
             "warning": 85,
         },
     },
     "cpu": {
-        "interval": 1,
-        "format": " {usage}%"
+        "interval": 10,
+        "format": "{}% ",
+        "max-length": 10,
+        "on-click": "gnome-system-monitor",
     },
     "network": {
-        "interval": 10,
-        "format-wifi": "說 {essid}",
-        "format-ethernet": "  {ifname} ({ipaddr})",
-        "format-linked": "說 {essid} (No IP)",
-        "format-disconnected": "說 Disconnected",
-        "tooltip": false
+        "format-wifi": "{essid} ({signalStrength}%) ",
+        "max-length": 20
     },
     "temperature": {
         "hwmon-path": "",
