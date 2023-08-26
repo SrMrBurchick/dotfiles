@@ -54,10 +54,3 @@ if status then
     bufferline.setup()
 end
 
--- Standalone UI for nvim-lsp progress.
-local fidget = {}
-
-status, fidget = pcall(require, "fidget")
-if status then
-    fidget.setup()
-end

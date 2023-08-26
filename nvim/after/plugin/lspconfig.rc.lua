@@ -16,13 +16,6 @@ if (not status) then return end
 
 mason_lsp.setup()
 
-status, mason_dap = pcall(require, "mason-nvim-dap")
-if (not status) then return end
-
-mason_dap.setup({
-    automatic_setup = true
-})
-
 local handlers = {
     ["textDocument/publishDiagnostics"] = vim.lsp.with(
         vim.lsp.diagnostic.on_publish_diagnostics, {
@@ -47,6 +40,7 @@ vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
 local on_attach = function(client, bufnr)
+    require("lsp-inlayhints").on_attach(client, bufnr)
     -- Enable completion triggered by <c-x><c-o>
     vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 

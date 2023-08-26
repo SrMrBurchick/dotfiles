@@ -1,6 +1,13 @@
 local status, dap = pcall(require, "dap")
 if (not status) then return end
 
+status, mason_dap = pcall(require, "mason-nvim-dap")
+if (not status) then return end
+
+mason_dap.setup({
+    automatic_setup = true
+})
+
 -- VSCode launch
 local vscode = {}
 status, vscode = pcall(require, 'dap.ext.vscode')

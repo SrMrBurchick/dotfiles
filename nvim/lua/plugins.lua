@@ -10,6 +10,10 @@ packer.startup(function(use)
     -- Packer
     use 'wbthomason/packer.nvim'
 
+    -- Large Files
+    use {
+      "LunarVim/bigfile.nvim",
+    }
 
     -- UI
     use {
@@ -35,14 +39,18 @@ packer.startup(function(use)
         end
     }
 
+    -- Notify
+    use {
+        'mrded/nvim-lsp-notify',
+        requires = { 'rcarriga/nvim-notify' },
+    }
 
     -- LSP
     use 'neovim/nvim-lspconfig' -- Collection of configurations for built-in LSP client
-    use 'hrsh7th/nvim-cmp' -- Autocompletion plugin
-    use 'hrsh7th/cmp-nvim-lsp' -- LSP source for nvim-cmp
+    use 'hrsh7th/nvim-cmp'      -- Autocompletion plugin
+    use 'hrsh7th/cmp-nvim-lsp'  -- LSP source for nvim-cmp
     use 'hrsh7th/cmp-path'
-    use 'onsails/lspkind.nvim' -- vscode-like pictograms
-    use 'j-hui/fidget.nvim' -- Standalone UI for nvim-lsp progress
+    use 'onsails/lspkind.nvim'  -- vscode-like pictograms
     use({
         "glepnir/lspsaga.nvim",
         branch = "main",
@@ -145,7 +153,7 @@ packer.startup(function(use)
         requires = {
             'kyazdani42/nvim-web-devicons', -- optional, for file icons
         },
-        tag = 'nightly' -- optional, updated every week. (see issue #1193)
+        tag = 'nightly'                     -- optional, updated every week. (see issue #1193)
     }
 
 
