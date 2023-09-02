@@ -27,16 +27,16 @@ def toggle_vpn():
     if vpn_info["state"] == "disconnected":
         result = subprocess.run("nmcli con up {}".format(VPN_NAME), shell=True)
         if 0 == result.returncode:
-            subprocess.run("dunstify \"VPN Connected\"", shell=True)
+            subprocess.run("notify-send \"VPN Connected\"", shell=True)
         else:
-            subprocess.run("dunstify \"VPN connection failed\"", shell=True)
+            subprocess.run("notify-send \"VPN connection failed\"", shell=True)
     else:
         result = subprocess.run(
             "nmcli con down {}".format(VPN_NAME), shell=True)
         if 0 == result.returncode:
-            subprocess.run("dunstify \"VPN Disconnected\"", shell=True)
+            subprocess.run("notify-send \"VPN Disconnected\"", shell=True)
         else:
-            subprocess.run("dunstify \"VPN failed to disconnect\"", shell=True)
+            subprocess.run("notify-send \"VPN failed to disconnect\"", shell=True)
 
 
 # Функція для виводу інформації про VPN

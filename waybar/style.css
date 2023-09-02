@@ -1,127 +1,175 @@
 * {
-  font-family: "DejaVuSansMono-Bold", "SF Pro", "JetBrainsMono Nerd Font";
-  font-size: 15pt;
-  font-weight: bold;
-  border-radius: 0px;
-  transition-property: background-color;
-  transition-duration: 0.1s;
+    border: none;
+    border-radius: 0;
+    font-family: "JetBrainsMono Nerd Font";
+    font-weight: bold;
+    font-size: 16px;
+    min-height: 0;
 }
-@define-color background #000000;
-@define-color foreground #f8f8f2;
-@define-color active-background #6272a4;
-@define-color active-foreground #f8f8f2;
-@define-color urgent-background #ff5555;
-@define-color urgent-foreground #f8f8f2;
 
-#window {
-    /*font-weight: bold;*/
-  color: rgb(217, 224, 238);
-}
 window#waybar {
-    background: transparent;
-}
-/*-----module groups----*/
-.modules-right {
-  margin-top: 5px;
-  opacity: 0.7;
-  background-color: @background;
-  border-radius: 20px;
-}
-
-.modules-center {
-  margin-top: 5px;
-  background-color: @background;
-  opacity: 0.7;
-  border-radius: 20px;
-}
-
-.modules-left {
-  margin-top: 5px;
-  background-color: @background;
-  opacity: 0.7;
-  border-radius: 20px;
+    background: rgba(21, 18, 27, 0);
+    color: #cdd6f4;
 }
 
 tooltip {
-  background: @background;
+    background: #1e1e2e;
+    border-radius: 10px;
+    border-width: 2px;
+    border-style: solid;
+    border-color: #11111b;
 }
-tooltip label {
-  color: rgb(217, 224, 238);
+
+#workspaces button {
+    padding: 5px;
+    color: #313244;
+    margin-right: 5px;
 }
-#custom-launcher {
-  padding-left: 8px;
-  padding-right: 6px;
-  font-size: 24;
-  color: rgb(201, 203, 255);
+
+#workspaces button.active {
+    color: #a6adc8;
 }
-#mode,
+
+#workspaces button.focused {
+    color: #a6adc8;
+    background: #eba0ac;
+    border-radius: 10px;
+}
+
+#workspaces button.urgent {
+    color: #11111b;
+    background: #a6e3a1;
+    border-radius: 10px;
+}
+
+#workspaces button:hover {
+    background: #11111b;
+    color: #cdd6f4;
+    border-radius: 10px;
+}
+
+#custom-power_profile,
+#custom-weather,
+#custom-pomodoro,
+#custom-vpn,
+#window,
 #clock,
-#memory,
-#temperature,
-#cpu,
-#idle_inhibitor,
-#temperature,
-#backlight,
+#battery,
 #pulseaudio,
 #network,
-#battery,
-#custom-powermenu,
-#custom-cava-internal,
-#custom-vpn,
-#custom-pomodoro,
-#custom-media {
-  padding-left: 10px;
-  padding-right: 10px;
-}
-#memory {
-  color: rgb(181, 232, 224);
-}
-#cpu {
-  color: rgb(245, 194, 231);
-}
-#clock {
-  color: rgb(217, 224, 238);
-}
-#idle_inhibitor {
-  color: rgb(221, 182, 242);
-}
-#temperature {
-  color: rgb(150, 205, 251);
-}
+#bluetooth,
+#temperature,
+#workspaces,
+#tray,
+#sway-language,
 #backlight {
-  color: rgb(248, 189, 150);
-}
-#pulseaudio {
-  color: rgb(245, 224, 220);
-}
-#network {
-  color: #ABE9B3;
+    background: #1e1e2e;
+    opacity: 0.8;
+    padding: 0px 10px;
+    margin: 3px 0px;
+    margin-top: 14px;
+    border: 1px solid #181825;
 }
 
-#network.disconnected {
-  color: rgb(255, 255, 255);
+#temperature {
+    border-radius: 10px 0px 0px 10px;
 }
-#battery.charging, #battery.full, #battery.discharging {
-  color: rgb(250, 227, 176);
+
+#temperature.critical {
+    color: #eba0ac;
 }
-#battery.critical:not(.charging) {
-  color: rgb(242, 143, 173);
+
+#backlight {
+    border-radius: 10px 0px 0px 10px;
 }
-#custom-powermenu {
-  color: red;
-}
-#custom-vpn {
-  color: rgb(245, 194, 231)
-}
+
 #tray {
-  padding-right: 8px;
-  padding-left: 10px;
-}
-#custom-cava-internal{
-  color: rgb(150, 205, 251);
-  font-family: "Hack Nerd Font" ;
+    border-radius: 10px;
+    margin-left: 10px;
 }
 
-#custom-media {
-  color: rgb(150, 205, 251);
+#workspaces {
+    background: #1e1e2e;
+    border-radius: 10px;
+    margin-left: 10px;
+    padding-right: 0px;
+    padding-left: 5px;
+}
+
+#sway-language {
+    color: #fab387;
+    border-left: 0px;
+    border-right: 0px;
+}
+
+#custom-weather {
+    color: #fab387;
+    border-left: 0px;
+    border-right: 0px;
+}
+
+#custom-vpn {
+    color: #a6e3a1;
+    border-left: 0px;
+    border-radius: 0px 10px 10px 0px;
+    padding-right: 13px;
+}
+
+#custom-power_profile {
+    color: #a6e3a1;
+    border-left: 0px;
+    border-right: 0px;
+}
+
+#window {
+    border-radius: 10px;
+    margin-left: 60px;
+    margin-right: 60px;
+}
+
+#clock {
+    color: #fab387;
+    border-radius: 10px 10px 10px 10px;
+    margin-left: 0px;
+    border-right: 0px;
+}
+
+#network {
+    color: #f9e2af;
+    border-radius: 10px 0px 0px 10px;
+    border-left: 0px;
+    border-right: 0px;
+}
+
+#bluetooth {
+    color: #89b4fa;
+    border-radius: 0px 10px 10px 0px;
+    margin-right: 10px
+}
+
+#pulseaudio {
+    color: #89b4fa;
+    border-left: 0px;
+    border-right: 0px;
+}
+
+#pulseaudio.microphone {
+    color: #cba6f7;
+    border-left: 0px;
+    border-right: 0px;
+    border-radius: 0px 10px 10px 0px;
+    margin-right: 10px;
+}
+
+#battery {
+    color: #a6e3a1;
+    border-radius: 0 10px 10px 0;
+    margin-right: 10px;
+    border-left: 0px;
+}
+
+#custom-pomodoro {
+    border-radius: 10px 0px 0px 10px;
+    border-right: 0px;
+    margin-left: 10px;
 }

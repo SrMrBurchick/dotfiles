@@ -60,9 +60,9 @@ status = get_status()
 remaining_time = get_remaining_time()
 
 if status == "pomodoro":
-    text = " "
+    text = ""
 else:
-    text = " "
+    text = ""
 
 if status == "pomodoro":
     tooltip = remaining_time + " to break"

@@ -1,123 +1,172 @@
 {
-    "layer": "top", // Waybar at top layer
-    "margin": "5 20 0 20",
+    "layer": "top",
+    "position": "top",
+    "mod": "dock",
+    "exclusive": true,
+    "passthrough": false,
+    "gtk-layer-shell": true,
+    "height": 50,
     "modules-left": [
-        "custom/launcher",
-        "custom/vpn",
         "custom/pomodoro",
-        "tray",
+        "custom/vpn",
+        "sway/language",
+        "wlr/workspaces",
+        "tray"
     ],
     "modules-center": [
-        "custom/media",
         "clock",
-        "custom/cava-internal",
     ],
     "modules-right": [
-        "pulseaudio",
-        "backlight",
-        "memory",
-        "cpu",
         "network",
+        "bluetooth",
+        "temperature",
+        "custom/power_profile",
         "battery",
-        "custom/powermenu"
+        "backlight",
+        "pulseaudio",
+        "pulseaudio#microphone",
     ],
-    "custom/launcher": {
-        "format": "",
-        "on-click": "wofi --show drun",
-        "tooltip": false
+    "hyprland/window": {
+        "format": "{}"
     },
-    "custom/cava-internal": {
-        "exec": "~/.config/waybar/media.sh",
+    "sway/language": {
+        "format": "{short} {variant}",
     },
-    "custom/media": {
+    "wlr/workspaces": {
+        "disable-scroll": true,
+        "all-outputs": true,
+        "on-click": "activate",
+        "persistent_workspaces": {
+            "1": [],
+            "2": [],
+            "3": [],
+            "4": [],
+            "5": [],
+            "6": [],
+            "7": [],
+            "8": [],
+            "9": [],
+            "10": []
+        }
+    },
+    "custom/power_profile": {
+        //shows the current power profile and switches to next on click
+        "exec": "asusctl profile -p | sed s:'Active profile is'::",
+        "interval": 30,
+        "format": "󰈐{}",
+        "on-click": "asusctl profile -n; pkill -SIGRTMIN+8 waybar",
+        "signal": 8
+    },
+    "custom/weather": {
+        //shows the current weather and forecast
+        "tooltip": true,
         "format": "{}",
-        "interval": 1,
-        "return-type": "json",
-        "on-click": "~/.config/hypr/scripts/mediactl.py toggle",
-        "exec": "~/.config/hypr/scripts/mediactl.py"
+        "interval": 30,
+        "exec": "~/.config/waybar/scripts/waybar-wttr.py",
+        "return-type": "json"
+    },
+    "tray": {
+        "icon-size": 18,
+        "spacing": 10
+    },
+    "clock": {
+        "format": "{: %I:%M %p   %a, %b %e}",
+        "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
     },
     "backlight": {
         "device": "intel_backlight",
-        "format": "{percent}% {icon}",
+        "format": "{icon} {percent}%",
         "format-icons": [
-            "",
-            ""
+            "󰃞",
+            "󰃟",
+            "󰃠"
+        ],
+        "on-scroll-up": "brightnessctl set 1%+",
+        "on-scroll-down": "brightnessctl set 1%-",
+        "min-length": 6
+    },
+    "battery": {
+        "states": {
+            "good": 95,
+            "warning": 30,
+            "critical": 20
+        },
+        "format": "{icon} {capacity}%",
+        "format-charging": " {capacity}%",
+        "format-plugged": " {capacity}%",
+        "format-alt": "{time} {icon}",
+        "format-icons": [
+            "󰂎",
+            "󰁺",
+            "󰁻",
+            "󰁼",
+            "󰁽",
+            "󰁾",
+            "󰁿",
+            "󰂀",
+            "󰂁",
+            "󰂂",
+            "󰁹"
         ]
     },
     "pulseaudio": {
-        "scroll-step": 1,
         "format": "{icon} {volume}%",
-        "format-muted": "  Muted",
+        "tooltip": true,
+        "format-muted": " Muted",
+        "on-click": "pamixer -t",
+        "on-scroll-up": "pamixer -i 5",
+        "on-scroll-down": "pamixer -d 5",
+        "scroll-step": 5,
         "format-icons": {
+            "headphone": "",
+            "hands-free": "",
+            "headset": "",
+            "phone": "",
+            "portable": "",
+            "car": "",
             "default": [
+                "",
                 "",
                 ""
             ]
-        },
-        "states": {
-            "warning": 85,
-        },
-        "on-click": "pavucontrol",
+        }
+    },
+    "pulseaudio#microphone": {
         "tooltip": false,
-    },
-    "battery": {
-        "interval": 60,
-        "states": {
-            "warning": 30,
-            "critical": 15
-        },
-        "format": "{capacity}% {icon} ",
-        "format-icons": [
-            "",
-            "",
-            "",
-            "",
-            ""
-        ],
-        "max-length": 25
-    },
-    "clock": {
-        "on-click-right": "~/.config/waybar/wallpaper_random.sh &",
-        "on-click-middle": "~/.config/waybar/live_wallpaper.sh &",
-        "interval": 1,
-        "format": "{:%I:%M:%S %p  %A %b %d}",
-        "tooltip": true,
-        "tooltip-format": "{:%A, %d %B %Y}\n<tt>{calendar}</tt>"
-    },
-    "memory": {
-        "interval": 1,
-        "format": " {percentage}%",
-        "states": {
-            "warning": 85,
-        },
-    },
-    "cpu": {
-        "interval": 10,
-        "format": "{}% ",
-        "max-length": 10,
-        "on-click": "gnome-system-monitor",
-    },
-    "network": {
-        "format-wifi": "{essid} ({signalStrength}%) ",
-        "max-length": 20
+        "format": "{format_source}",
+        "format-source": " {volume}%",
+        "format-source-muted": " Muted",
+        "on-click": "pamixer --default-source -t",
+        "on-scroll-up": "pamixer --default-source -i 5",
+        "on-scroll-down": "pamixer --default-source -d 5",
+        "scroll-step": 5
     },
     "temperature": {
-        "hwmon-path": "",
+        "thermal-zone": 1,
+        "format": "{temperatureC}°C ",
         "critical-threshold": 80,
-        "tooltip": true,
-        "format": " {temperatureC}°C"
+        "format-critical": "{temperatureC}°C "
     },
-    "custom/powermenu": {
-        "format": "{}",
-        "return-type": "json",
-        "interval": 1,
-        "tooltip": "true",
-        "on-click": "wlogout",
-        "exec": "~/.config/waybar/uptime.sh"
+    "network": {
+        // "interface": "wlp2*", // (Optional) To force the use of this interface
+        "format-wifi": "  {signalStrength}%",
+        "format-ethernet": "{ipaddr}/{cidr}",
+        "tooltip-format": "{essid} - {ifname} via {gwaddr}",
+        "format-linked": "{ifname} (No IP)",
+        "format-disconnected": "Disconnected ⚠",
+        "format-alt": "{ifname}:{essid} {ipaddr}/{cidr}"
+    },
+    "bluetooth": {
+        "format": " {status}",
+        "format-disabled": "", // an empty format will hide the module
+        "format-connected": " {num_connections}",
+        "tooltip-format": "{device_alias}",
+        "tooltip-format-connected": "{device_enumerate}",
+        "tooltip-format-enumerate-connected": " {device_alias}\t{device_battery_percentage}%",
     },
     "custom/pomodoro": {
         "format": "{}",
-        "exec": "~/.config/waybar/pomodoro.py",
+        "exec": "~/.config/waybar/scripts/pomodoro.py",
         "interval": 1,
         "return-type": "json",
         "on-click": "gnome-pomodoro",
@@ -125,17 +174,13 @@
         "on-click-middle": "gnome-pomodoro --skip",
         "tooltip": "true"
     },
-    "tray": {
-        "icon-size": 15,
-        "spacing": 5
-    },
     "custom/vpn": {
-        "exec": "~/.config/waybar/vpn.py",
+        "exec": "~/.config/waybar/scripts/vpn.py",
         "format": "{}",
         "interval": 5,
         "return-type": "json",
         "tooltip": "true",
-        "on-click": "~/.config/waybar/vpn.py toggle",
+        "on-click": "~/.config/waybar/scripts/vpn.py toggle",
         "on-click-right": "nm-connection-editor",
         "signal-click-left": 10
     }
