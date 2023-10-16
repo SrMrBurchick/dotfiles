@@ -1,14 +1,23 @@
 local status, dap = pcall(require, "dap")
 if (not status) then return end
 
+local mason_dap = {}
 status, mason_dap = pcall(require, "mason-nvim-dap")
 if (not status) then return end
 
-mason_dap.setup({
-    automatic_setup = true
+mason_dap.default_setup({
+    automatic_installation = true,
 })
 
--- VSCode launch
+local adapters = require('mason-nvim-dap.mappings.adapters')
+local filetypes = require('mason-nvim-dap.mappings.filetypes')
+local configurations = require('mason-nvim-dap.mappings.configurations')
+dap.adapters = adapters;
+dap.filetypes = filetypes;
+dap.configurations = configurations;
+dap.configurations.rust = dap.configurations.cpp
+
+-- -- VSCode launch
 local vscode = {}
 status, vscode = pcall(require, 'dap.ext.vscode')
 if status then
@@ -28,7 +37,7 @@ if status then
 end
 
 -- Icons
-vim.fn.sign_define('DapBreakpoint', { text = '🟥', texthl = '', linehl = '', numhl = '' })
+vim.fn.sign_define('DapBreakpoint', { text = '🔴', texthl = '', linehl = '', numhl = '' })
 
 -- Key maps
 local keymap = vim.keymap
