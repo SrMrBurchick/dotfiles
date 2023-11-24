@@ -9,12 +9,12 @@
     "modules-left": [
         "custom/pomodoro",
         "custom/vpn",
-        "sway/language",
-        "wlr/workspaces",
+        "hyprland/workspaces",
         "tray"
     ],
     "modules-center": [
         "clock",
+        "custom/weather"
     ],
     "modules-right": [
         "network",
@@ -32,7 +32,7 @@
     "sway/language": {
         "format": "{short} {variant}",
     },
-    "wlr/workspaces": {
+    "hyprland/workspaces": {
         "disable-scroll": true,
         "all-outputs": true,
         "on-click": "activate",
@@ -154,7 +154,7 @@
         "tooltip-format": "{essid} - {ifname} via {gwaddr}",
         "format-linked": "{ifname} (No IP)",
         "format-disconnected": "Disconnected ⚠",
-        "format-alt": "{ifname}:{essid} {ipaddr}/{cidr}"
+        "format-alt": "{ifname}:{essid} {ipaddr}/{cidr}",
     },
     "bluetooth": {
         "format": " {status}",
@@ -163,6 +163,7 @@
         "tooltip-format": "{device_alias}",
         "tooltip-format-connected": "{device_enumerate}",
         "tooltip-format-enumerate-connected": " {device_alias}\t{device_battery_percentage}%",
+        "on-click": "blueman-manager"
     },
     "custom/pomodoro": {
         "format": "{}",
@@ -183,5 +184,10 @@
         "on-click": "~/.config/waybar/scripts/vpn.py toggle",
         "on-click-right": "nm-connection-editor",
         "signal-click-left": 10
+    },
+    "custom/network": {
+        "exec": "~/.config/waybar/scripts/wifi_selector.sh",
+        "format": " {}",
+        "interval": 5,
     }
 }

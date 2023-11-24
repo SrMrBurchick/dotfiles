@@ -129,7 +129,7 @@ tooltip {
 
 #clock {
     color: #fab387;
-    border-radius: 10px 10px 10px 10px;
+    border-radius: 10px 0px 0px 10px;
     margin-left: 0px;
     border-right: 0px;
 }
@@ -172,4 +172,10 @@ tooltip {
     border-radius: 10px 0px 0px 10px;
     border-right: 0px;
     margin-left: 10px;
+}
+
+#custom-weather {
+    color: #a6e3a1;
+    border-radius: 0 10px 10px 0;
+    border-left: 0px;
 }

@@ -7,6 +7,45 @@ import sys
 VPN_NAME = "Pingle"
 
 
+# Функція для отримання списку VPN
+def get_vpn_list():
+    vpn_list = []
+    try:
+        output = subprocess.check_output(
+            "nmcli -t -f NAME,TYPE,STATE con | grep 'vpn:'",
+            shell=True,
+            universal_newlines=True,
+        )
+
+        vpn_list = output.strip().split("\n")
+    except subprocess.CalledProcessError:
+        pass
+
+    return vpn_list
+
+
+# Функція для генерації tooltip
+def generate_tooltip():
+    # tooltip = []
+    tooltip = ""
+    vpn_list_format = "{name} {state}\n"
+    vpn_list = get_vpn_list()
+    icon = ""
+
+    for vpn in vpn_list:
+        name, type, state = vpn.strip().split(":")
+        if state != "":
+            icon = ""
+        # vpn_tooltip = {
+        #     "label": vpn_list_format.format(name=name, state=icon),
+        #     "exec": "notify-send \"{}\"".format(name)
+        # }
+        # tooltip.append(vpn_tooltip)
+        tooltip += vpn_list_format.format(name=name, state=icon)
+
+    return tooltip
+
+
 # Функція для отримання інформації про VPN
 def get_vpn_info():
     try:
@@ -47,12 +86,14 @@ def vpn_module():
     else:
         icon = ""
     text = f"VPN: {icon}"
-    return {"text": text, "tooltip": "Click to toggle VPN", "icon": icon, "state": vpn_info['state']}
+    return {"text": text, "tooltip": generate_tooltip(), "icon": icon, "state": vpn_info['state']}
 
 
 if __name__ == "__main__":
     if len(sys.argv) != 1:
         if "toggle" in sys.argv:
             toggle_vpn()
+        elif "list" in sys.argv:
+            print(generate_tooltip())
     else:
         print(json.dumps(vpn_module()))
