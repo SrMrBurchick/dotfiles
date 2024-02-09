@@ -15,13 +15,20 @@ status, mason_lsp = pcall(require, "mason-lspconfig")
 if (not status) then return end
 
 mason_lsp.setup()
+--
+-- status, mason_dap = pcall(require, "mason-nvim-dap")
+-- if (not status) then return end
+--
+-- mason_dap.setup({
+--     automatic_installation = true
+-- })
 
 local handlers = {
     ["textDocument/publishDiagnostics"] = vim.lsp.with(
         vim.lsp.diagnostic.on_publish_diagnostics, {
-        -- Disable virtual_text
-        virtual_text = false
-    })
+            -- Disable virtual_text
+            virtual_text = false
+        })
 }
 
 local protocol = require('vim.lsp.protocol')
@@ -65,6 +72,57 @@ mason_lsp.setup_handlers {
     end
 }
 
+-- QML
+vim.lsp.handlers["textDocument/semanticTokens"] = vim.lsp.handlers["textDocument/semanticTokens"] or function(_, _, _, _, _, _, _)
+  return { data = {} }
+end
+require('lspconfig').qml_lsp.setup {
+    cmd = { "qmlls6" },
+    filetypes = { "qml", "qmljs" },
+    on_attach = on_attach,
+    capabilities = capabilities,
+    handlers = handlers
+
+}
+-- require'lspconfig'.qmlls.setup{}
+
+-- -- Rust
+-- require('lspconfig').rust_analyzer.setup {
+--     settings = {
+--         ["rust-analyzer"] = {
+--             check = {
+--                 overrideCommand = {
+--                     "cargo",
+--                     "clippy",
+--                     "--message-format=json-diagnostic-rendered-ansi",
+--                     "--fix",
+--                     "--allow-dirty"
+--                 }
+--             }
+--         }
+--     }
+-- }
+-- require('lspconfig')["rust_analyzer"].setup {
+--     cmd = "ra-multiplex"
+-- }
+
+-- require('lspconfig').rust_analyzer.setup {
+--     cmd = { "ra-multiplex" },
+--     settings = {
+--         ["rust-analyzer"] = {
+--             check = {
+--                 overrideCommand = {
+--                     "cargo",
+--                     "clippy",
+--                     "--message-format=json-diagnostic-rendered-ansi",
+--                     "--fix",
+--                     "--allow-dirty"
+--                 }
+--             }
+--         }
+--     }
+-- }
+
 -- Clangd server
 require("clangd_extensions").setup {
     server = {
@@ -84,7 +142,7 @@ require("clangd_extensions").setup {
 }
 
 local luasnip = require 'luasnip'
-vim.keymap.set('i', '<C-s>', function ()
+vim.keymap.set('i', '<C-s>', function()
     vim.cmd("LuaSnipUnlinkCurrent")
 end)
 -- nvim-cmp setup
@@ -148,8 +206,8 @@ cmp.setup {
     },
     formatting = {
         format = lspkind.cmp_format({
-            mode = 'symbol_text', -- show only symbol annotations
-            maxwidth = 50, -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
+            mode = 'symbol_text',  -- show only symbol annotations
+            maxwidth = 50,         -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
             ellipsis_char = '...', -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
             -- The function below will be called before any actual modifications from lspkind
             -- so that you can provide more controls on popup customization. (See [#30](https://github.com/onsails/lspkind-nvim/pull/30))
@@ -159,7 +217,7 @@ cmp.setup {
         })
     },
     mapping = cmp.mapping.preset.insert({
-        ['<C-d>'] = cmp.mapping.scroll_docs( -4),
+        ['<C-d>'] = cmp.mapping.scroll_docs(-4),
         ['<C-f>'] = cmp.mapping.scroll_docs(4),
         ['<C-Space>'] = cmp.mapping.complete(),
         ['<CR>'] = cmp.mapping.confirm {
@@ -178,8 +236,8 @@ cmp.setup {
         ['<S-Tab>'] = cmp.mapping(function(fallback)
             if cmp.visible() then
                 cmp.select_prev_item()
-            elseif luasnip.jumpable( -1) then
-                luasnip.jump( -1)
+            elseif luasnip.jumpable(-1) then
+                luasnip.jump(-1)
             else
                 fallback()
             end

@@ -7,6 +7,11 @@ local function telescope_buffer_dir()
     return vim.fn.expand('%:p:h')
 end
 
+local emoji = require("telescope").load_extension("emoji")
+if (nil == emoji) then
+    return
+end
+
 local fb_actions = require "telescope".extensions.file_browser.actions
 telescope.setup {
     defaults = {
@@ -56,6 +61,18 @@ telescope.setup {
                 },
             },
         },
+        emoji = {
+            action = function(emoji)
+                -- argument emoji is a table.
+                -- {name="", value="", cagegory="", description=""}
+
+                vim.fn.setreg("*", emoji.value)
+                print([[Press p or "*p to paste this emoji]] .. emoji.value)
+
+                -- insert emoji when picked
+                -- vim.api.nvim_put({ emoji.value }, 'c', false, true)
+            end,
+        }
     },
 }
 

@@ -39,12 +39,23 @@ packer.startup(function(use)
         end
     }
 
-    -- Notify
+    -- QML
+    use 'artoj/qmake-syntax-vim'
+    use 'peterhoeg/vim-qml'
     use {
-        'mrded/nvim-lsp-notify',
-        requires = { 'rcarriga/nvim-notify' },
+        use 'Decodetalkers/neoqmllsp',
+        run = "cargo build --release"
+    }
+    -- use {
+    --     'Jinlixian/coc-qml',
+    --     run = "yarn install --frozen-lockfile && yarn build"
+    -- }
+
+    use {
+        'rcarriga/nvim-notify'
     }
 
+    use "Pocco81/TrueZen.nvim"
     -- LSP
     use 'neovim/nvim-lspconfig' -- Collection of configurations for built-in LSP client
     use 'hrsh7th/nvim-cmp'      -- Autocompletion plugin
@@ -57,6 +68,9 @@ packer.startup(function(use)
     })
     use 'lvimuser/lsp-inlayhints.nvim'
 
+    -- Rust
+    use 'simrat39/rust-tools.nvim'
+
     -- Snippets
     use 'L3MON4D3/LuaSnip' -- Snippets plugin
 
@@ -64,11 +78,6 @@ packer.startup(function(use)
     -- Mason
     use 'williamboman/mason.nvim'
     use 'williamboman/mason-lspconfig.nvim'
-
-    use {
-        "mfussenegger/nvim-dap",
-        "jay-babu/mason-nvim-dap.nvim",
-    }
 
     -- Language based highlight
     use {
@@ -92,6 +101,7 @@ packer.startup(function(use)
     use 'nvim-telescope/telescope-project.nvim'
     -- Telescope media files preview
     use 'nvim-telescope/telescope-media-files.nvim'
+    use 'xiyaowong/telescope-emoji.nvim'
 
 
     -- Git
@@ -159,10 +169,9 @@ packer.startup(function(use)
 
     -- Debugger
     use {
-        'rcarriga/nvim-dap-ui',
-        requires = {
-            'mfussenegger/nvim-dap'
-        }
+        "mfussenegger/nvim-dap",
+        "jay-babu/mason-nvim-dap.nvim",
+        "rcarriga/nvim-dap-ui",
     }
 
     use 'akinsho/toggleterm.nvim'
@@ -173,5 +182,13 @@ packer.startup(function(use)
             "nvim-lua/plenary.nvim",
             "m00qek/baleia.nvim"
         },
+    }
+
+    use {
+      "startup-nvim/startup.nvim",
+      requires = {"nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim"},
+      config = function()
+        require"startup".setup()
+      end
     }
 end)

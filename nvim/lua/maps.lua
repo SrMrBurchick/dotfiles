@@ -61,6 +61,11 @@ keymap.set('', 'ta', ':lua require("telescope").extensions.vstask.tasks()<CR>',
 keymap.set('', 'la', ':lua require("telescope").extensions.vslaunch.launches()<CR>',
     { noremap = true })
 
+local status, telescope = require('telescope.builtin')
+if (not status) then
+    return
+end
+
 -- Symbols outline
 keymap.set('', '<M-o>', function()
     -- local opts= {
@@ -75,5 +80,5 @@ keymap.set('', '<M-o>', function()
     -- if vim.bo.filetype == "vim" then
     --     opts.symbols = { "function" }
     -- end
-    require('telescope.builtin').lsp_document_symbols()
+    telescope.lsp_document_symbols()
 end)

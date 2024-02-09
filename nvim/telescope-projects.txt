@@ -3,3 +3,5 @@
  * Project template
  * : <Name>=<Path>=w0=1=1
  */
+
+ChibiChatBotGame=/home/srmrburchick/Projects/ChibiChatBotGame=w0=1=1
