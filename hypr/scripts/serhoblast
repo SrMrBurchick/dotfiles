@@ -17,26 +17,27 @@
 ## hyprctl equivalents.
 ## https://github.com/swaywm/sway/blob/master/contrib/grimshot
 
-VARIABLES_DIR="/home/sbura/.config/hypr/scripts"
+VARIABLES_DIR="$HOME/.config/hypr/scripts"
 DIR_PATH="$VARIABLES_DIR/dir"
 FILENAME_PATH="$VARIABLES_DIR/file"
 
 saveDirectory() {
-    echo $1 > $DIR_PATH
+    echo "$1" > $DIR_PATH
 }
 
 getTargetFile() {
-    read dir_path < $DIR_PATH
+    read dir_path < "$DIR_PATH"
     file=$(zenity --file-selection --save --confirm-overwrite --title="Select a directory" --filename="$dir_path/")
 
-    saveDirectory $(dirname "$file")
+    dir=$(dirname "$file")
+    saveDirectory "$dir"
 
-    echo $file
+    echo "$file"
 }
 
 getTargetName() {
-    name=$(zenity --entry --text "Enter filename:")
-    echo $name
+    name="$(zenity --entry --text "Enter filename:")"
+    echo "$name"
 }
 
 NOTIFY=no
@@ -189,7 +190,7 @@ elif [ "$ACTION" = "save" ] ; then
 
     FILE="$(getTargetFile).png"
 
-    wl-paste > $FILE
+    wl-paste > "$FILE"
 
     TITLE="Screenshot of $SUBJECT"
     MESSAGE=$(basename "$FILE")

@@ -84,6 +84,17 @@ require('lspconfig').qml_lsp.setup {
     handlers = handlers
 
 }
+
+
+-- glsl
+require'lspconfig'.glsl_analyzer.setup{}
+-- require'lspconfig'.glslls.setup {
+--     cmd = { "glslls"},
+--     filetypes = { "glsl", "vert", "tesc", "tese", "frag", "geom", "comp" },
+--     on_attach = on_attach,
+--     capabilities = capabilities,
+-- }
+
 -- require'lspconfig'.qmlls.setup{}
 
 -- -- Rust

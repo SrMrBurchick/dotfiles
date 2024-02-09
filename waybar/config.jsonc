@@ -17,6 +17,7 @@
         "custom/weather"
     ],
     "modules-right": [
+        "custom/wallpaper",
         "network",
         "bluetooth",
         "temperature",
@@ -31,6 +32,10 @@
     },
     "sway/language": {
         "format": "{short} {variant}",
+    },
+    "custom/wallpaper": {
+        "format" : "⚪",
+        "on-click": "~/.config/waybar/scripts/wallpaper_random.sh"
     },
     "hyprland/workspaces": {
         "disable-scroll": true,
@@ -154,6 +159,7 @@
         "tooltip-format": "{essid} - {ifname} via {gwaddr}",
         "format-linked": "{ifname} (No IP)",
         "format-disconnected": "Disconnected ⚠",
+        "on-click": "~/.config/waybar/scripts/wifi_selector.sh"
     },
     "bluetooth": {
         "format": " {status}",

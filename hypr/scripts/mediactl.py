@@ -35,19 +35,19 @@ def get_player_info():
 def prev_next(IsPrev: bool):
     if IsPrev:
         subprocess.run("playerctl previous", shell=True)
-        subprocess.run("dunstify \"Play next\"", shell=True)
-        subprocess.run("dunstify \"Play previous\"", shell=True)
+        subprocess.run("notify-send \"Play next\"", shell=True)
+        subprocess.run("notify-send \"Play previous\"", shell=True)
     else:
         subprocess.run("playerctl next", shell=True)
-        subprocess.run("dunstify \"Play next\"", shell=True)
+        subprocess.run("notify-send \"Play next\"", shell=True)
 
 
 def toggle():
     player_info = get_player_info()
     if player_info["status"] == "Playing":
-        subprocess.run("dunstify \"Stop playing\"", shell=True)
+        subprocess.run("notify-send \"Stop playing\"", shell=True)
     else:
-        subprocess.run("dunstify \"Continue playing\"", shell=True)
+        subprocess.run("notify-send \"Continue playing\"", shell=True)
 
     subprocess.run("playerctl play-pause", shell=True)
 
@@ -65,6 +65,14 @@ def media_module():
     tooltip = f"{title} - {artist}"
     return {"text": icon, "tooltip": tooltip}
 
+def volume_up():
+    subprocess.run("pamixer -i 5", shell=True)
+
+def volume_down():
+    subprocess.run("pamixer -d 5", shell=True)
+
+def volume_toggle_mute():
+    subprocess.run("pamixer -t", shell=True)
 
 if __name__ == "__main__":
     if len(sys.argv) != 1:
@@ -74,5 +82,11 @@ if __name__ == "__main__":
             prev_next(False)
         elif "prev" in sys.argv:
             prev_next(True)
+        elif "up" in sys.argv:
+            volume_up()
+        elif "down" in sys.argv:
+            volume_down()
+        elif "mute" in sys.argv:
+            volume_toggle_mute()
     else:
         print(json.dumps(media_module()))

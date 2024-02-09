@@ -45,7 +45,7 @@ window:
   # Window opacity as a floating point number from `0.0` to `1.0`.
   # The value `0.0` is completely transparent and `1.0` is opaque.
   # opacity: 1.0
-  opacity: 0.75
+  opacity: 0.80
 
   # Window decorations
   #
@@ -107,6 +107,7 @@ scrolling:
 #tabspaces: 8
 
 # Font configuration
+    # family: Noto Sans Mono
 font:
   normal:
     family: Noto Sans Mono
@@ -120,7 +121,7 @@ font:
   bold_italic:
     family: Noto Sans Mono
     style: Bold Italic
-  size: 18.0
+  size: 20.0
 
 # Додайте ці рядки, щоб вказати шрифти Noto Emoji та Noto Sans Symbols2
 # Якщо ви бажаєте використовувати інші розміри шрифтів, змініть значення size
@@ -249,6 +250,7 @@ schemes:
   ### Doom One ###
   DoomOne: &DoomOne
     primary:
+      # background: '#15161e'
       background: '#000000'
       foreground: '#bbc2cf'
     cursor:
@@ -585,6 +587,31 @@ schemes:
       cyan:    '#54ced6'
       white:   '#282a2e'
 
+  ## Colors (One Half Dark)
+  OneHalfDark: &OneHalfDark
+    primary:
+      background: '#000000'
+      foreground: '0xdcdfe4'
+
+    normal:
+      black: '0x282c34'
+      red: '0xe06c75'
+      green: '0x98c379'
+      yellow: '0xe5c07b'
+      blue: '0x61afef'
+      magenta: '0xc678dd'
+      cyan: '0x56b6c2'
+      white: '0xdcdfe4'
+
+    bright:
+      black: '0x282c34'
+      red: '0xe06c75'
+      green: '0x98c379'
+      yellow: '0xe5c07b'
+      blue: '0x61afef'
+      magenta: '0xc678dd'
+      cyan: '0x56b6c2'
+      white: '0xdcdfe4'
 ######################################################################
 ## SET THEME: Choose ONE color scheme from those in the above list. ##
 ## ###################################################################
@@ -601,6 +628,8 @@ schemes:
 # *TomorrowNight
 
 colors: *DoomOne
+# colors: *OneHalfDark
+# colors: *TomorrowNight
 
 #######################################
 ##       END OF COLOR SCHEMES        ##
