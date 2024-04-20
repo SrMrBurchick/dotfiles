@@ -26,6 +26,7 @@ set -gx PATH ~/.local/bin $PATH
 # NodeJS
 set -gx PATH node_modules/.bin $PATH
 
+set -gx PATH ~/.dotnet $PATH
 # Go
 set -g GOPATH $HOME/go
 set -gx PATH $GOPATH/bin $PATH
@@ -45,5 +46,6 @@ if test -f $LOCAL_CONFIG
   source $LOCAL_CONFIG
 end
 
+source "$HOME/.cargo/env.fish"
+
 starship init fish | source
-fortune | cowsay -f tux

@@ -136,19 +136,6 @@ packer.startup(function(use)
     use 'kamykn/spelunker.vim'
     use 'windwp/nvim-autopairs'
 
-
-    -- VScode tasks & launches
-    use {
-        'SrMrBurchick/vs-tasks.nvim',
-        branch = 'new_feature',
-        requires = {
-            'nvim-lua/popup.nvim',
-            'nvim-lua/plenary.nvim',
-            'nvim-telescope/telescope.nvim'
-        }
-    }
-
-
     -- Commenting util
     use {
         'numToStr/Comment.nvim',
@@ -160,10 +147,10 @@ packer.startup(function(use)
 
     use {
         'kyazdani42/nvim-tree.lua',
-        requires = {
-            'kyazdani42/nvim-web-devicons', -- optional, for file icons
-        },
-        tag = 'nightly'                     -- optional, updated every week. (see issue #1193)
+        -- requires = {
+        --     'kyazdani42/nvim-web-devicons', -- optional, for file icons
+        -- },
+        -- tag = 'nightly'                     -- optional, updated every week. (see issue #1193)
     }
 
 
