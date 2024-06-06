@@ -185,4 +185,6 @@ packer.startup(function(use)
         require"startup".setup()
       end
     }
+
+    use 'SrMrBurchick/perforce.nvim'
 end)
