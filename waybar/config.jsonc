@@ -18,15 +18,39 @@
     ],
     "modules-right": [
         "custom/wallpaper",
+        "custom/clipboard",
         "network",
         "bluetooth",
         "temperature",
         "custom/power_profile",
+        "custom/pacman",
         "battery",
         "backlight",
         "pulseaudio",
         "pulseaudio#microphone",
     ],
+   "custom/pacman": {
+        "format": "󰀼 {}",
+        "interval": 3600,
+        "return-type": "json",
+        "exec-if": "~/.config/hypr/scripts/checkupdates.sh check",
+        "exec": "~/.config/hypr/scripts/checkupdates.sh status",
+        "on-click": "pamac-manager",
+        "signal": 14
+    },
+
+    "custom/clipboard": {
+        "format": "󰨸",
+        "interval": "once",
+        "return-type": "json",
+        "on-click": "cliphist list | wofi --dmenu | cliphist decode | wl-copy; waybar-signal clipboard",
+        "on-click-right": "cliphist list | wofi --dmenu | cliphist delete",
+        "on-click-middle": "cliphist wipe; waybar-signal clipboard",
+        "exec": "printf '{\"tooltip\":\"%s\"}' $(cliphist list | wc -l)' item(s) in the clipboard\r(Mid click to clear)'",
+        "exec-if": "[ -x \"$(command -v cliphist)\" ] && [ $(cliphist list | wc -l) -gt 0 ]",
+        "signal": 9
+    },
+
     "hyprland/window": {
         "format": "{}"
     },
@@ -43,12 +67,21 @@
     },
     "custom/power_profile": {
         //shows the current power profile and switches to next on click
-        "exec": "asusctl profile -p | sed s:'Active profile is'::",
+        "exec": "~/.config/waybar/modules/asusct.py",
         "interval": 30,
-        "format": "󰈐{}",
+        "format": "{}",
         "on-click": "asusctl profile -n; pkill -SIGRTMIN+8 waybar",
+        "return-type": "json",
         "signal": 8
     },
+    // "custom/power_profile": {
+    //     //shows the current power profile and switches to next on click
+    //     "exec": "asusctl profile -p | sed s:'Active profile is'::",
+    //     "interval": 30,
+    //     "format": "󰈐{}",
+    //     "on-click": "asusctl profile -n; pkill -SIGRTMIN+8 waybar",
+    //     "signal": 8
+    // },
     "custom/weather": {
         //shows the current weather and forecast
         "tooltip": true,
@@ -147,8 +180,7 @@
         "format-ethernet": "{ipaddr}/{cidr}",
         "tooltip-format": "{essid} - {ifname} via {gwaddr}",
         "format-linked": "{ifname} (No IP)",
-        "format-disconnected": "Disconnected ⚠",
-        "on-click": "~/.config/waybar/scripts/wifi_selector.sh"
+        "format-disconnected": "Disconnected ⚠"
     },
     "bluetooth": {
         "format": " {status}",

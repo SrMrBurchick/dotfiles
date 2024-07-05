@@ -4,7 +4,7 @@ import subprocess
 import json
 import sys
 
-VPN_NAME = "PingleVPN_Updated"
+VPN_NAME = "PingleVPN"
 
 
 # Функція для отримання списку VPN

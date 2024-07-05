@@ -70,9 +70,17 @@ selectAction() {
     echo "$action"
 }
 
+ACTION=$1
+SUBJECT=$2
 
-ACTION=$(selectAction)
-SUBJECT=${2:-screen}
+if [ -z "$ACTION" ] ; then
+    ACTION=$(selectAction)
+fi
+
+if [ -z "$SUBJECT" ] ; then
+    SUBJECT="area"
+fi
+
 
 if [ "$ACTION" != "save" ] && [ "$ACTION" != "copy" ] && [ "$ACTION" != "copysave" ] && [ "$ACTION" != "check" ]; then
     echo "Usage:"

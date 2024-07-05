@@ -5,11 +5,11 @@ require('highlights')
 require('maps')
 require('plugins')
 
-if vim.v.argc ~= 0 then
-    if vim.v.argv[2] == "pr" then
-        vim.cmd 'autocmd VimEnter * bdelete pr | NvimTreeToggle'
-    end
-end
+-- if vim.v.argc ~= 0 then
+--     if vim.v.argv[2] == "pr" then
+--         vim.cmd 'autocmd VimEnter * bdelete pr | NvimTreeToggle'
+--     end
+-- end
 
 local local_vimrc = vim.fn.getcwd() .. '/.nvimrc.lua'
 if vim.loop.fs_stat(local_vimrc) then
