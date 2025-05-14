@@ -14,7 +14,14 @@ mason.setup({
 status, mason_lsp = pcall(require, "mason-lspconfig")
 if (not status) then return end
 
-mason_lsp.setup()
+local servers = {
+    "html",
+    "cssls",
+}
+
+mason_lsp.setup({
+    ensure_installed = servers
+})
 --
 -- status, mason_dap = pcall(require, "mason-nvim-dap")
 -- if (not status) then return end
@@ -36,7 +43,8 @@ local protocol = require('vim.lsp.protocol')
 -- Add additional capabilities supported by nvim-cmp
 local capabilities = protocol.make_client_capabilities()
 
-capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
+capabilities = require('cmp_nvim_lsp').default_capabilities(protocol.make_client_capabilities())
+capabilities.textDocument.completion.completionItem.snippetSupport = true
 
 local opts = { noremap = true, silent = true }
 --vim.keymap.set('n', '<space>e', vim.diagnostic.open_float, opts)
@@ -44,11 +52,13 @@ vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
 --vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist, opts)
 
+
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
 local on_attach = function(client, bufnr)
-    require("lsp-inlayhints").on_attach(client, bufnr)
     -- Enable completion triggered by <c-x><c-o>
+    -- local state, hints = pcall(require, "eol-hints")
+    -- hints.enable(bufnr)
     vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
     -- Mappings.
@@ -88,74 +98,27 @@ require('lspconfig').qml_lsp.setup {
 
 -- glsl
 require'lspconfig'.glsl_analyzer.setup{}
--- require'lspconfig'.glslls.setup {
---     cmd = { "glslls"},
---     filetypes = { "glsl", "vert", "tesc", "tese", "frag", "geom", "comp" },
---     on_attach = on_attach,
---     capabilities = capabilities,
--- }
-
--- require'lspconfig'.qmlls.setup{}
-
--- -- Rust
--- require('lspconfig').rust_analyzer.setup {
---     settings = {
---         ["rust-analyzer"] = {
---             check = {
---                 overrideCommand = {
---                     "cargo",
---                     "clippy",
---                     "--message-format=json-diagnostic-rendered-ansi",
---                     "--fix",
---                     "--allow-dirty"
---                 }
---             }
---         }
---     }
--- }
--- require('lspconfig')["rust_analyzer"].setup {
---     cmd = "ra-multiplex"
--- }
-
--- require('lspconfig').rust_analyzer.setup {
---     cmd = { "ra-multiplex" },
---     settings = {
---         ["rust-analyzer"] = {
---             check = {
---                 overrideCommand = {
---                     "cargo",
---                     "clippy",
---                     "--message-format=json-diagnostic-rendered-ansi",
---                     "--fix",
---                     "--allow-dirty"
---                 }
---             }
---         }
---     }
--- }
 
 -- Clangd server
-require("clangd_extensions").setup {
-    server = {
-        on_attach = on_attach,
-        cmd = {
-            "clangd",
-            "--background-index",
-            "--cross-file-rename",
-            "--header-insertion=never",
-            "--limit-references=100",
-            "--completion-style=detailed",
-            "--limit-results=20"
-        },
-        capabilities = capabilities,
-        handlers = handlers,
+require'lspconfig'.clangd.setup {
+    on_attach = on_attach,
+    cmd = {
+        "clangd",
+        "--background-index",
+        "--cross-file-rename",
+        "--header-insertion=never",
+        "--limit-references=100",
+        "--completion-style=detailed",
+        "--limit-results=20",
+        "--inlay-hints=true"
     },
+    capabilities = capabilities,
+    handlers = handlers,
 }
 
 local luasnip = require 'luasnip'
-vim.keymap.set('i', '<C-s>', function()
-    vim.cmd("LuaSnipUnlinkCurrent")
-end)
+-- Load VSCode-style snippets from friendly-snippets
+require("luasnip.loaders.from_vscode").lazy_load()
 -- nvim-cmp setup
 local cmp = require 'cmp'
 local lspkind = require('lspkind')
@@ -256,15 +219,15 @@ cmp.setup {
     }),
     sources = {
         { name = 'nvim_lsp' },
+        { name = 'path' },
+        { name = 'buffer'},
         { name = 'luasnip' },
-        { name = 'path' }
     },
     sorting = {
         comparators = {
             cmp.config.compare.offset,
             cmp.config.compare.exact,
             cmp.config.compare.recently_used,
-            require("clangd_extensions.cmp_scores"),
             cmp.config.compare.kind,
             cmp.config.compare.sort_text,
             cmp.config.compare.length,

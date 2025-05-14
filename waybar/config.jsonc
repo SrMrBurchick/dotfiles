@@ -97,7 +97,7 @@
     "clock": {
         "interval": 1,
         // "format": "{:%r:%s %p   %a, %b %e}",
-        "format": " {:%R:%S}",
+        "format": " {:%R:%S %a %e %b}",
         "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>"
     },
     "backlight": {

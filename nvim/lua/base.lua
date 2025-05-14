@@ -38,3 +38,4 @@ vim.opt.list = true
 vim.opt.listchars = "tab:>-,trail:~,extends:>,precedes:<"
 vim.opt.foldmethod = "indent"
 vim.opt.foldenable = false
+-- vim.o.cmdheight=0

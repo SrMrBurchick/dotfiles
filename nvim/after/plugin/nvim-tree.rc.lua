@@ -13,14 +13,6 @@ nvim_tree.setup({
         enable = false
     },
     sort_by = "case_sensitive",
-    view = {
-        width = 40,
-        mappings = {
-            list = {
-                { key = "u", action = "dir_up" },
-            },
-        },
-    },
     renderer = {
         group_empty = true,
     },
@@ -29,7 +21,7 @@ nvim_tree.setup({
         -- custom = { '^.git$' }
     },
     git = {
-        enable = true,
+        enable = false,
     },
     renderer = {
         icons = {
@@ -47,11 +39,3 @@ nvim_tree.setup({
         },
     }
 })
-
--- set highlights
-vim.o.termguicolors = true
-vim.cmd.highlight 'NvimTreeGitStaged guifg=green'
-vim.cmd.highlight 'NvimTreeGitDirty guifg=#e3b341'
-vim.cmd.highlight 'NvimTreeGitNew guifg=gray'
-vim.cmd.highlight 'NvimTreeGitRenamed guifg=#f0883e'
-vim.cmd.highlight 'NvimTreeGitDeleted guifg=red'

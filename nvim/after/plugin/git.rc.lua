@@ -1,29 +1,3 @@
--- Keymaps
-vim.keymap.set('n', '<M-g>m', '<CMD>GitMessenger<CR>')
-vim.keymap.set('n', '<M-g>b', '<CMD>Git blame<CR>')
-
-vim.keymap.set('n', '<M-g>a', function ()
-    require('toggleterm').exec('git add -p')
-end)
-
-vim.keymap.set('n', '<M-g>d', function ()
-    require('toggleterm').exec('git diff')
-end)
-
-vim.keymap.set('n', '<M-g>r', function ()
-    require('toggleterm').exec('git restore --staged -p .')
-end)
-
-vim.keymap.set('n', '<M-g>s', function ()
-    vim.cmd('Telescope git_status')
-end)
-
-vim.keymap.set('n', '<M-g>u', function ()
-    require('toggleterm').exec('git fetch origin dev')
-end)
-vim.keymap.set('n', '<M-g>lg', function ()
-    require('toggleterm').exec('lazygit')
-end)
 local status, git_blame = pcall(require, 'blame_line')
 if (not status) then
     return
@@ -223,4 +197,8 @@ octo.setup({
     }
   }
 })
+
+-- Keymaps
+vim.keymap.set('n', '<M-g>m', '<CMD>GitMessenger<CR>')
+vim.keymap.set('n', '<M-g>b', '<CMD>Git blame<CR>')
 

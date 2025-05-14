@@ -30,10 +30,10 @@ end
 
 if vim.g.neovide then
     vim.g.neovide_cursor_vfx_mode = "torpedo"
-    vim.g.neovide_transparency = 0.8
+    vim.g.neovide_opacity = 0.85
     vim.g.transparency = 0.8
     vim.g.neovide_background_color = "#000000"
-    vim.g.neovide_floating_blur_amount_x = 5.0
-    vim.g.neovide_floating_blur_amount_y = 5.0
-    vim.o.guifont = "Hack:h20"
+    vim.g.neovide_floating_blur_amount_x = 15.0
+    vim.g.neovide_floating_blur_amount_y = 15.0
+    vim.o.guifont = "Hack:h16:b"
 end

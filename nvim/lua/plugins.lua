@@ -20,12 +20,8 @@ packer.startup(function(use)
         'nvim-lualine/lualine.nvim',
         requires = { 'kyazdani42/nvim-web-devicons', opt = true }
     }
-    use {
-        'akinsho/bufferline.nvim',
-        tag = "v2.*",
-        requires = 'kyazdani42/nvim-web-devicons'
-    }
     use 'rafi/awesome-vim-colorschemes'
+    use 'scottmckendry/cyberdream.nvim'
 
     -- CSS
     use {
@@ -34,64 +30,50 @@ packer.startup(function(use)
             require("nvim-highlight-colors").setup {
                 render = 'background', -- or 'foreground' or 'first_column'
                 enable_named_colors = true,
-                enable_tailwind = false
+                enable_tailwind = true
             }
         end
     }
 
-    -- QML
+
+     -- QML
     use 'artoj/qmake-syntax-vim'
     use 'peterhoeg/vim-qml'
     use {
         use 'Decodetalkers/neoqmllsp',
         run = "cargo build --release"
     }
-    -- use {
-    --     'Jinlixian/coc-qml',
-    --     run = "yarn install --frozen-lockfile && yarn build"
-    -- }
 
-    use {
-        'rcarriga/nvim-notify'
-    }
-
-    use "Pocco81/TrueZen.nvim"
     -- LSP
     use 'neovim/nvim-lspconfig' -- Collection of configurations for built-in LSP client
     use 'hrsh7th/nvim-cmp'      -- Autocompletion plugin
     use 'hrsh7th/cmp-nvim-lsp'  -- LSP source for nvim-cmp
     use 'hrsh7th/cmp-path'
+    use 'hrsh7th/cmp-buffer'
     use 'onsails/lspkind.nvim'  -- vscode-like pictograms
     use({
         "glepnir/lspsaga.nvim",
         branch = "main",
     })
-    use 'lvimuser/lsp-inlayhints.nvim'
-
-    -- Rust
-    use 'simrat39/rust-tools.nvim'
 
     -- Snippets
-    use 'L3MON4D3/LuaSnip' -- Snippets plugin
-
+    use({
+        "L3MON4D3/LuaSnip",
+        -- follow latest release.
+        tag = "v2.*", -- Replace <CurrentMajor> by the latest released major (first number of latest release)
+        -- install jsregexp (optional!:).
+        run = "make install_jsregexp"
+    })
+    use 'saadparwaiz1/cmp_luasnip'
+    use 'rafamadriz/friendly-snippets'
 
     -- Mason
     use 'williamboman/mason.nvim'
     use 'williamboman/mason-lspconfig.nvim'
 
-    -- Language based highlight
-    use {
-        'nvim-treesitter/nvim-treesitter',
-        run = ':TSUpdate'
-    }
-    -- Treesitter highlight colorizer
-    use 'p00f/nvim-ts-rainbow'
-
-
     -- Icons
     use 'kyazdani42/nvim-web-devicons'
     use 'ryanoasis/vim-devicons'
-
 
     -- Telescope stuff
     use 'nvim-lua/popup.nvim'
@@ -101,38 +83,33 @@ packer.startup(function(use)
     use 'nvim-telescope/telescope-project.nvim'
     -- Telescope media files preview
     use 'nvim-telescope/telescope-media-files.nvim'
-    use 'xiyaowong/telescope-emoji.nvim'
 
 
     -- Git
-    use 'tpope/vim-fugitive'
-    use 'airblade/vim-gitgutter'
-    use 'rhysd/git-messenger.vim'
+    -- use 'tpope/vim-fugitive'
+    -- use 'airblade/vim-gitgutter'
+    -- use 'rhysd/git-messenger.vim'
     -- use 'braxtons12/blame_line.nvim'
-    use {
-        'tanvirtin/vgit.nvim',
-        requires = {
-            'nvim-lua/plenary.nvim'
-        },
-        config = function()
-            require('vgit').setup()
-        end
-
-    }
+    -- use {
+    --     'tanvirtin/vgit.nvim',
+    --     requires = {
+    --         'nvim-lua/plenary.nvim'
+    --     },
+    --     config = function()
+    --         require('vgit').setup()
+    --     end
+    --
+    -- }
 
 
     -- Markdown preview
     use({
         "iamcco/markdown-preview.nvim",
-        run = "cd app && npm install",
-        setup = function() vim.g.mkdp_filetypes = { "markdown" } end,
-        ft = { "markdown" },
-        opt = true
+        run = function() vim.fn["mkdp#util#install"]() end,
     })
 
-
     -- Other
-    use 'arithran/vim-delete-hidden-buffers'
+    -- use 'arithran/vim-delete-hidden-buffers'
     use 'kamykn/spelunker.vim'
     use 'windwp/nvim-autopairs'
 
@@ -168,16 +145,6 @@ packer.startup(function(use)
         }
     }
 
-    use 'akinsho/toggleterm.nvim'
-
-    use {
-        "princejoogie/chafa.nvim",
-        requires = {
-            "nvim-lua/plenary.nvim",
-            "m00qek/baleia.nvim"
-        },
-    }
-
     use {
       "startup-nvim/startup.nvim",
       requires = {"nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim"},
@@ -186,5 +153,5 @@ packer.startup(function(use)
       end
     }
 
-    use 'SrMrBurchick/perforce.nvim'
+    -- use 'SrMrBurchick/perforce.nvim'
 end)
