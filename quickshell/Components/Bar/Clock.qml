@@ -22,7 +22,7 @@ Module {
 
     AppletWindow {
         id: dashboard
-        contentItem: Calendar {
+        contentItem: DashBoard {
 
         }
     }

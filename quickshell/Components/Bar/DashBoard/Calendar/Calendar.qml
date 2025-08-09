@@ -5,6 +5,7 @@ import Quickshell
 import Quickshell.Io
 
 import "root:./Components/Base/"
+import "root:./Components/Bar/Dashboard/Calendar"
 
 ColumnLayout {
     SystemClock {
@@ -47,8 +48,8 @@ ColumnLayout {
                 implicitWidth: parent.implicitHeight
                 implicitHeight: parent.implicitHeight
 
-                // radius: Appearance.rounding.full
-                // color: model.today ? Colours.palette.m3primary : "transparent"
+                radius: 20
+                color: model.today ? CalendarStyle.colors.todayDayBG : CalendarStyle.colors.dayBG
 
                 BaseText {
                     id: text
