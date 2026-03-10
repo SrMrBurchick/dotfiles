@@ -13,7 +13,7 @@ keymap.set('n', '<M-c>l', ':so ~\\AppData\\Local\\nvim\\init.lua<CR>')
 -- Neovide
 vim.cmd [[
     if exists("g:neovide")
-        let g:neovide_transparency=1.0
+        " let g:neovide_transparency=1.0
     endif
 ]]
 

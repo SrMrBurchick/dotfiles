@@ -28,6 +28,10 @@ saga.setup {
             go_action = "g"
         },
     },
+    finder = {
+        max_height = 0.5,
+        left_width = 0.2,
+    },
 }
 
 local opts = { noremap = true, silent = true }

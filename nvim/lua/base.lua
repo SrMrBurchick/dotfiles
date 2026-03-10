@@ -20,7 +20,7 @@ vim.opt.backup = false
 vim.opt.showcmd = true
 vim.opt.cmdheight = 1
 vim.opt.laststatus = 2
-vim.opt.expandtab = true
+vim.opt.expandtab = false
 vim.opt.scrolloff = 10
 
 vim.opt.backupskip = { '/tmp/*', '/private/tmp/*' }
@@ -38,3 +38,5 @@ vim.opt.list = true
 vim.opt.listchars = "tab:>-,trail:~,extends:>,precedes:<"
 vim.opt.foldmethod = "indent"
 vim.opt.foldenable = false
+
+vim.lsp.set_log_level("OFF")

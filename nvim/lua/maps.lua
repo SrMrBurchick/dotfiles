@@ -39,7 +39,6 @@ keymap.set('', '<C-c>', '"+y')
 keymap.set('', '<C-p>', '"+p')
 
 -- NvimTree
-keymap.set('n', '<C-e>', ':NvimTreeToggle<CR>')
 
 -- Code Actions
 keymap.set('', 'va', '<cmd>Lspsaga code_action<CR>')

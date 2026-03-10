@@ -9,27 +9,23 @@ end
 vim.g.loaded = 1
 vim.g.loaded_netrwPlugin = 1
 nvim_tree.setup({
+    sync_root_with_cwd = true,
     diagnostics = {
         enable = false
     },
     sort_by = "case_sensitive",
     view = {
-        width = 40,
-        mappings = {
-            list = {
-                { key = "u", action = "dir_up" },
-            },
-        },
+        width = 30,
     },
     renderer = {
-        group_empty = true,
+        group_empty = false,
     },
     filters = {
         dotfiles = false,
         -- custom = { '^.git$' }
     },
     git = {
-        enable = true,
+        enable = false,
     },
     renderer = {
         icons = {
@@ -55,3 +51,6 @@ vim.cmd.highlight 'NvimTreeGitDirty guifg=#e3b341'
 vim.cmd.highlight 'NvimTreeGitNew guifg=gray'
 vim.cmd.highlight 'NvimTreeGitRenamed guifg=#f0883e'
 vim.cmd.highlight 'NvimTreeGitDeleted guifg=red'
+
+
+vim.keymap.set('n', '<C-e>', ':NvimTreeToggle<CR>')
