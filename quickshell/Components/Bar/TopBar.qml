@@ -3,10 +3,12 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 
-import "root:./"
 import "root:./Components/Bar/"
 import "root:./Components/Bar/Workspace/"
+import "root:./Components/Bar/KbLayout/"
+import "root:./Components/Bar/Network/"
 import "root:./Components/Base/"
+import "root:./Configs/"
 
 Item {
     id: root
@@ -23,18 +25,13 @@ Item {
             Layout.alignment: Qt.AlignLeft
         }
 
-        Rectangle {
-            color: "transparent"
+        Clock {
+            screen: root.screen
             anchors.centerIn: parent
-            width: Config.sizes.barHeight
-            height: Config.sizes.barHeight
-            RowLayout {
-                anchors.fill: parent
-                Clock {
-                }
-            }
         }
 
+        KbLayout {
+            Layout.alignment: Qt.AlignRight
+        }
     }
-
 }

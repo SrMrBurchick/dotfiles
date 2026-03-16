@@ -6,7 +6,6 @@ import Quickshell.Io
 import Quickshell.Hyprland
 import Quickshell.Widgets
 
-import "root:./"
 import "root:./Components/Base/"
 
 Row {

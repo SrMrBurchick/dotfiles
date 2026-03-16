@@ -6,6 +6,7 @@ import Quickshell.Io
 
 import "root:./Components/Base/"
 import "root:./Components/Bar/Dashboard/Calendar"
+import "root:./Configs"
 
 ColumnLayout {
     SystemClock {

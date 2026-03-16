@@ -4,13 +4,12 @@ import QtQuick.Layouts
 import Quickshell
 import Quickshell.Io
 
+import "root:"
 import "root:./Components/Base/"
 import "root:./Components/Bar/DashBoard"
 import "root:./Widgets"
 
 Module {
-    id: root
-    required property ShellScreen screen
     SystemClock {
         id: clock
     }
@@ -23,7 +22,6 @@ Module {
 
     AppletWindow {
         id: dashboard
-        screen: root.screen
         contentItem: DashBoard {
 
         }

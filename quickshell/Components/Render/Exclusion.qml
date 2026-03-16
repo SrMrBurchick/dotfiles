@@ -2,7 +2,7 @@ import Quickshell
 import QtQuick
 
 import "root:./Widgets"
-import "root:"
+import "root:./Configs"
 
 Scope {
     id: root
@@ -31,5 +31,13 @@ Scope {
         screen: root.screen
         name: "border-exclusion"
         mask: Region {}
+        exclusiveZone: Config.sizes.baseExclusion
+        // Rectangle {
+        //     anchors.fill: parent
+        //     color: "grey"
+        //     opacity: 0.4
+        //     width: parent.exclusiveZone
+        //     height: parent.exclusiveZone
+        // }
     }
 }

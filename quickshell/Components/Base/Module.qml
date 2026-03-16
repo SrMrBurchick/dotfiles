@@ -1,8 +1,8 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import "root:"
 import "root:./Components/Base/"
+import "root:./Configs"
 
 Control {
     property bool isHovered: false

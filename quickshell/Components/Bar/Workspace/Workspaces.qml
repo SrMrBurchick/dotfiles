@@ -5,9 +5,9 @@ import Quickshell
 import Quickshell.Io
 import Quickshell.Hyprland
 
-import "root:"
 import "root:./Components/Base/"
 import "root:./Components/Bar/Workspace"
+import "root:./Configs/"
 
 Item {
     Layout.fillHeight: true

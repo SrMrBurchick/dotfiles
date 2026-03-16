@@ -6,8 +6,5 @@ import "./Components/Render"
 
 ShellRoot {
     MainRender {
-
     }
 }
-
-

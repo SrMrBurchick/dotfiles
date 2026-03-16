@@ -27,6 +27,7 @@ QtObject {
         readonly property int defaultPadding: 5
 
         readonly property int baseSpacing: 5
+        readonly property int baseExclusion: 10
 
     }
 

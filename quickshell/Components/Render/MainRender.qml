@@ -2,9 +2,10 @@ import Quickshell
 import Quickshell.Wayland
 import Quickshell.Hyprland
 import QtQuick
+import QtQuick.Controls
 import QtQuick.Effects
 
-import "root:./"
+import "root:./Configs"
 import "root:./Widgets"
 import "root:./Components/Render"
 
@@ -32,15 +33,53 @@ Variants {
                 y: Config.sizes.barHeight
                 width: win.width - bar.implicitWidth - 10
                 height: win.height
+                // height: 0
                 intersection: Intersection.Xor
 
-                regions: regions.instances
+                // regions: regions.instances
+                // regions: [Region {
+                //     x: win.width / 2 - 100
+                //     y: Config.sizes.barHeight
+                //
+                //     // width: modelData.width
+                //     // height: modelData.height
+                //     width: 200
+                //     height: 200
+                //     intersection: Intersection.Subtract
+                // }]
             }
+
+
+            // Variants {
+            //     id: regions
+            //
+            //     model: RenderManager.popups
+            //
+            //     delegate: Region {
+            //         required property AppletWindow modelData
+            //
+            //         x: modelData.x + bar.implicitWidth
+            //         y: modelData.y + Config.sizes.barHeight
+            //         // x: win.width / 2 - 100
+            //         // y: Config.sizes.barHeight
+            //
+            //         width: modelData.width
+            //         height: modelData.height
+            //         // width: 200
+            //         // height: 200
+            //
+            //         intersection: Intersection.Subtract
+            //         Component.onCompleted: {
+            //             console.log("Add new region[x = ", x, ",y = ", y, ",w =", width, "h = ", height)
+            //         }
+            //     }
+            // }
 
             anchors.top: true
             anchors.bottom: true
             anchors.left: true
             anchors.right: true
+
             BarRender {
                 id: bar
 
