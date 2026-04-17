@@ -39,4 +39,36 @@ vim.opt.listchars = "tab:>-,trail:~,extends:>,precedes:<"
 vim.opt.foldmethod = "indent"
 vim.opt.foldenable = false
 
-vim.lsp.set_log_level("OFF")
+-- vim.lsp.set_log_level("OFF")
+function JumpToLessIndentUp()
+	local cur_indent = vim.fn.indent('.')
+	local line = vim.fn.line('.')
+
+	while line > 1 do
+		line = line - 1
+		local indent = vim.fn.indent(line)
+
+		if indent < cur_indent then
+			vim.fn.cursor(line, 1)
+			return
+		end
+	end
+end
+
+function JumpToSameIndent()
+	local cur_indent = vim.fn.indent('.')
+	local line = vim.fn.line('.')
+
+	while line <= vim.fn.line('$') do
+		line = line + 1
+		local indent = vim.fn.indent(line)
+
+		if indent == cur_indent then
+			vim.fn.cursor(line, 1)
+			return
+		end
+	end
+end
+
+vim.keymap.set('n', ']]', JumpToSameIndent)
+vim.keymap.set('n', '[i', JumpToLessIndentUp)

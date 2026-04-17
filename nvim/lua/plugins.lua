@@ -108,5 +108,11 @@ packer.startup(function(use)
 	use 'C:\\Users\\s.Bura\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\markdown-preview.nvim'
 	use "D:\\Toos\\cpphelper.nvim"
 	use 'rcarriga/nvim-notify'
+	use {
+		'mrded/nvim-lsp-notify',
+		config = function()
+			require('lsp-notify').setup({})
+		end
+	}
 	-- use({ "iamcco/markdown-preview.nvim", run = "cd app && npm install", setup = function() vim.g.mkdp_filetypes = { "markdown" } end, ft = { "markdown" }, })
 end)

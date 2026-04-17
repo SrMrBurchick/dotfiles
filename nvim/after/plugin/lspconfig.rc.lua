@@ -14,8 +14,20 @@ mason.setup({
 status, mason_lsp = pcall(require, "mason-lspconfig")
 if (not status) then return end
 
+status, cpphelper = pcall(require, "cpphelper")
+if (not status) then
+	vim.notify("CppHelper not installed")
+	return
+end
+
+cpphelper.setup({})
+
+
 mason_lsp.setup({
-    automatic_enable = true
+    automatic_enable = false,
+    ensure_installed = {
+        "clangd",
+    }
 })
 --
 -- status, mason_dap = pcall(require, "mason-nvim-dap")
@@ -66,6 +78,7 @@ local on_attach = function(client, bufnr)
     vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
     vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, bufopts)
     vim.keymap.set('n', 'ca', vim.lsp.buf.code_action, bufopts)
+    vim.keymap.set('n', 'vs', vim.lsp.buf.hover, bufopts)
         -- vim.api.nvim_create_autocmd("CursorHold", {
         --     buffer = bufnr,
         --     callback = vim.lsp.buf.document_highlight
@@ -179,22 +192,86 @@ vim.lsp.config('omnisharp', {
 -- }
 
 
--- require("clangd_extensions").setup {
---     server = {
---         on_attach = on_attach,
---         cmd = {
---             "clangd",
---             "--background-index",
---             "--cross-file-rename",
---             "--header-insertion=never",
---             "--limit-references=100",
---             "--completion-style=detailed",
---             "--limit-results=20"
---         },
---         capabilities = capabilities,
---         handlers = handlers,
---     },
--- }
+-- Setup CLANGD with VS Code-like behavior
+local util = require('lspconfig.util')
+require('lspconfig').clangd.setup({
+    on_attach = on_attach,
+	cmd = {
+		'clangd',
+		-- Indexing: use all available cores
+		'-j=12',
+		-- Background indexing so Neovim stays responsive during initial parse
+		'--background-index',
+		-- Disable diagnostics (UE4 has thousands of false positives)
+		'--clang-tidy=false',
+		-- Use compile_commands.json from project root
+		-- '--compile-commands-dir=' .. project_root,
+		-- Completion style
+		'--completion-style=detailed',
+		-- Header insertion
+		-- '--header-insertion=never',
+		'--header-insertion=iwyu',
+		-- Increase memory limit for the large codebase
+		-- '--malloc-trim=false',
+		-- Log level (set to 'verbose' for debugging)
+		'--log=error',
+		-- Function signatures in completion
+		'--function-arg-placeholders=true',
+		-- Cross-file rename
+		-- '--cross-file-rename',
+	},
+
+	capabilities = (function()
+		-- Increase completion item limit for UE4's massive API
+		local caps = vim.lsp.protocol.make_client_capabilities()
+		caps.textDocument.completion.completionItem.snippetSupport = true
+		caps.textDocument.completion.completionItem.resolveSupport = {
+		  properties = { 'documentation', 'detail', 'additionalTextEdits' },
+		}
+		return caps
+	end)(),
+    -- capabilities = capabilities,
+ -- cmd = {
+	--  "clangd",
+	--  "--cross-file-rename",
+	--  "--background-index",
+	--  "--header-insertion=never",
+	--  "--limit-references=0",
+	--  "--limit-results=0",
+	--  "--completion-style=detailed",
+	--  "--clang-tidy",
+ -- },
+    init_options = {
+        clangdFileStatus = true,
+        useSpaceAsTab = true,
+        semanticHighlighting = true,
+    },
+    handlers = handlers,
+})
+
+-- Setup Plantuml
+local lspconfig = require("lspconfig")
+local configs = require("lspconfig.configs")
+if not configs.plantuml_lsp then
+	configs.plantuml_lsp = {
+		default_config = {
+			cmd = {
+				"C:\\Users\\s.bura\\go\\binplantuml-lsp.exe",
+				"--stdlib-path=C:\\Users\\s.bura\\plantuml-stdlib\\stdlib",
+				-- Running plantuml via a .jar file:
+				"--jar-path=C:\\Users\\s.bura\\scoop\\apps\\plantuml\\current\\plantuml.jar",
+				-- With plantuml executable and available from your PATH there is a simpler method:
+				"--exec-path=plantuml",
+			},
+			filetypes = { "plantuml" },
+			root_dir = function(fname)
+				return lspconfig.util.find_git_ancestor(fname) or lspconfig.util.path.dirname(fname)
+			end,
+			settings = {},
+		}
+	}
+end
+lspconfig.plantuml_lsp.setup {}
 
 local luasnip = require 'luasnip'
 vim.keymap.set('i', '<C-s>', function()
@@ -263,19 +340,25 @@ local function has_active_lsp()
   return false
 end
 
-cmp.setup {
+-- VS Code-like completion settings for nvim-cmp
+cmp.setup({
     snippet = {
         expand = function(args)
             luasnip.lsp_expand(args.body)
         end,
     },
+    completion = {
+        autocomplete = {
+            require('cmp').TriggerEvent.TextChanged,
+            require('cmp').TriggerEvent.InsertEnter,
+        },
+        completeopt = 'menu,menuone,noinsert',
+    },
     formatting = {
         format = lspkind.cmp_format({
-            mode = 'symbol_text',  -- show only symbol annotations
-            maxwidth = 50,         -- prevent the popup from showing more than provided characters (e.g 50 will not show more than 50 characters)
-            ellipsis_char = '...', -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
-            -- The function below will be called before any actual modifications from lspkind
-            -- so that you can provide more controls on popup customization. (See [#30](https://github.com/onsails/lspkind-nvim/pull/30))
+            mode = 'symbol_text',
+            maxwidth = 50,
+            ellipsis_char = '...',
             before = function(entry, vim_item)
                 return vim_item
             end
@@ -285,13 +368,17 @@ cmp.setup {
         ['<C-d>'] = cmp.mapping.scroll_docs(-4),
         ['<C-f>'] = cmp.mapping.scroll_docs(4),
         ['<C-Space>'] = cmp.mapping.complete(),
-        ['<CR>'] = cmp.mapping.confirm {
+        ['<CR>'] = cmp.mapping.confirm({
             behavior = cmp.ConfirmBehavior.Replace,
-            select = true,
-        },
+            select = false,
+        }),
+        -- ['<Tab>'] = cmp.mapping.confirm({
+        --     behavior = cmp.ConfirmBehavior.Replace,
+        --     select = false,
+        -- }),
         ['<Tab>'] = cmp.mapping(function(fallback)
             if cmp.visible() then
-                cmp.select_next_item()
+                cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
             elseif luasnip.expand_or_jumpable() then
                 luasnip.expand_or_jump()
             else
@@ -300,7 +387,7 @@ cmp.setup {
         end, { 'i', 's' }),
         ['<S-Tab>'] = cmp.mapping(function(fallback)
             if cmp.visible() then
-                cmp.select_prev_item()
+                cmp.select_prev_item({ behavior = cmp.SelectBehavior.Select })
             elseif luasnip.jumpable(-1) then
                 luasnip.jump(-1)
             else
@@ -309,14 +396,13 @@ cmp.setup {
         end, { 'i', 's' }),
     }),
     sources = cmp.config.sources({
-        { name = 'nvim_lsp', cond = has_active_lsp() },
-        { name = 'luasnip', cond = has_active_lsp() },
-        { name = 'path' },
-        { name = 'buffer'}
+        { name = 'nvim_lsp', priority = 1000 },
+        { name = 'luasnip', priority = 750 },
+        { name = 'path', priority = 500 },
+        { name = 'buffer', priority = 250 }
     }),
     sorting = {
         comparators = {
-            cmp.config.compare.offset,
             cmp.config.compare.exact,
             cmp.config.compare.recently_used,
             cmp.config.compare.kind,
@@ -325,7 +411,11 @@ cmp.setup {
             cmp.config.compare.order,
         },
     },
-}
+    window = {
+        completion = cmp.config.window.bordered(),
+        documentation = cmp.config.window.bordered(),
+    },
+})
 
 -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
 cmp.setup.cmdline('/', {
