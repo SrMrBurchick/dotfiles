@@ -15,7 +15,11 @@ keymap.set('n', '<C-a>', 'gg<S-v>G')
 keymap.set('n', 'cf', '<cmd> lua vim.lsp.buf.format()<cr>')
 
 -- New tab
-keymap.set('n', 'tn', ':tabnew <CR>')
+keymap.set('n', '<C-S-t>', ':tabnew<CR>')
+keymap.set('n', 'tn', ':tabnew<CR>')
+-- Next/prev tab
+keymap.set('n', '<C-Tab>', ':tabnext<CR>')
+keymap.set('n', '<C-S-Tab>', ':tabprevious<CR>')
 -- New tab terminal
 keymap.set('n', 'tnt', ':tabnew<CR>:terminal<CR>')
 -- Split window

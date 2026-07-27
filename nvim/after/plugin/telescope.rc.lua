@@ -62,15 +62,22 @@ telescope.setup {
 telescope.load_extension("file_browser")
 telescope.load_extension('project')
 
+local function get_cwd()
+    return vim.t.root_dir or vim.fn.getcwd()
+end
+
 vim.keymap.set('n', ';f',
     function()
         builtin.find_files({
             no_ignore = true,
-            hidden = true
+            hidden = true,
+            cwd = get_cwd()
         })
     end)
 vim.keymap.set('n', ';r', function()
-    builtin.live_grep()
+    builtin.live_grep({
+        cwd = get_cwd()
+    })
 end)
 vim.keymap.set('n', '\\\\', function()
     builtin.buffers()
