@@ -1,15 +1,22 @@
 pragma Singleton
+pragma ComponentBehavior: Bound
 
 import Quickshell
 import Quickshell.Io
+import Quickshell.Hyprland
 import Quickshell.Services.Notifications
 import QtQuick
+import QtQuick.Controls
+
+import "root:./Components/Notification"
 
 Singleton {
     id: root
 
     readonly property list<RawNotification> list: []
     readonly property list<RawNotification> popups: list.filter(n => n.popup)
+
+    property var activeScreen: Quickshell.screens.length > 0 ? Quickshell.screens[0] : null
 
     NotificationServer {
         id: server
@@ -22,12 +29,25 @@ Singleton {
         imageSupported: true
 
         onNotification: notif => {
+            console.log("Notification received:", notif.appName, notif.summary);
             notif.tracked = true;
 
-            root.list.push(notifComp.createObject(root, {
+            const rawNotif = notifComp.createObject(root, {
                 popup: true,
                 notification: notif
-            }));
+            });
+            root.list.push(rawNotif);
+        }
+    }
+
+    Connections {
+        target: Hyprland
+
+        function onFocusedMonitorChanged(): void {
+            const mon = Hyprland.focusedMonitor;
+            if (mon) {
+                root.activeScreen = Quickshell.screens.filter(s => s.name === mon.name)[0] || null;
+            }
         }
     }
 
@@ -61,5 +81,12 @@ Singleton {
         id: notifComp
 
         RawNotification {}
+    }
+
+    Component {
+        id: popupComp
+
+        NotificationPopup {
+        }
     }
 }

@@ -1,0 +1,64 @@
+# ─────────────────────────────────────────────
+# Hyprland Lofi Palette
+# ─────────────────────────────────────────────
+
+# Base
+background      = #11111B  # Main desktop / UI background
+background_alt  = #181825  # Panels, Waybar, Rofi background
+surface         = #1E1E2E  # Windows / cards / notification background
+surface_alt     = #29263A  # Elevated elements / secondary cards
+
+# Text
+foreground      = #CDD6F4  # Primary text
+text            = #CDD6F4  # Normal text
+text_muted      = #8C8AA3  # Inactive / secondary text
+text_dark       = #181825  # Text on bright accent backgrounds
+
+# Purple / Lavender
+lavender        = #A89BB9  # Primary soft accent
+purple          = #817A9B  # Buttons / active workspace
+purple_dark     = #514B68  # Borders / inactive elements
+
+# Pink / Coral
+pink            = #C77D91  # Main warm accent
+coral           = #D58A86  # Highlight / active indicator
+rose            = #B86F82  # Notifications / attention
+
+# Warm tones
+cream           = #D8C3A5  # Warm text / subtle highlight
+peach           = #D6A27A  # Secondary highlight
+
+# Green
+sage            = #819B8B  # Success / connected / positive
+sage_dark       = #596F65  # Muted success state
+
+
+# ─────────────────────────────────────────────
+# Semantic colors
+# ─────────────────────────────────────────────
+
+button          = #817A9B  # Default button
+button_hover    = #A89BB9  # Hovered button
+button_active   = #C77D91  # Pressed / selected button
+
+border          = #514B68  # Normal window border
+border_inactive = #29263A  # Inactive window
+border_active   = #C77D91  # Focused window
+
+selection       = #817A9B  # Selected item
+selection_hover = #A89BB9  # Hovered list/menu item
+
+notification    = #1E1E2E  # Notification background
+notification_fg = #CDD6F4  # Notification text
+notification_hi = #C77D91  # Notification accent
+
+success         = #819B8B
+warning         = #D6A27A
+error           = #B86F82
+
+workspace       = #8C8AA3  # Inactive workspace
+workspace_hover = #A89BB9
+workspace_active= #C77D91  # Active workspace
+
+tooltip         = #29263A
+tooltip_text    = #CDD6F4

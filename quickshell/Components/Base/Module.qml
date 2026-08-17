@@ -1,12 +1,38 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+
 import "root:./Components/Base/"
 import "root:./Configs"
 
 Control {
+    id: root
+
     property bool isHovered: false
-    property string bgColor: isHovered ? Config.colors.moduleHoveredBG : Config.colors.moduleUnHoveredBG
+
+    property color bgColor: isHovered
+        ? Config.colors.moduleHoveredBG
+        : Config.colors.moduleUnHoveredBG
+
+    property color borderColor: isHovered
+        ? Config.colors.lavender
+        : Config.colors.purpleDark
+
+    leftPadding: Config.sizes.defaultPadding + 3
+    rightPadding: Config.sizes.defaultPadding + 3
+
+    topPadding: Config.sizes.defaultPadding
+    bottomPadding: Config.sizes.defaultPadding
+    //padding: Config.sizes.defaultPadding
+
+    scale: isHovered ? 1.035 : 1.0
+
+    Behavior on scale {
+        NumberAnimation {
+            duration: Config.anim.appearance.baseAnimationTime
+            easing.type: Easing.OutCubic
+        }
+    }
 
     Behavior on bgColor {
         ColorAnimation {
@@ -14,13 +40,21 @@ Control {
         }
     }
 
-    padding: Config.sizes.defaultPadding
+    Behavior on borderColor {
+        ColorAnimation {
+            duration: Config.anim.appearance.baseAnimationTime
+        }
+    }
 
     background: Rectangle {
-        id: button
-        color: bgColor
+        color: root.bgColor
+
         opacity: Config.anim.appearance.baseOpacity
+
         radius: Config.sizes.moduleRadius
+
+        border.width: 1
+        border.color: root.borderColor
     }
 
     Layout.fillHeight: true
@@ -29,21 +63,24 @@ Control {
     MouseArea {
         anchors.fill: parent
         hoverEnabled: true
+
+        cursorShape: Qt.PointingHandCursor
+
         onClicked: {
-            moduleClicked();
+            root.moduleClicked()
         }
+
         onEntered: {
-            isHovered = true;
-            moduleHovered(isHovered);
+            root.isHovered = true
+            root.moduleHovered(true)
         }
+
         onExited: {
-            isHovered = false;
-            moduleHovered(isHovered);
+            root.isHovered = false
+            root.moduleHovered(false)
         }
     }
 
-
-    signal moduleClicked();
-    signal moduleHovered(bool hovered);
+    signal moduleClicked()
+    signal moduleHovered(bool hovered)
 }
-

@@ -1,0 +1,25 @@
+// Canonical Lofi Palette
+
+background      #11111B
+backgroundAlt   #181825
+surface         #1E1E2E
+surfaceAlt      #29263A
+
+foreground      #CDD6F4
+text            #CDD6F4
+textMuted       #8C8AA3
+textDark        #181825
+
+lavender        #A89BB9
+purple          #817A9B
+purpleDark      #514B68
+
+pink            #C77D91
+coral           #D58A86
+rose            #B86F82
+
+cream           #D8C3A5
+peach           #D6A27A
+
+sage            #819B8B
+sageDark        #596F65

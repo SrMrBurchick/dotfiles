@@ -10,6 +10,7 @@ Module {
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignHCenter
         text: HyprlandSocket.currentKbLayout
+        //Layout.alignment: Qt.AlignVCenter
     }
 }
 

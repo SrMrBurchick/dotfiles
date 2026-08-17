@@ -9,48 +9,133 @@ import Quickshell.Widgets
 import "root:./Services/"
 import "root:./Components/Base/"
 import "root:./Components/Bar/DashBoard/Media"
-
+import "root:./Configs"
 
 ColumnLayout {
-    BaseText {
+    id: root
+    anchors.fill: parent
+    anchors.margins: 10
+
+    spacing: 10
+
+    ScrollingText {
         id: title
 
-        // anchors.top: cover.bottom
-        // anchors.horizontalCenter: parent.horizontalCenter
-        // anchors.topMargin: Appearance.spacing.normal
+        Layout.fillWidth: true
 
-        // animate: true
+        text: (Players.active?.trackTitle ?? qsTr("No media"))
+              || qsTr("Unknown title")
+
+        color: Config.colors.foreground
+
+        font.bold: true
+
+        animationDuration: 5000
+        pauseDuration: 1200
+    }
+
+    BaseText {
+        Layout.fillWidth: true
+
+        text: Players.active?.trackArtist ?? ""
+
         horizontalAlignment: Text.AlignHCenter
-        text: (Players.active?.trackTitle ?? qsTr("No media")) || qsTr("Unknown title")
-        // color: Colours.palette.m3primary
-        // font.pointSize: Appearance.font.size.normal
 
-        // width: parent.implicitWidth - Appearance.padding.large * 2
+        color: Config.colors.textMuted
+
         elide: Text.ElideRight
     }
 
-    ClippingRectangle {
-        radius: 100
-        height: 130
-        width: height
-        anchors.horizontalCenter: parent.horizontalCenter
-        color: "transparent"
-        Image {
-            anchors.fill: parent
-            source: Players.active?.trackArtUrl ?? ""
+    Item {
+        id: coverContainer
+
+        Layout.fillWidth: true
+        Layout.fillHeight: true
+
+        property url currentArtUrl: ""
+
+        function updateArt() {
+            const url = Players.active?.trackArtUrl ?? ""
+
+            if (url !== "")
+                currentArtUrl = url
+        }
+
+        Connections {
+            target: Players.active
+
+            function onTrackArtUrlChanged() {
+                coverContainer.updateArt()
+            }
+        }
+
+        Component.onCompleted: {
+            updateArt()
+        }
+
+        ClippingRectangle {
+            anchors.centerIn: parent
+
+            width: 140
+            height: 140
+
+            radius: 16
+            color: Config.colors.surfaceAlt
+
+            Image {
+                id: cover
+
+                anchors.fill: parent
+
+                source: coverContainer.currentArtUrl
+                fillMode: Image.PreserveAspectCrop
+
+                asynchronous: true
+                cache: true
+
+                onStatusChanged: {
+                    console.log(
+                        "Cover status:",
+                        status,
+                        "source:",
+                        source
+                    )
+                }
+            }
         }
     }
 
     RowLayout {
-        anchors.horizontalCenter: parent.horizontalCenter
+        Layout.alignment: Qt.AlignHCenter
+
+        spacing: 10
+
         ControlButton {
             text: ""
+
+            onButtonClicked: {
+                Players.active?.previous()
+            }
         }
+
         ControlButton {
-            text: ""
+            text: Players.active?.isPlaying ? "" : ""
+
+            onButtonClicked: {
+                Players.active?.togglePlaying()
+            }
         }
+
         ControlButton {
             text: ""
+
+            onButtonClicked: {
+                Players.active?.next()
+            }
         }
+    }
+
+    Component.onCompleted: {
+        coverContainer.updateArt()
     }
 }
