@@ -74,14 +74,26 @@ BASENAME restricts the scan to a single file name."
       (message "Scanning with rg asynchronously…")
       (my-project-scan root choose))))
 (defun my-project-search (pattern)
-  (interactive (list (read-string "Project regexp: " (thing-at-point 'symbol t))))
+  (interactive (list (or (thing-at-point 'symbol t) "")))
   (let ((root (my-project-root)))
-    (my-process-output "rg" (my-executable "rg")
-                       (append '("--line-number" "--column" "--no-heading" "--color=never")
-                               (my-rg-args root) (list "--" pattern ".")) root)))
+    (my-executable "rg")
+    (if (require 'consult nil t)
+        ;; Consult list expressions preserve each Windows path as one argument.
+        (let ((consult-ripgrep-args
+               (list (list 'quote (append
+                      '("rg" "--null" "--line-buffered" "--color=never"
+                        "--max-columns=300" "--path-separator" "/" "--smart-case"
+                        "--no-heading" "--with-filename" "--line-number")
+                      (my-rg-args root))))))
+          (consult-ripgrep root pattern))
+      (my-process-output "rg" (my-executable "rg")
+                         (append '("--line-number" "--column" "--no-heading" "--color=never")
+                                 (my-rg-args root)
+                                 (list "--" (read-string "Project regexp: " pattern) ".")) root))))
 (defun my-recent-file ()
   (interactive)
-  (find-file (completing-read "Recent file: " recentf-list nil t)))
+  (if (require 'consult nil t) (consult-recent-file)
+    (find-file (completing-read "Recent file: " recentf-list nil t))))
 (setq project-switch-commands '((my-project-find-file "Find file")
                                 (my-project-search "Search")
                                 (project-switch-to-buffer "Buffer")

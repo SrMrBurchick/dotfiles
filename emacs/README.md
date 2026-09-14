@@ -22,10 +22,11 @@ Projectile, lsp-mode, Company, Git integration, or a distribution framework.
    uses 12pt semibold (about 16px at 96 DPI). Adjust `:height 120` or weight in
    `config-ui.el` for your display. Missing fonts fall back to Emacs's font.
 5. Start Emacs, run `M-x my-install-packages`, and restart. This explicit step
-   installs Evil, Corfu, Treemacs and treemacs-evil plus their declared
+   installs Evil, Corfu, Treemacs, treemacs-evil, nyan-mode, Vertico, Orderless,
+   Marginalia and Consult plus their declared
    dependencies from GNU ELPA, NonGNU ELPA and MELPA. Startup never accesses
    package archives. Installation failures can be retried with the same command.
-   Built-in use-package, Eglot, project.el, xref, Eldoc, Icomplete, hideshow,
+   Built-in use-package, Eglot, project.el, xref, Eldoc, hideshow,
    compilation-mode and Modus Vivendi supply the remaining features.
 6. Open a project header or source file. Configure the compilation database
    before expecting accurate clangd navigation. Use `C-c p f` for project files.
@@ -82,9 +83,11 @@ to modules, targets, engine version, toolchain or generated code. Restart with
 `M-x eglot-shutdown`, then `M-x eglot-ensure`. Never give clangd an unrestricted
 `--query-driver=*`; no driver execution permission is configured here.
 
-Eglot starts only in C/C++ buffers. Diagnostic **display** defaults off;
-`C-c c d` toggles Flymake in the current buffer. clangd still computes and sends
-diagnostics. clang-tidy is disabled. Background indexing and preamble creation
+Eglot starts only in C/C++ buffers. Flymake and compact inline diagnostics
+default on. `C-c c d` toggles Flymake; `C-c c v` independently toggles inline
+text without enabling a disabled Flymake. Customize `my-cpp-diagnostics-enabled`
+and `my-cpp-inline-diagnostics-enabled` for defaults in new buffers. clangd
+still computes and sends diagnostics when Flymake is disabled. clang-tidy is disabled. Background indexing and preamble creation
 remain substantial CPU/RAM users; thread counts are left to clangd. To reduce
 indexing for a particular engine checkout, use clangd's documented per-path
 `Index.Background: Skip` configuration, accepting reduced cross-file results.
@@ -107,9 +110,10 @@ memory. `C-u C-c p f` refreshes after adding, removing or syncing files. Built-i
 `project-files` consumes that cache; it never falls back to recursive GNU find.
 First-time completion over a very large result set can still cost time and RAM.
 
-Search runs `rg` asynchronously into compilation-mode; use `RET` on a hit or
-`M-g n`/`M-g p` for next/previous error. The initial search text is the symbol at
-point; it is a regexp, so add `\b` boundaries if needed. Generated/build folders
+Search uses `consult-ripgrep` with asynchronous `rg` output in the minibuffer;
+select a hit with `RET`. `M-.` explicitly previews it. Without Consult installed,
+the command falls back to compilation-mode. The initial search text is the
+symbol at point; it is a regexp, so add `\b` boundaries if needed. Generated/build folders
 Binaries, DerivedDataCache, Intermediate, Saved and .vs are excluded from scans
 and search. `.gen.cpp` references are filtered only for C++ Eglot xref references;
 definitions and other xref backends retain normal behavior.
@@ -218,6 +222,91 @@ not generate `_Validate`, BlueprintNativeEvent bodies or code in other modules.
 For unsupported declarations try clangd's offered actions with `C-c c a`, or
 write the definition manually. Review every generated stub.
 
+## Dashboard, navigation and window focus
+
+`config-dashboard.el` supplies a small button-based startup buffer, with no
+additional dashboard package. Known projects come directly from
+`project-known-project-roots`; recent files come from recentf. Neither list is
+validated or recursively scanned during dashboard rendering. Use TAB/Shift-TAB
+and RET, or click a button. `g` refreshes; `C-c h` reopens the dashboard.
+
+Open project selects a saved root. Add project registers a directory using
+project.el. Opening a root creates a project landing buffer whose
+`default-directory` is that root, so `C-c p f`, search, shell and other project.el
+commands immediately use the selected project. Project context in Emacs is
+buffer-local, not a global replacement for the project of every open file.
+Missing roots are diagnosed when selected; forget stale entries with
+`M-x project-forget-project`. CLI file visits still use Emacs's normal startup
+handling; the dashboard is configured through `initial-buffer-choice`.
+
+Vertico, Orderless, Marginalia and Consult replace Icomplete. Space-separated
+search terms match in any order, with literal and fuzzy subsequence matching.
+`\` in Evil normal mode searches open buffers; useful special buffers remain
+available. Consult's hidden-buffer source (`SPC` narrowing prefix) can reveal
+internal buffers filtered by its normal source. `C-c b` provides the same command
+outside normal mode. Arrow keys or C-n/C-p select candidates, RET accepts, and
+Escape cancels. Recent files use Consult. Project files retain the asynchronous
+rg cache and use Vertico/Orderless via standard completing-read; no synchronous
+Consult find traversal or additional fd executable is introduced. `M-.` opts
+into Consult previews, avoiding automatic visits to large files.
+
+`C-f` overrides Evil's forward-page command **only in normal state**. It saves
+the current frame's window configuration and maximizes the selected editing
+window, including hiding side windows such as Treemacs. Press it again to
+restore the prior splits, sizes, buffers and selected window. Editing progress
+in the original selected buffer is retained where practical. Saved layouts are
+per-frame. Buffers are not killed and OS fullscreen is never changed. Select a
+source window first if currently in a sidebar. Killing buffers or resizing the
+frame while maximized can necessarily limit exact restoration. Insert and
+minibuffer C-f keep their usual behavior; backslash still inserts normally in
+insert state. `C-e` keeps its open/focus/hide Treemacs behavior.
+
+Nyan mode uses its global `nyan-mode` API with a short 12-unit bar, no animation
+or music, and a minimum window width of 64 columns. It replaces only the normal
+modeline position indicator, retaining line/column information. Its own text
+fallback works without XPM image support. No custom modeline framework is added.
+
+## Inline diagnostics and C++ inlay hints
+
+These are distinct native features in Emacs 30+; neither inserts source text.
+
+- Flymake's `flymake-show-diagnostics-at-end-of-line` is set to `short` in managed
+  C/C++ buffers: the most severe message on each affected line is shown using
+  separate red error, amber warning and blue note faces. Flymake owns overlay
+  updates and removal when backend reports change. There is no polling timer,
+  automatic diagnostics window or extra diagnostic package. `C-c c v` toggles
+  inline text; if Flymake is enabled it restarts that buffer's Flymake once to
+  clear/recreate overlays through public APIs. It does not change `C-c c d`'s
+  enabled/disabled state. The compact text may be clipped on long source lines
+  because source buffers truncate rather than wrap.
+- Native `eglot-inlay-hints-mode` is enabled automatically in managed c-mode,
+  c++-mode, c-ts-mode and c++-ts-mode buffers. `C-c c n` toggles it for the buffer.
+  The previous ignored `:inlayHintProvider` setting has been removed. Subtle
+  gray overlays show clangd's deduced types and parameter names independently
+  of Flymake. Eglot controls visible-region hint requests and overlay cleanup.
+
+Current clangd enables parameter-name and deduced-type hints by default; no new
+server flags or nonstandard LSP initialization settings are required. If an
+existing clangd configuration overrides them, merge this into the project's
+`.clangd` (do not replace its compilation database settings):
+
+```yaml
+InlayHints:
+  Enabled: true
+  ParameterNames: true
+  DeducedTypes: true
+```
+
+clangd decides when a hint is useful; redundant argument-name hints or excessively
+long types may be suppressed. Accurate hints require a valid compilation database
+and successful parsing. These settings cannot repair missing Unreal includes.
+Restart an existing Eglot connection after loading the updated configuration,
+then revisit buffers. For missing hints check `M-x describe-variable RET
+eglot-inlay-hints-mode`, your clangd version/configuration, and its advertised
+inlayHintProvider capability. Neither feature is enabled in large-file fallback
+buffers. Inline diagnostics and inlay hints do add overlays; toggle them per
+buffer if profiling shows a cost on an especially dense translation unit.
+
 ## MSVC/PDB debugging
 
 Use **Visual Studio's native debugger**. Build Tools alone do not supply the full
@@ -251,10 +340,15 @@ watch windows here. GDB is not offered as an MSVC/PDB replacement.
 | `C-c p f`, `C-u C-c p f` | Project file / refresh file cache |
 | `C-c p s`, `C-c p b`, `C-c p p` | Project search, project buffer, switch project |
 | `C-c p t` | Project shell, native Windows shell |
-| `C-c f r`, `C-c b` | Recent file, any buffer |
-| `C-c t` | Toggle current-project Treemacs |
+| `C-c f r`, `C-c b` | Consult recent file, open buffers |
+| `\` (normal mode) | Search open buffers using Consult |
+| `C-f` (normal mode) | Maximize selected window / restore previous layout |
+| `C-c h` | Startup dashboard |
+| `C-e` / `C-c t` | Open/focus Treemacs; hide it when already focused |
 | `C-c c h`, `C-c c i`, `C-c c a` | Header/source, create implementation, LSP action |
-| `C-c c d` | Toggle this buffer's diagnostic display |
+| `C-c c d` | Toggle this buffer's Flymake diagnostics |
+| `C-c c v` | Toggle inline diagnostic summaries independently |
+| `C-c c n` | Toggle clangd type/parameter inlay hints independently |
 | `za`, `zc`, `zo`, `zM`, `zR` | Toggle/close/open fold, close/open all |
 | `C-c u o`, `C-c u b`, `C-c u e` | Open .uproject directory, game build, editor build |
 | `C-c v e/r/o/d/i` | P4 edit/revert/opened/diff/info |
@@ -286,6 +380,24 @@ watch windows here. GDB is not offered as an MSVC/PDB replacement.
   avoid editing the same file in multiple Emacs instances. Undo history is not
   persisted between sessions. The theme has no transparency or animation.
 
+## Validation
+
+After installing the configured packages, run from this configuration directory:
+
+```text
+emacs -Q --batch -l tests/config-ui-tests.el
+```
+
+The eight regression tests cover project landing context, dashboard rendering
+without file probes, exact window restoration including sidebars, diagnostic
+update/removal, independent toggles, Evil/minibuffer key scope, Consult argument
+boundaries for paths with spaces, and idempotent static Nyan integration.
+They use temporary state rather than writing your normal Emacs history files.
+These tests passed with Emacs 31.1 and the current installed packages on Linux.
+A separate live clangd check returned both type and parameter hints and verified
+that toggling hints preserved source text and Flymake state. Native Windows GUI
+rendering and the Unreal/MSVC/P4 environment still need workstation validation.
+
 ## References
 
 - [Epic: Visual Studio setup and engine/version compatibility](https://dev.epicgames.com/documentation/en-us/unreal-engine/setting-up-visual-studio-development-environment-for-cplusplus-projects-in-unreal-engine)
@@ -295,3 +407,11 @@ watch windows here. GDB is not offered as an MSVC/PDB replacement.
 - [Treemacs documentation](https://github.com/Alexander-Miller/treemacs)
 - [Microsoft: devenv /DebugExe](https://learn.microsoft.com/en-us/visualstudio/ide/reference/debugexe-devenv-exe?view=visualstudio)
 - [Microsoft: C++ debugger configuration and cppvsdbg](https://code.visualstudio.com/docs/cpp/launch-json-reference)
+
+Additional verified APIs:
+
+- [Emacs 30.1 Flymake implementation and end-of-line diagnostics](https://github.com/emacs-mirror/emacs/blob/emacs-30.1/lisp/progmodes/flymake.el)
+- [Emacs 30 Eglot native inlay hints](https://github.com/emacs-mirror/emacs/blob/emacs-30/lisp/progmodes/eglot.el)
+- [clangd inlay-hint configuration](https://clangd.llvm.org/config#inlayhints)
+- [Nyan mode API and installation](https://github.com/TeMPOraL/nyan-mode)
+- [Consult](https://github.com/minad/consult), [Vertico](https://github.com/minad/vertico), [Orderless](https://github.com/oantolin/orderless), [Marginalia](https://github.com/minad/marginalia)

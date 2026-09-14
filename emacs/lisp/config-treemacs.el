@@ -15,9 +15,15 @@
                  (member file my-project-excludes)))
   (when (locate-library "treemacs-evil") (require 'treemacs-evil)))
 (defun my-treemacs-toggle ()
+  "Open and focus the tree, focus a visible tree, or hide the selected tree."
   (interactive)
   (unless (require 'treemacs nil t) (user-error "Run M-x my-install-packages first"))
-  (if (treemacs-get-local-window) (treemacs)
-    (let ((default-directory (my-project-root)))
-      (treemacs-add-and-display-current-project-exclusively))))
+  (let ((window (treemacs-get-local-window)))
+    (cond ((eq window (selected-window)) (treemacs))
+          ((window-live-p window) (select-window window))
+          (t
+           (let ((default-directory (my-project-root)))
+             (treemacs-add-and-display-current-project-exclusively)
+             (when-let* ((tree-window (treemacs-get-local-window)))
+               (select-window tree-window)))))))
 (provide 'config-treemacs)
