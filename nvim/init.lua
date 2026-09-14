@@ -42,49 +42,49 @@ local ns = vim.api.nvim_create_namespace("split_random_bg")
 -- Cache random colors per buffer (bufnr -> hex color)
 local buf_colors = {}
 local function random_soft_color()
-  -- Soft-ish range so text remains readable
-  local r = math.random(25, 70)
-  local g = math.random(25, 70)
-  local b = math.random(25, 70)
-  return string.format("#%02x%02x%02x", r, g, b)
+    -- Soft-ish range so text remains readable
+    local r = math.random(25, 70)
+    local g = math.random(25, 70)
+    local b = math.random(25, 70)
+    return string.format("#%02x%02x%02x", r, g, b)
 end
 local function get_buf_color(bufnr)
-  if not buf_colors[bufnr] then
-    buf_colors[bufnr] = random_soft_color()
-  end
-  return buf_colors[bufnr]
+    if not buf_colors[bufnr] then
+        buf_colors[bufnr] = random_soft_color()
+    end
+    return buf_colors[bufnr]
 end
 local function apply_split_backgrounds()
-  local current_win = vim.api.nvim_get_current_win()
-  for _, win in ipairs(vim.api.nvim_list_wins()) do
-    local buf = vim.api.nvim_win_get_buf(win)
-    -- skip floating windows
-    local cfg = vim.api.nvim_win_get_config(win)
-    if cfg.relative == "" then
-      if win == current_win then
-        -- Focused: transparent
-        vim.api.nvim_set_hl(ns, "WinBg_" .. win, { bg = "NONE" })
-      else
-        -- Unfocused: random per-buffer color
-        vim.api.nvim_set_hl(ns, "WinBg_" .. win, { bg = get_buf_color(buf) })
-      end
-      vim.wo[win].winhighlight =
-        "Normal:WinBg_" .. win .. ",NormalNC:WinBg_" .. win
+    local current_win = vim.api.nvim_get_current_win()
+    for _, win in ipairs(vim.api.nvim_list_wins()) do
+        local buf = vim.api.nvim_win_get_buf(win)
+        -- skip floating windows
+        local cfg = vim.api.nvim_win_get_config(win)
+        if cfg.relative == "" then
+            if win == current_win then
+                -- Focused: transparent
+                vim.api.nvim_set_hl(ns, "WinBg_" .. win, { bg = "NONE" })
+            else
+                -- Unfocused: random per-buffer color
+                vim.api.nvim_set_hl(ns, "WinBg_" .. win, { bg = get_buf_color(buf) })
+            end
+            vim.wo[win].winhighlight =
+            "Normal:WinBg_" .. win .. ",NormalNC:WinBg_" .. win
+        end
     end
-  end
 end
 vim.api.nvim_create_autocmd({
-  "WinEnter",
-  "WinLeave",
-  "BufEnter",
-  "BufWinEnter",
-  "VimResized",
+    "WinEnter",
+    "WinLeave",
+    "BufEnter",
+    "BufWinEnter",
+    "VimResized",
 }, {
-  callback = apply_split_backgrounds,
+    callback = apply_split_backgrounds,
 })
 -- Optional: cleanup cache when buffer is wiped
 vim.api.nvim_create_autocmd("BufWipeout", {
-  callback = function(args)
-    buf_colors[args.buf] = nil
-  end,
+    callback = function(args)
+        buf_colors[args.buf] = nil
+    end,
 })

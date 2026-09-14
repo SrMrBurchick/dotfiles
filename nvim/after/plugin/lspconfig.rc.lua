@@ -14,21 +14,7 @@ mason.setup({
 status, mason_lsp = pcall(require, "mason-lspconfig")
 if (not status) then return end
 
-local servers = {
-    "html",
-    "cssls",
-}
-
-mason_lsp.setup({
-    ensure_installed = servers
-})
---
--- status, mason_dap = pcall(require, "mason-nvim-dap")
--- if (not status) then return end
---
--- mason_dap.setup({
---     automatic_installation = true
--- })
+mason_lsp.setup()
 
 local handlers = {
     ["textDocument/publishDiagnostics"] = vim.lsp.with(
@@ -47,22 +33,15 @@ capabilities = require('cmp_nvim_lsp').default_capabilities(protocol.make_client
 capabilities.textDocument.completion.completionItem.snippetSupport = true
 
 local opts = { noremap = true, silent = true }
---vim.keymap.set('n', '<space>e', vim.diagnostic.open_float, opts)
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
---vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist, opts)
 
 
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
 local on_attach = function(client, bufnr)
-    -- Enable completion triggered by <c-x><c-o>
-    -- local state, hints = pcall(require, "eol-hints")
-    -- hints.enable(bufnr)
     vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
-    -- Mappings.
-    -- See `:help vim.lsp.*` for documentation on any of the below functions
     local bufopts = { noremap = true, silent = true, buffer = bufnr }
     vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
     vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
@@ -71,50 +50,58 @@ local on_attach = function(client, bufnr)
     vim.keymap.set('n', 'ca', vim.lsp.buf.code_action, bufopts)
 end
 
--- Loop through all of the installed servers and set it up via lspconfig
-mason_lsp.setup_handlers {
-    function(server_name)
-        require('lspconfig')[server_name].setup({
-            on_attach = on_attach,
-            capabilities = capabilities,
-            handlers = handlers
-        })
+
+local function setup_linux_cpp()
+    -- QML
+    vim.lsp.handlers["textDocument/semanticTokens"] = vim.lsp.handlers["textDocument/semanticTokens"] or function(_, _, _, _, _, _, _)
+        return { data = {} }
     end
-}
 
--- QML
-vim.lsp.handlers["textDocument/semanticTokens"] = vim.lsp.handlers["textDocument/semanticTokens"] or function(_, _, _, _, _, _, _)
-  return { data = {} }
+    require('lspconfig').qml_lsp.setup {
+        cmd = { "qmlls6" },
+        filetypes = { "qml", "qmljs" },
+        on_attach = on_attach,
+        capabilities = capabilities,
+        handlers = handlers
+    }
+
+    -- glsl
+    require'lspconfig'.glsl_analyzer.setup{}
+
+    -- Clangd server
+    require'lspconfig'.clangd.setup {
+        on_attach = on_attach,
+        cmd = {
+            "clangd",
+            "--background-index",
+            "--cross-file-rename",
+            "--header-insertion=never",
+            "--limit-references=100",
+            "--completion-style=detailed",
+            "--limit-results=20",
+            "--inlay-hints=true"
+        },
+        capabilities = capabilities,
+        handlers = handlers,
+    }
 end
-require('lspconfig').qml_lsp.setup {
-    cmd = { "qmlls6" },
-    filetypes = { "qml", "qmljs" },
-    on_attach = on_attach,
-    capabilities = capabilities,
-    handlers = handlers
-
-}
 
 
--- glsl
-require'lspconfig'.glsl_analyzer.setup{}
+local function setup_windows_cpp()
+end
 
--- Clangd server
-require'lspconfig'.clangd.setup {
-    on_attach = on_attach,
-    cmd = {
-        "clangd",
-        "--background-index",
-        "--cross-file-rename",
-        "--header-insertion=never",
-        "--limit-references=100",
-        "--completion-style=detailed",
-        "--limit-results=20",
-        "--inlay-hints=true"
-    },
-    capabilities = capabilities,
-    handlers = handlers,
-}
+local has = vim.fn.has
+local is_win = has "win32"
+local is_linux = has "linux"
+
+-- if 0 ~= is_win then
+--     setup_windows_cpp()
+-- elseif 0 ~= is_linux then
+--     setup_linux_cpp()
+-- else
+--     print("Uknown system!")
+-- end
+
 
 local luasnip = require 'luasnip'
 -- Load VSCode-style snippets from friendly-snippets

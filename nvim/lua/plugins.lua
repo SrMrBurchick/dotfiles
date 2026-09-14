@@ -10,11 +10,6 @@ packer.startup(function(use)
     -- Packer
     use 'wbthomason/packer.nvim'
 
-    -- Large Files
-    use {
-      "LunarVim/bigfile.nvim",
-    }
-
     -- UI
     use {
         'nvim-lualine/lualine.nvim',
@@ -35,6 +30,14 @@ packer.startup(function(use)
         end
     }
 
+    -- CSV
+    use {
+        'hat0uma/csvview.nvim',
+        config = function()
+            require("csvview").setup {
+            }
+        end
+    }
 
      -- QML
     use 'artoj/qmake-syntax-vim'
@@ -84,24 +87,6 @@ packer.startup(function(use)
     -- Telescope media files preview
     use 'nvim-telescope/telescope-media-files.nvim'
 
-
-    -- Git
-    -- use 'tpope/vim-fugitive'
-    -- use 'airblade/vim-gitgutter'
-    -- use 'rhysd/git-messenger.vim'
-    -- use 'braxtons12/blame_line.nvim'
-    -- use {
-    --     'tanvirtin/vgit.nvim',
-    --     requires = {
-    --         'nvim-lua/plenary.nvim'
-    --     },
-    --     config = function()
-    --         require('vgit').setup()
-    --     end
-    --
-    -- }
-
-
     -- Markdown preview
     use({
         "iamcco/markdown-preview.nvim",
@@ -109,25 +94,11 @@ packer.startup(function(use)
     })
 
     -- Other
-    -- use 'arithran/vim-delete-hidden-buffers'
     use 'kamykn/spelunker.vim'
     use 'windwp/nvim-autopairs'
 
-    -- Commenting util
-    use {
-        'numToStr/Comment.nvim',
-        config = function()
-            require('Comment').setup()
-        end
-    }
-
-
     use {
         'kyazdani42/nvim-tree.lua',
-        -- requires = {
-        --     'kyazdani42/nvim-web-devicons', -- optional, for file icons
-        -- },
-        -- tag = 'nightly'                     -- optional, updated every week. (see issue #1193)
     }
 
 
@@ -152,6 +123,13 @@ packer.startup(function(use)
         require"startup".setup()
       end
     }
-
+    use '~/Projects/buffer_highlight.nvim'
+    use 'javiorfo/nvim-soil'
+    -- Optional for puml syntax highlighting:
+    use 'javiorfo/nvim-nyctophilia'
     -- use 'SrMrBurchick/perforce.nvim'
+    use '/home/srmrburchick/Projects/sqlui'
+    use({
+        "Pocco81/true-zen.nvim",
+    })
 end)
