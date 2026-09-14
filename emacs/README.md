@@ -18,9 +18,10 @@ Projectile, lsp-mode, Company, Git integration, or a distribution framework.
    Check with `M-: (executable-find "clangd")`, and likewise `rg` and `p4`.
    GUI applications inherit PATH at launch; an already-running Emacs daemon
    does not inherit later changes. No Bash, GNU find, Python or Node is required.
-4. Install **JetBrainsMono Nerd Font** in Windows, then restart Emacs. The config
-   uses 12pt semibold (about 16px at 96 DPI). Adjust `:height 120` or weight in
-   `config-ui.el` for your display. Missing fonts fall back to Emacs's font.
+4. Install **JetBrains NF** in Windows, then restart Emacs. The config
+   uses `my-font-height` (default 160, i.e. 16pt) and semibold weight. The font
+   is checked and applied to each GUI frame explicitly. Missing fonts produce
+   a warning; adjust `my-font-height` and re-evaluate `config-ui.el` to resize.
 5. Start Emacs, run `M-x my-install-packages`, and restart. This explicit step
    installs Evil, Corfu, Treemacs, treemacs-evil, nyan-mode, Vertico, Orderless,
    Marginalia and Consult plus their declared
@@ -261,10 +262,19 @@ frame while maximized can necessarily limit exact restoration. Insert and
 minibuffer C-f keep their usual behavior; backslash still inserts normally in
 insert state. `C-e` keeps its open/focus/hide Treemacs behavior.
 
-Nyan mode uses its global `nyan-mode` API with a short 12-unit bar, no animation
-or music, and a minimum window width of 64 columns. It replaces only the normal
+Nyan mode uses its global `nyan-mode` API with a short 12-unit bar, animation and a wavy
+trail enabled by default, no music, and a minimum window width of 64 columns. It replaces only the normal
 modeline position indicator, retaining line/column information. Its own text
 fallback works without XPM image support. No custom modeline framework is added.
+
+Programming buffers use absolute line numbers and built-in `whitespace-mode`.
+Spaces appear as dim dots, tabs as `>---`, and trailing whitespace has a subtle
+separate face. `C-c w` or `M-x whitespace-mode` toggles visualization for the
+current buffer. No file contents are changed or cleaned automatically. The tab
+glyph is a fixed four-cell display mapping, matching the default indentation;
+tabs after non-tab-stop columns or in modes with different tab widths will not
+have their usual visual alignment. No per-character overlays or extra package
+are used. Large-file fallback buffers retain their lightweight plain-text UI.
 
 ## Inline diagnostics and C++ inlay hints
 
@@ -344,6 +354,7 @@ watch windows here. GDB is not offered as an MSVC/PDB replacement.
 | `\` (normal mode) | Search open buffers using Consult |
 | `C-f` (normal mode) | Maximize selected window / restore previous layout |
 | `C-c h` | Startup dashboard |
+| `C-c w` | Toggle whitespace visualization in this buffer |
 | `C-e` / `C-c t` | Open/focus Treemacs; hide it when already focused |
 | `C-c c h`, `C-c c i`, `C-c c a` | Header/source, create implementation, LSP action |
 | `C-c c d` | Toggle this buffer's Flymake diagnostics |
@@ -388,10 +399,11 @@ After installing the configured packages, run from this configuration directory:
 emacs -Q --batch -l tests/config-ui-tests.el
 ```
 
-The eight regression tests cover project landing context, dashboard rendering
+The regression tests cover project landing context, dashboard rendering
 without file probes, exact window restoration including sidebars, diagnostic
 update/removal, independent toggles, Evil/minibuffer key scope, Consult argument
-boundaries for paths with spaces, and idempotent static Nyan integration.
+boundaries for paths with spaces, and idempotent animated Nyan integration, whitespace preservation, font targeting,
+and repeatable UI re-evaluation.
 They use temporary state rather than writing your normal Emacs history files.
 These tests passed with Emacs 31.1 and the current installed packages on Linux.
 A separate live clangd check returned both type and parameter hints and verified

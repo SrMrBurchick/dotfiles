@@ -31,6 +31,7 @@
                 ("C-c b" . my-switch-buffer) ("C-c t" . my-treemacs-toggle)
                 ("C-c c h" . my-unreal-switch-header-source)
                 ("C-c c i" . my-unreal-create-implementation)
+                ("C-c w" . whitespace-mode)
                 ("C-c c v" . my-cpp-toggle-inline-diagnostics)
                 ("C-c c n" . my-cpp-toggle-inlay-hints)
                 ("C-c h" . my-dashboard)

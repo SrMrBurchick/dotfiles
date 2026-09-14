@@ -9,15 +9,43 @@
       mouse-wheel-progressive-speed nil
       mode-line-compact t)
 (set-fringe-mode 8)
+(defcustom my-font-height 160
+  "Default GUI font height in tenths of a point."
+  :type 'integer :group 'my-unreal)
 (defun my-frame-font (&optional frame)
-  (when (display-graphic-p frame)
-    (with-selected-frame (or frame (selected-frame))
-      (when (find-font (font-spec :family "JetBrainsMono Nerd Font"))
-        ;; 12 points is approximately 16px at 96 DPI; Windows scaling applies.
-        (set-face-attribute 'default nil :family "JetBrainsMono Nerd Font"
-                            :height 120 :weight 'semi-bold)))))
-(my-frame-font)
+  "Apply JetBrains NF to the explicit GUI FRAME, or warn if unavailable."
+  (let ((frame (or frame (selected-frame))))
+    (when (display-graphic-p frame)
+      (if (and (member "JetBrains NF" (font-family-list frame))
+               (find-font (font-spec :family "JetBrains NF") frame))
+          (set-face-attribute 'default frame :family "JetBrains NF"
+                              :height my-font-height :weight 'semi-bold)
+        (display-warning 'font
+                         "JetBrains NF was not found. Install that font family in Windows, then run M-: (my-frame-font), or restart Emacs.")))))
+;; Re-evaluation also updates existing GUI frames; daemon frames use the hook.
+(dolist (frame (frame-list)) (my-frame-font frame))
 (add-hook 'after-make-frame-functions #'my-frame-font)
+(require 'whitespace)
+(setq display-line-numbers-type t
+      whitespace-action nil
+      whitespace-style '(face tabs spaces trailing space-mark tab-mark)
+      whitespace-display-mappings '((space-mark ?\s [?·] [?.])
+                                    (tab-mark ?\t [?> ?- ?- ?-])))
+;; A fixed four-cell tab marker matches the configured four-space indentation.
+;; Only display tables/font-lock faces change; no whitespace cleanup is run.
+(set-face-attribute 'whitespace-space nil :foreground "#454955" :background 'unspecified)
+(set-face-attribute 'whitespace-tab nil :foreground "#555968" :background 'unspecified)
+(set-face-attribute 'whitespace-trailing nil :foreground "#8b6571" :background "#251d24")
+(defun my-programming-whitespace ()
+  "Enable absolute line numbers and subtle whitespace in source buffers."
+  (unless (bound-and-true-p my-large-file-p)
+    (setq-local display-line-numbers t display-line-numbers-type t)
+    (whitespace-mode 1)))
+(add-hook 'prog-mode-hook #'my-programming-whitespace)
+;; Apply the changed UI to buffers already open when using M-x eval-buffer.
+(dolist (buffer (buffer-list))
+  (with-current-buffer buffer
+    (when (derived-mode-p 'prog-mode) (my-programming-whitespace))))
 (set-face-attribute 'mode-line nil :background "#263b54" :foreground "#ffffff"
                     :box nil)
 (set-face-attribute 'mode-line-inactive nil :background "#161a22"
@@ -28,11 +56,14 @@
   :hook (after-init . my-enable-nyan)
   :init
   (setq nyan-bar-length 12 nyan-minimum-window-width 64
-        nyan-animate-nyancat nil nyan-wavy-trail nil))
+        nyan-animate-nyancat t nyan-wavy-trail t))
 (defun my-enable-nyan ()
-  "Enable the package's global modeline integration once, without animation."
-  (when (and (require 'nyan-mode nil t) (not (bound-and-true-p nyan-mode)))
-    (nyan-mode 1)))
+  "Enable Nyan globally and start its single animation timer."
+  (when (require 'nyan-mode nil t)
+    (unless (bound-and-true-p nyan-mode) (nyan-mode 1))
+    (when nyan-animate-nyancat (nyan-start-animation))))
+;; after-init has already run when this module is evaluated interactively.
+(when after-init-time (my-enable-nyan))
 (defun my-toggle-window-maximize ()
   "Maximize this window, or restore this frame's saved window configuration."
   (interactive)

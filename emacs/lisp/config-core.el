@@ -44,7 +44,7 @@
 (global-so-long-mode 1)
 (defun my-programming-ui ()
   (unless my-large-file-p
-    (setq-local display-line-numbers 'relative)
+    (setq-local display-line-numbers t)
     (setq-local truncate-lines t)))
 (add-hook 'prog-mode-hook #'my-programming-ui)
 (defun my-executable (name)
