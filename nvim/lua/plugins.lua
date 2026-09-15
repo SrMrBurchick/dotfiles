@@ -113,4 +113,5 @@ packer.startup(function(use)
     use({
         "Pocco81/true-zen.nvim",
     })
+    use("mangelozzi/nvim-rgflow.lua")
 end)
