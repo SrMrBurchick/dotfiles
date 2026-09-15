@@ -5,25 +5,25 @@ if (not status) then
 end
 
 
--- disable netrw at the very start of your init.lua (strongly advised)
-vim.g.loaded = 1
-vim.g.loaded_netrwPlugin = 1
 nvim_tree.setup({
     diagnostics = {
         enable = false
     },
     sort_by = "case_sensitive",
-    renderer = {
-        group_empty = true,
-    },
     filters = {
         dotfiles = false,
-        -- custom = { '^.git$' }
+        custom = { '^Binaries$', '^DerivedDataCache$', '^Intermediate$', '^Saved$', '^\\.vs$' },
     },
     git = {
         enable = false,
     },
+    filesystem_watchers = {
+        ignore_dirs = function(path)
+            return require("ue_paths").is_tree_ignored(path)
+        end,
+    },
     renderer = {
+        group_empty = true,
         icons = {
             glyphs = {
                 git = {

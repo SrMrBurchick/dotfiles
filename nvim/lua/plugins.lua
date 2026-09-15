@@ -13,39 +13,25 @@ packer.startup(function(use)
     -- UI
     use {
         'nvim-lualine/lualine.nvim',
-        requires = { 'kyazdani42/nvim-web-devicons', opt = true }
+        requires = { 'kyazdani42/nvim-web-devicons' }
     }
     use 'rafi/awesome-vim-colorschemes'
     use 'scottmckendry/cyberdream.nvim'
 
-    -- CSS
-    use {
-        'brenoprata10/nvim-highlight-colors',
-        config = function()
-            require("nvim-highlight-colors").setup {
-                render = 'background', -- or 'foreground' or 'first_column'
-                enable_named_colors = true,
-                enable_tailwind = true
-            }
-        end
-    }
-
-    -- CSV
-    use {
-        'hat0uma/csvview.nvim',
-        config = function()
-            require("csvview").setup {
-            }
-        end
-    }
+    -- Setup lives in after/plugin; all packages here load eagerly.
+    use 'brenoprata10/nvim-highlight-colors'
+    use 'hat0uma/csvview.nvim'
 
      -- QML
     use 'artoj/qmake-syntax-vim'
     use 'peterhoeg/vim-qml'
     use {
-        use 'Decodetalkers/neoqmllsp',
+        'Decodetalkers/neoqmllsp',
         run = "cargo build --release"
     }
+
+    -- Native highlighting; install/update parsers explicitly, never on buffer entry.
+    use { 'nvim-treesitter/nvim-treesitter', branch = 'main', run = ':TSUpdate' }
 
     -- LSP
     use 'neovim/nvim-lspconfig' -- Collection of configurations for built-in LSP client
@@ -103,10 +89,8 @@ packer.startup(function(use)
 
 
     -- Debugger
-    use {
-        "mfussenegger/nvim-dap",
-        "jay-babu/mason-nvim-dap.nvim",
-    }
+    use "mfussenegger/nvim-dap"
+    use "jay-babu/mason-nvim-dap.nvim"
 
     use {
         "rcarriga/nvim-dap-ui",
@@ -117,11 +101,8 @@ packer.startup(function(use)
     }
 
     use {
-      "startup-nvim/startup.nvim",
-      requires = {"nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim"},
-      config = function()
-        require"startup".setup()
-      end
+        'startup-nvim/startup.nvim',
+        requires = { 'nvim-telescope/telescope.nvim', 'nvim-lua/plenary.nvim' },
     }
     use '~/Projects/buffer_highlight.nvim'
     use 'javiorfo/nvim-soil'

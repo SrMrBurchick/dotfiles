@@ -1,3 +1,6 @@
+-- Let nvim-tree own directory buffers.
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
 require('base')
 
 require('configuration')
@@ -7,8 +10,8 @@ require('plugins')
 require('workspaces')
 
 local local_vimrc = vim.fn.getcwd() .. '/.nvim.rc.lua'
-if vim.loop.fs_stat(local_vimrc) then
-    vim.cmd('source ' .. local_vimrc)
+if vim.uv.fs_stat(local_vimrc) then
+    vim.cmd.source(vim.fn.fnameescape(local_vimrc))
 end
 
 local has = vim.fn.has
@@ -34,11 +37,16 @@ if vim.g.neovide then
 end
 
 
+-- The installed buffer_highlight plugin owns split colors.
+-- Keep this existing fallback for machines without the local plugin.
+if pcall(require, "buffer_highlight") then return end
+
 -- Better colors in terminal
 vim.opt.termguicolors = true
 -- Seed RNG once
 math.randomseed(os.time())
-local ns = vim.api.nvim_create_namespace("split_random_bg")
+local group = vim.api.nvim_create_augroup("SplitRandomBackground", { clear = true })
+local ns = 0 -- winhighlight resolves groups in the global namespace
 -- Cache random colors per buffer (bufnr -> hex color)
 local buf_colors = {}
 local function random_soft_color()
@@ -75,15 +83,15 @@ local function apply_split_backgrounds()
 end
 vim.api.nvim_create_autocmd({
     "WinEnter",
-    "WinLeave",
-    "BufEnter",
     "BufWinEnter",
-    "VimResized",
+    "ColorScheme",
 }, {
+    group = group,
     callback = apply_split_backgrounds,
 })
 -- Optional: cleanup cache when buffer is wiped
 vim.api.nvim_create_autocmd("BufWipeout", {
+    group = group,
     callback = function(args)
         buf_colors[args.buf] = nil
     end,

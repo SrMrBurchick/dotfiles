@@ -5,16 +5,11 @@ local mason_dap = {}
 status, mason_dap = pcall(require, "mason-nvim-dap")
 if (not status) then return end
 
-mason_dap.default_setup({
+mason_dap.setup({
     automatic_installation = true,
+    handlers = {},
 })
 
-local adapters = require('mason-nvim-dap.mappings.adapters')
-local filetypes = require('mason-nvim-dap.mappings.filetypes')
-local configurations = require('mason-nvim-dap.mappings.configurations')
-dap.adapters = adapters;
-dap.filetypes = filetypes;
-dap.configurations = configurations;
 dap.configurations.rust = dap.configurations.cpp
 
 -- -- VSCode launch
@@ -41,11 +36,6 @@ vim.fn.sign_define('DapBreakpoint', { text = '🔴', texthl = '', linehl = '', n
 
 -- Key maps
 local keymap = vim.keymap
-keymap.set('n', '<F5>', function()
-    vim.cmd [[ :DapLoadLaunchJSON ]]
-    vim.cmd [[ :DapContinue ]]
-end)
-
 keymap.set('n', '<F5>', function()
     vim.cmd [[ :DapLoadLaunchJSON ]]
     vim.cmd [[ :DapContinue ]]

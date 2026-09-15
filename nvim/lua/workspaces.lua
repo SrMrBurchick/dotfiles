@@ -18,26 +18,10 @@ function M.create_workspace_tab(dir)
     set_tab_root(dir)
     vim.cmd("lcd " .. vim.fn.fnameescape(dir))
 
-    if vim.fn.filereadable(dir .. "/compile_commands.json") == 1 or
-       vim.fn.filereadable(dir .. "/.clangd") == 1 then
-        vim.lsp.start({
-            name = "clangd",
-            cmd = {
-                "clangd",
-                "--background-index",
-                "--cross-file-rename",
-                "--header-insertion=never",
-                "--limit-references=100",
-                "--completion-style=detailed",
-                "--limit-results=20",
-                "--inlay-hints=true"
-            },
-            root_dir = dir,
-        })
-    end
 end
 
 vim.api.nvim_create_autocmd("TabEnter", {
+    group = vim.api.nvim_create_augroup("WorkspaceTabs", { clear = true }),
     callback = function()
         local root = get_tab_root()
         if root then

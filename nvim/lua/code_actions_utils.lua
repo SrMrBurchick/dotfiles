@@ -1,13 +1,22 @@
 local M = {}
 
-local lsp_util = vim.lsp.util
-
+-- Optional project-local listener. No automatic requests are registered here.
 function M.code_action_listener()
-    local context = { diagnostics = vim.lsp.diagnostic.get_line_diagnostics() }
-    local params = lsp_util.make_range_params()
-    params.context = context
-    vim.lsp.buf_request(0, 'textDocument/codeAction', params, function(err, _, result)
-        -- do something with result - e.g. check if empty and show some indication such as a sign
+    local bufnr = vim.api.nvim_get_current_buf()
+    local win = vim.api.nvim_get_current_win()
+    local diagnostics = vim.diagnostic.get(bufnr, { lnum = vim.api.nvim_win_get_cursor(win)[1] - 1 })
+    local lsp_diagnostics = {}
+    for _, diagnostic in ipairs(diagnostics) do
+        if diagnostic.user_data and diagnostic.user_data.lsp then
+            table.insert(lsp_diagnostics, diagnostic.user_data.lsp)
+        end
+    end
+    vim.lsp.buf_request(bufnr, 'textDocument/codeAction', function(client)
+        local params = vim.lsp.util.make_range_params(win, client.offset_encoding)
+        params.context = { diagnostics = lsp_diagnostics }
+        return params
+    end, function(_err, _result, _ctx)
+        -- Hook for project-local consumers.
     end)
 end
 

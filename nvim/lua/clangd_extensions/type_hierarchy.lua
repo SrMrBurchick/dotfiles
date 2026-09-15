@@ -32,37 +32,32 @@ local function format_tree(node, visited, result, padding)
     return result
 end
 
-local function handler(err, TypeHierarchyItem)
-    if err or not TypeHierarchyItem then
+local function handler(err, TypeHierarchyItem, ctx)
+    if err or not TypeHierarchyItem or api.nvim_get_current_buf() ~= ctx.bufnr then
         return
     else
         local lines = format_tree(TypeHierarchyItem, {}, {}, "")
-        vim.cmd(fmt([[split %s:\ type\ hierarchy]], TypeHierarchyItem.name))
+        vim.cmd.split(vim.fn.fnameescape(TypeHierarchyItem.name .. ": type hierarchy"))
         local bufnr = vim.api.nvim_get_current_buf()
         api.nvim_buf_set_lines(bufnr, 0, -1, true, lines)
         vim.bo.buftype = "nofile"
         vim.bo.modifiable = false
         vim.bo.bufhidden = "wipe"
-        api.nvim_win_set_option(0, "number", false)
-        api.nvim_win_set_option(0, "relativenumber", false)
-        api.nvim_win_set_option(0, "spell", false)
-        api.nvim_win_set_option(0, "cursorline", false)
+        vim.wo.number = false
+        vim.wo.relativenumber = false
+        vim.wo.spell = false
+        vim.wo.cursorline = false
     end
 end
 
 function M.show_hierarchy()
-    vim.lsp.buf_request(0, "textDocument/typeHierarchy", {
-        textDocument = {
-            uri = vim.uri_from_bufnr(0),
-        },
-        position = {
-            line = vim.fn.getcurpos()[2] - 1,
-            character = vim.fn.getcurpos()[3] - 1,
-        },
-        -- TODO make these configurable (config + command args)
-        resolve = 3,
-        direction = 2,
-    }, handler)
+    local win = api.nvim_get_current_win()
+    vim.lsp.buf_request(0, "textDocument/typeHierarchy", function(client)
+        local params = vim.lsp.util.make_position_params(win, client.offset_encoding)
+        params.resolve = 3
+        params.direction = 2
+        return params
+    end, handler)
 end
 
 return M

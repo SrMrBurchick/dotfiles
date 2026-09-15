@@ -10,6 +10,10 @@ end
 local fb_actions = require "telescope".extensions.file_browser.actions
 telescope.setup {
     defaults = {
+        vimgrep_arguments = vim.list_extend({
+            'rg', '--color=never', '--no-heading', '--with-filename',
+            '--line-number', '--column', '--smart-case',
+        }, require('ue_paths').rg_args()),
         mappings = {
             n = {
                 ["q"] = actions.close
@@ -38,6 +42,10 @@ telescope.setup {
             sync_with_nvim_tree = true,
         },
         file_browser = {
+            depth = 1, -- bound the plugin's synchronous grouped/fallback scans
+            git_status = false, -- Perforce: no synchronous git status calls
+            follow_symlinks = false,
+            file_ignore_patterns = require('ue_paths').ignore_patterns(),
             theme = "dropdown",
             -- disables netrw and use telescope-file-browser in its place
             hijack_netrw = true,
@@ -69,7 +77,7 @@ end
 vim.keymap.set('n', ';f',
     function()
         builtin.find_files({
-            no_ignore = true,
+            find_command = vim.list_extend({ 'rg', '--files', '--hidden', '--no-ignore' }, require('ue_paths').rg_args()),
             hidden = true,
             cwd = get_cwd()
         })
