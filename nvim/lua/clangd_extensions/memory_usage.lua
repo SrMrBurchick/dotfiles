@@ -8,8 +8,8 @@ local function display(lines)
             lines[k] = "  " .. line .. "  "
         end
     end
-    local vim_width = api.nvim_get_option("columns")
-    local vim_height = api.nvim_get_option("lines")
+    local vim_width = vim.o.columns
+    local vim_height = vim.o.lines
     local height = math.ceil(vim_height * 0.7 - 4)
     local width = math.ceil(vim_width * 0.7)
     local row = math.ceil((vim_height - height) / 2 - 1)
@@ -27,9 +27,9 @@ local function display(lines)
     vim.bo.shiftwidth = 2
     vim.wo.foldmethod = "indent"
     api.nvim_buf_set_lines(buf, 0, -1, true, lines)
-    api.nvim_buf_set_option(buf, "bufhidden", "wipe")
-    api.nvim_buf_set_option(buf, "modifiable", false)
-    api.nvim_buf_set_option(buf, "buftype", "nofile")
+    vim.bo[buf].bufhidden = "wipe"
+    vim.bo[buf].modifiable = false
+    vim.bo[buf].buftype = "nofile"
     api.nvim_buf_set_keymap(buf, "n", "q", ":bd<CR>", {
         noremap = true,
         silent = true,
@@ -89,7 +89,7 @@ local function format_tree(node, visited, result, padding, prefix, expand_preamb
 end
 
 local function handler(err, result, expand_preamble)
-    if err then
+    if err or not result then
         return
     end
     display(format_tree(result, {}, { "" }, "", "", expand_preamble))

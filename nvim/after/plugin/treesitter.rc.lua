@@ -1,38 +1,23 @@
-local status, ts = pcall(require, 'nvim-treesitter.configs')
-
-if (not status) then
+local ok, ts = pcall(require, 'nvim-treesitter')
+if not ok then
+    vim.notify('Tree-sitter plugin missing: install with Packer, then :TSInstall c cpp lua', vim.log.levels.WARN)
     return
 end
-
-ts.setup {
-    highlight = {
-        enable = true,
-        disable = {},
-        additional_vim_regex_highlighting = true,
-    },
-    indent = {
-        enable = true,
-        disable = { "yaml" },
-    },
-    ensure_installed = {
-        "json",
-        "c",
-        "cpp",
-        "python",
-        "rust",
-        "lua",
-        "markdown",
-        "markdown_inline"
-    },
-    autotag = {
-        enable = true
-    },
-    rainbow = {
-        enable = true,
-        -- disable = { "jsx", "cpp" }, list of languages you want to disable the plugin for
-        extended_mode = true, -- Also highlight non-bracket delimiters like html tags, boolean or table: lang -> boolean
-        max_file_lines = nil, -- Do not enable for files with more than n lines, int
-        -- colors = {}, -- table of hex strings
-        -- termcolors = {} -- table of colour name strings
-    }
-}
+-- Current main-branch API. No parser downloads or builds during startup/editing.
+ts.setup({})
+local group = vim.api.nvim_create_augroup('ConfigTreesitter', { clear = true })
+vim.api.nvim_create_autocmd('FileType', {
+    group = group,
+    pattern = { 'c', 'cpp', 'lua', 'json', 'python', 'rust', 'markdown' },
+    callback = function(args)
+        local lang = vim.treesitter.language.get_lang(vim.bo[args.buf].filetype)
+        local loaded, err = pcall(vim.treesitter.language.add, lang)
+        if not loaded then
+            vim.notify('Tree-sitter: ' .. tostring(err) .. '\nInstall with :TSInstall ' .. lang, vim.log.levels.WARN)
+            return
+        end
+        -- Native start is idempotent and disables duplicate regex highlighting.
+        vim.treesitter.start()
+        vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+    end,
+})

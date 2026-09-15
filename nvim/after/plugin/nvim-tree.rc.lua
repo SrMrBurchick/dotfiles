@@ -5,29 +5,25 @@ if (not status) then
 end
 
 
--- disable netrw at the very start of your init.lua (strongly advised)
-vim.g.loaded = 1
-vim.g.loaded_netrwPlugin = 1
 nvim_tree.setup({
-    sync_root_with_cwd = true,
     diagnostics = {
         enable = false
     },
     sort_by = "case_sensitive",
-    view = {
-        width = 30,
-    },
-    renderer = {
-        group_empty = false,
-    },
     filters = {
         dotfiles = false,
-        -- custom = { '^.git$' }
+        custom = { '^Binaries$', '^DerivedDataCache$', '^Intermediate$', '^Saved$', '^\\.vs$' },
     },
     git = {
         enable = false,
     },
+    filesystem_watchers = {
+        ignore_dirs = function(path)
+            return require("ue_paths").is_tree_ignored(path)
+        end,
+    },
     renderer = {
+        group_empty = true,
         icons = {
             glyphs = {
                 git = {
@@ -43,14 +39,3 @@ nvim_tree.setup({
         },
     }
 })
-
--- set highlights
-vim.o.termguicolors = true
-vim.cmd.highlight 'NvimTreeGitStaged guifg=green'
-vim.cmd.highlight 'NvimTreeGitDirty guifg=#e3b341'
-vim.cmd.highlight 'NvimTreeGitNew guifg=gray'
-vim.cmd.highlight 'NvimTreeGitRenamed guifg=#f0883e'
-vim.cmd.highlight 'NvimTreeGitDeleted guifg=red'
-
-
-vim.keymap.set('n', '<C-e>', ':NvimTreeToggle<CR>')

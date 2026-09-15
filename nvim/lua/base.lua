@@ -1,5 +1,3 @@
-vim.cmd("autocmd!")
-
 vim.scriptencoding = 'utf-8'
 vim.opt.encoding = 'utf-8'
 vim.opt.fileencoding = 'utf-8'
@@ -11,7 +9,7 @@ vim.cmd [[ set mouse-=a ]]
 vim.cmd [[ set noswapfile ]]
 
 vim.opt.title = true
-vim.opt.syntax = on
+vim.cmd.syntax("enable")
 vim.opt.autoindent = true
 vim.opt.smartindent = true
 vim.opt.hlsearch = false
@@ -20,7 +18,7 @@ vim.opt.backup = false
 vim.opt.showcmd = true
 vim.opt.cmdheight = 1
 vim.opt.laststatus = 2
-vim.opt.expandtab = false
+vim.opt.expandtab = true
 vim.opt.scrolloff = 10
 
 vim.opt.backupskip = { '/tmp/*', '/private/tmp/*' }
@@ -33,42 +31,11 @@ vim.opt.tabstop = 4
 vim.opt.wrap = false -- No Wrap lines
 vim.opt.backspace = { 'start', 'eol', 'indent' }
 vim.opt.path:append { '**' } -- Finding files - Search down into subfolders
-vim.opt.wildignore:append { '*/node_modules/*' }
+vim.opt.wildignore:append { '*/node_modules/*', '*/Binaries/*', '*/DerivedDataCache/*', '*/Intermediate/*', '*/Saved/*', '*/.vs/*' }
+-- Limit automatic spelling checks to the visible area on idle.
+vim.g.spelunker_check_type = 2
 vim.opt.list = true
 vim.opt.listchars = "tab:>-,trail:~,extends:>,precedes:<"
 vim.opt.foldmethod = "indent"
 vim.opt.foldenable = false
-
--- vim.lsp.set_log_level("OFF")
-function JumpToLessIndentUp()
-	local cur_indent = vim.fn.indent('.')
-	local line = vim.fn.line('.')
-
-	while line > 1 do
-		line = line - 1
-		local indent = vim.fn.indent(line)
-
-		if indent < cur_indent then
-			vim.fn.cursor(line, 1)
-			return
-		end
-	end
-end
-
-function JumpToSameIndent()
-	local cur_indent = vim.fn.indent('.')
-	local line = vim.fn.line('.')
-
-	while line <= vim.fn.line('$') do
-		line = line + 1
-		local indent = vim.fn.indent(line)
-
-		if indent == cur_indent then
-			vim.fn.cursor(line, 1)
-			return
-		end
-	end
-end
-
-vim.keymap.set('n', ']]', JumpToSameIndent)
-vim.keymap.set('n', '[i', JumpToLessIndentUp)
+-- vim.o.cmdheight=0

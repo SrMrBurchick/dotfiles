@@ -1,118 +1,116 @@
 local status, packer = pcall(require, "packer")
 if (not status) then
-	print("Packer is not installed")
-	return
+    print("Packer is not installed")
+    return
 end
 
 vim.cmd [[packadd packer.nvim]]
 
 packer.startup(function(use)
-	-- Packer
-	use 'wbthomason/packer.nvim'
+    -- Packer
+    use 'wbthomason/packer.nvim'
 
-	-- UI
-	use {
-		'nvim-lualine/lualine.nvim',
-		requires = { 'kyazdani42/nvim-web-devicons', opt = true }
-	}
-	use { "scottmckendry/cyberdream.nvim" }
-	use({
-		"Pocco81/true-zen.nvim",
-	})
-	use {
-		'akinsho/bufferline.nvim',
-		branch = 'main',
-		requires = 'kyazdani42/nvim-web-devicons'
-	}
-	use 'rafi/awesome-vim-colorschemes'
-	-- use 'romgrk/barbar.nvim'
+    -- UI
+    use {
+        'nvim-lualine/lualine.nvim',
+        requires = { 'kyazdani42/nvim-web-devicons' }
+    }
+    use 'rafi/awesome-vim-colorschemes'
+    use 'scottmckendry/cyberdream.nvim'
 
-	use {
-		'kyazdani42/nvim-tree.lua',
-	}
+    -- Setup lives in after/plugin; all packages here load eagerly.
+    use 'brenoprata10/nvim-highlight-colors'
+    use 'hat0uma/csvview.nvim'
 
-	-- LSP
-	use 'neovim/nvim-lspconfig' -- Collection of configurations for built-in LSP client
-	use 'hrsh7th/nvim-cmp'      -- Autocompletion plugin
-	use 'hrsh7th/cmp-nvim-lsp'  -- LSP source for nvim-cmp
-	use 'hrsh7th/cmp-path'
-	use 'hrsh7th/cmp-buffer'
-	use 'ray-x/lsp_signature.nvim'
-	use 'onsails/lspkind.nvim'  -- vscode-like pictograms
-	use({
-		"glepnir/lspsaga.nvim",
-		branch = "main",
-	})
-	-- use 'lvimuser/lsp-inlayhints.nvim'
-	-- use 'netmute/ctags-lsp.nvim'
+     -- QML
+    use 'artoj/qmake-syntax-vim'
+    use 'peterhoeg/vim-qml'
+    use {
+        'Decodetalkers/neoqmllsp',
+        run = "cargo build --release"
+    }
 
-	-- Rust
-	-- use 'simrat39/rust-tools.nvim'
+    -- Native highlighting; install/update parsers explicitly, never on buffer entry.
+    use { 'nvim-treesitter/nvim-treesitter', branch = 'main', run = ':TSUpdate' }
 
-	-- Snippets
-	use 'L3MON4D3/LuaSnip' -- Snippets plugin
+    -- LSP
+    use 'neovim/nvim-lspconfig' -- Collection of configurations for built-in LSP client
+    use 'hrsh7th/nvim-cmp'      -- Autocompletion plugin
+    use 'hrsh7th/cmp-nvim-lsp'  -- LSP source for nvim-cmp
+    use 'hrsh7th/cmp-path'
+    use 'hrsh7th/cmp-buffer'
+    use 'onsails/lspkind.nvim'  -- vscode-like pictograms
+    use({
+        "glepnir/lspsaga.nvim",
+        branch = "main",
+    })
 
-	-- Mason
-	use 'williamboman/mason.nvim'
-	use 'williamboman/mason-lspconfig.nvim'
+    -- Snippets
+    use({
+        "L3MON4D3/LuaSnip",
+        -- follow latest release.
+        tag = "v2.*", -- Replace <CurrentMajor> by the latest released major (first number of latest release)
+        -- install jsregexp (optional!:).
+        run = "make install_jsregexp"
+    })
+    use 'saadparwaiz1/cmp_luasnip'
+    use 'rafamadriz/friendly-snippets'
 
-	-- Icons
-	use 'kyazdani42/nvim-web-devicons'
-	use 'ryanoasis/vim-devicons'
+    -- Mason
+    use 'williamboman/mason.nvim'
+    use 'williamboman/mason-lspconfig.nvim'
+
+    -- Icons
+    use 'kyazdani42/nvim-web-devicons'
+    use 'ryanoasis/vim-devicons'
+
+    -- Telescope stuff
+    use 'nvim-lua/popup.nvim'
+    use 'nvim-lua/plenary.nvim'
+    use 'nvim-telescope/telescope.nvim'
+    use 'nvim-telescope/telescope-file-browser.nvim'
+    use 'nvim-telescope/telescope-project.nvim'
+    -- Telescope media files preview
+    use 'nvim-telescope/telescope-media-files.nvim'
+
+    -- Markdown preview
+    use({
+        "iamcco/markdown-preview.nvim",
+        run = function() vim.fn["mkdp#util#install"]() end,
+    })
+
+    -- Other
+    use 'kamykn/spelunker.vim'
+    use 'windwp/nvim-autopairs'
+
+    use {
+        'kyazdani42/nvim-tree.lua',
+    }
 
 
-	-- Telescope stuff
-	use 'nvim-lua/popup.nvim'
-	use 'nvim-lua/plenary.nvim'
-	use 'nvim-telescope/telescope.nvim'
-	use 'nvim-telescope/telescope-file-browser.nvim'
-	use 'nvim-telescope/telescope-project.nvim'
-	-- Telescope media files preview
-	use 'nvim-telescope/telescope-media-files.nvim'
-	use 'xiyaowong/telescope-emoji.nvim'
+    -- Debugger
+    use "mfussenegger/nvim-dap"
+    use "jay-babu/mason-nvim-dap.nvim"
 
-	use 'windwp/nvim-autopairs'
+    use {
+        "rcarriga/nvim-dap-ui",
+        requires = {
+            "mfussenegger/nvim-dap",
+            "nvim-neotest/nvim-nio"
+        }
+    }
 
-	-- Commenting util
-	use {
-		'numToStr/Comment.nvim',
-		config = function()
-			require('Comment').setup()
-		end
-	}
-	use 'mangelozzi/nvim-rgflow.lua'
-
-	-- Debugger
-	use {
-		"mfussenegger/nvim-dap",
-		"jay-babu/mason-nvim-dap.nvim",
-		"mxsdev/nvim-dap-vscode-js"
-	}
-
-	use {
-		"rcarriga/nvim-dap-ui",
-		requires = {
-			"mfussenegger/nvim-dap",
-			"nvim-neotest/nvim-nio"
-		}
-	}
-
-	use 'SrMrBurchick/perforce.nvim'
-	use 'D:/Tools/cpphelper.nvim'
-	use 'javiorfo/nvim-soil'
-
-	-- Optional for puml syntax highlighting:
-	use 'javiorfo/nvim-nyctophilia'
-
-	use 'Pocco81/true-zen.nvim'
-	use 'C:\\Users\\s.Bura\\AppData\\Local\\nvim-data\\site\\pack\\packer\\start\\markdown-preview.nvim'
-	use "D:\\Toos\\cpphelper.nvim"
-	use 'rcarriga/nvim-notify'
-	use {
-		'mrded/nvim-lsp-notify',
-		config = function()
-			require('lsp-notify').setup({})
-		end
-	}
-	-- use({ "iamcco/markdown-preview.nvim", run = "cd app && npm install", setup = function() vim.g.mkdp_filetypes = { "markdown" } end, ft = { "markdown" }, })
+    use {
+        'startup-nvim/startup.nvim',
+        requires = { 'nvim-telescope/telescope.nvim', 'nvim-lua/plenary.nvim' },
+    }
+    use '~/Projects/buffer_highlight.nvim'
+    use 'javiorfo/nvim-soil'
+    -- Optional for puml syntax highlighting:
+    use 'javiorfo/nvim-nyctophilia'
+    -- use 'SrMrBurchick/perforce.nvim'
+    use '/home/srmrburchick/Projects/sqlui'
+    use({
+        "Pocco81/true-zen.nvim",
+    })
 end)
